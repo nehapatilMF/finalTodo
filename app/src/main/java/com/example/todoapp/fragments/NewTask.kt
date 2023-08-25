@@ -40,27 +40,6 @@ class NewTask : Fragment() {
         return binding?.root
     }
 
-
-    private fun showTimePickerDialog() {
-        val calendar = Calendar.getInstance()
-        val hourOfDay = calendar.get(Calendar.HOUR_OF_DAY)
-        val minute = calendar.get(Calendar.MINUTE)
-
-        val timePickerDialog = TimePickerDialog(
-            requireContext(),
-            { _, selectedHourOfDay, selectedMinute ->
-
-                val amPm = if (selectedHourOfDay < 12) "AM" else "PM"
-                val formattedHour = if (selectedHourOfDay % 12 == 0) 12 else selectedHourOfDay % 12
-                val formattedTime = String.format("%02d:%02d %s", formattedHour, selectedMinute, amPm)
-                binding?.tvTime?.text = formattedTime
-            },
-            hourOfDay,
-            minute,
-            false // 12-hour format
-        )
-        timePickerDialog.show()
-    }
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null

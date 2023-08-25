@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.todoapp.CalenderUtil
 import com.example.todoapp.R
+import com.example.todoapp.TimePickerUtil
 import com.example.todoapp.databinding.FragmentEditTaskBinding
 
 class EditTask : Fragment() {
@@ -20,6 +22,17 @@ class EditTask : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        binding?.tvDate?.setOnClickListener {
+            CalenderUtil.showDatePickerDialog (requireContext()){ selectedDate ->
+                binding?.tvDate?.text = selectedDate
+            }
+        }
+        binding?.tvTime?.setOnClickListener {
+            TimePickerUtil.showTimePickerDialog(requireContext()){ selectedTime ->
+                binding?.tvTime?.text = selectedTime
+            }
+        }
         binding?.buttonDeleteTask?.setOnClickListener{
             findNavController().navigate(R.id.navigate_from_edit_to_todoMain)
         }

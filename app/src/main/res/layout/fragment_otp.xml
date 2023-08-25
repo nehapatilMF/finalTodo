@@ -7,7 +7,6 @@
     android:orientation="vertical"
     android:padding="30dp"
     tools:context=".fragments.Otp">
-
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/otp"
         android:layout_width="match_parent"
@@ -17,7 +16,6 @@
         android:textColor="@color/red"
         android:textSize="40sp"
         android:textStyle="bold" />
-
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_receive_otp"
         android:layout_width="match_parent"
@@ -117,7 +115,6 @@
         android:textColor="@color/black"
         android:textSize="20sp" />
 </LinearLayout>
-
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonAuthorise"
         android:layout_width="130dp"
