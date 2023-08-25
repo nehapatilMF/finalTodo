@@ -23,6 +23,9 @@ class Login : Fragment() {
         binding?.signup?.setOnClickListener{
             findNavController().navigate(R.id.navigate_from_login_to_register)
         }
+        binding?.buttonNext?.setOnClickListener{
+            findNavController().navigate(R.id.navigate_from_login_to_todoMain)
+        }
         return binding?.root
     }
 

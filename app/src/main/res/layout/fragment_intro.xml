@@ -1,37 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:padding="16dp"
-    android:layout_marginTop="150dp"
-    android:layout_marginBottom="150dp"
+    android:background="@color/white"
+    android:orientation="vertical"
     tools:context=".fragments.Intro">
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_todo"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:text="@string/todo"
-        android:textSize="35sp"
-        android:textStyle="bold"
-        android:textColor="@color/red"
+        android:layout_marginTop="100dp"
         android:gravity="center"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/iv_todo"/>
+        android:text="@string/todo"
+        android:textColor="@color/red"
+        android:textSize="35sp"
+        android:textStyle="bold" />
+
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_todo"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:src="@drawable/todo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_todo"
-        app:layout_constraintBottom_toTopOf="@+id/txt1"/>
+        android:layout_height="300dp"
+        android:src="@drawable/todo" />
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txt1"
         android:layout_width="match_parent"
@@ -39,55 +32,45 @@
         android:gravity="center"
         android:text="@string/txt1"
         android:textSize="25sp"
-        android:textStyle="bold"
-        tools:ignore="TextSizeCheck"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/iv_todo"
-        app:layout_constraintBottom_toTopOf="@+id/txt2"/>
+        android:textStyle="bold" />
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txt2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="50dp"
         android:gravity="center"
         android:text="@string/txt2"
         android:textSize="25sp"
-        android:textStyle="bold"
-        tools:ignore="TextSizeCheck"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt1" />
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/buttonLogIn"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:importantForAccessibility="yes"
-        android:background="@drawable/button"
-        android:text="@string/log_in"
-        android:textAllCaps="false"
-        android:textSize="18sp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/buttonRegister"
-        app:layout_constraintTop_toBottomOf="@+id/txt2"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/buttonRegister"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button"
-        android:importantForAccessibility="yes"
-        android:text="@string/register"
-        android:layout_marginRight="20dp"
-        android:textSize="18sp"
-        android:textAllCaps="false"
-        tools:ignore="RedundantDescriptionCheck"
-        app:layout_constraintStart_toEndOf="@+id/buttonLogIn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt2"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        android:textStyle="bold" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonLogIn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/button"
+            android:text="@string/log_in"
+            android:textAllCaps="false"
+            android:textSize="18sp" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonRegister"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_weight="1"
+            android:background="@drawable/button"
+            android:text="@string/register"
+            android:textAllCaps="false"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+</LinearLayout>
