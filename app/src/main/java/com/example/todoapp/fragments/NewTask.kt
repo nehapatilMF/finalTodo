@@ -1,17 +1,15 @@
 package com.example.todoapp.fragments
 
-import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.todoapp.Calendar.getCurrentDate
-import com.example.todoapp.Calendar.getFormattedDate
+import com.example.todoapp.CalenderUtil
 import com.example.todoapp.R
+import com.example.todoapp.TimePickerUtil
 import com.example.todoapp.databinding.FragmentNewTaskBinding
 import java.util.Calendar
 
@@ -27,10 +25,14 @@ class NewTask : Fragment() {
     ): View? {
 
         binding?.tvDate?.setOnClickListener {
-            showDatePickerDialog()
+            CalenderUtil.showDatePickerDialog (requireContext()){ selectedDate ->
+                binding?.tvDate?.text = selectedDate
+            }
         }
         binding?.tvTime?.setOnClickListener {
-            showTimePickerDialog()
+            TimePickerUtil.showTimePickerDialog(requireContext()){ selectedTime ->
+                binding?.tvTime?.text = selectedTime
+            }
         }
         binding?.saveTask?.setOnClickListener {
             findNavController().navigate(R.id.navigate_from_newTask_to_todoMain)
@@ -38,28 +40,6 @@ class NewTask : Fragment() {
         return binding?.root
     }
 
-    private fun showDatePickerDialog() {
-        val calendar = getCurrentDate()
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH)
-        try {
-            val datePickerDialog = DatePickerDialog(
-                requireContext(),
-                { _, selectedYear, selectedMonth, selectedDayOfMonth ->
-                    val selectedDate = "$selectedDayOfMonth-${selectedMonth + 1}-$selectedYear"
-                    val formattedDate = getFormattedDate(selectedDate)
-                    binding?.tvDate?.text = formattedDate
-                },
-                year,
-                month,
-                dayOfMonth
-            )
-            datePickerDialog.show()
-        } catch (e: Exception) {
-            // Handle the exception, e.g., log it or show an error message
-        }
-    }
 
     private fun showTimePickerDialog() {
         val calendar = Calendar.getInstance()
