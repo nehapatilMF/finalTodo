@@ -1,70 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<ScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    android:padding="30dp"
     tools:context=".fragments.NewTask">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    <EditText
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editTextTitle"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:hint="@string/title"
-        android:inputType="text"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:importantForAutofill="no" />
-    <EditText
+        android:importantForAutofill="no"
+        android:inputType="text" />
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editTextDescription"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
         android:hint="@string/description"
-        android:inputType="textMultiLine"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintTop_toBottomOf="@id/editTextTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:importantForAutofill="no" />
-    <DatePicker
-        android:id="@+id/datePicker"
-        android:layout_width="0dp"
+        android:importantForAutofill="no"
+        android:inputType="textMultiLine" />
+  <androidx.appcompat.widget.AppCompatTextView
+      android:id="@+id/tv_date"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginBottom="10dp"
+      android:hint="Date"
+      android:textSize="20sp"
+      android:textStyle="bold"/>
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_time"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:calendarViewShown="false"
-        android:datePickerMode="calendar"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintTop_toBottomOf="@id/editTextDescription"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-    <TimePicker
-        android:id="@+id/timePicker"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintTop_toBottomOf="@id/datePicker"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
-
+        android:hint="Time"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/saveTask"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        app:srcCompat="@drawable/baseline_save_24"
-        tools:layout_editor_absoluteX="314dp"
-        tools:layout_editor_absoluteY="633dp"
-        app:layout_constraintTop_toBottomOf="@id/timePicker"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:importantForAccessibility="no" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+        android:layout_margin="16dp" />
+</LinearLayout>
+
