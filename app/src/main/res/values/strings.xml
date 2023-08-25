@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">TODO app</string>
+    <string name="email">Enter Email ID</string>
+    <string name="password">Enter Password</string>
+    <string name="Registered_email">Enter Registered Email ID</string>
+    <string name="otp">OTP</string>
+    <string name="otp_txt">An OTP will be sent to you on this email id.</string>
+    <string name="edit_email_txt">You cannot change or edit this email id once registered.</string>
+    <string name="already_have_account">Already have an account?</string>
+    <string name="new_to_todo">New to todo?</string>
+    <string name="signup">Sign up</string>
+    <string name="txt2">work and life, finally.</string>
+    <string name="txt1">Organise your</string>
+    <string name="Next">Next</string>
+    <string name="todo">todo</string>
+    <string name="log_in">Log In</string>
+    <string name="register">Register</string>
+    <string name="sign_up_otp">Sign up OTP</string>
+    <string name="you_will_receive_otp">You will receive OTP on your registered email id.</string>
+    <string name="enter_otp">Enter OTP</string>
+    <string name="your_otp_will_expire_in">Your OTP will expire in</string>
+    <string name="_5_00">5:00</string>
+    <string name="authorise">Authorise</string>
+    <string name="description">Description</string>
+    <string name="title">Title</string>
+    <string name="save_task">Save Task</string>
+    <string name="delete_task">Delete Task</string>
+
+</resources>

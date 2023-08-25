@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/splash">
+    <fragment
+        android:id="@+id/splash"
+        android:name="com.example.todoapp.fragments.Splash"
+        android:label="fragment_splash"
+        tools:layout="@layout/fragment_splash" >
+        <action
+            android:id="@+id/navigate_to_intro"
+            app:destination="@id/intro" />
+    </fragment>
+    <fragment
+        android:id="@+id/intro"
+        android:name="com.example.todoapp.fragments.Intro"
+        android:label="fragment_intro"
+        tools:layout="@layout/fragment_intro" >
+        <action
+            android:id="@+id/navigate_to_register"
+            app:destination="@id/register" />
+        <action
+            android:id="@+id/navigate_to_login"
+            app:destination="@id/login" />
+    </fragment>
+    <fragment
+        android:id="@+id/login"
+        android:name="com.example.todoapp.fragments.Login"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/navigate_from_login_to_todoMain"
+            app:destination="@id/todoMain" />
+        <action
+            android:id="@+id/navigate_from_login_to_register"
+            app:destination="@id/register" />
+    </fragment>
+    <fragment
+        android:id="@+id/register"
+        android:name="com.example.todoapp.fragments.Register"
+        android:label="fragment_register"
+        tools:layout="@layout/fragment_register" >
+        <action
+            android:id="@+id/navigate_from_register_to_otp"
+            app:destination="@id/otp" />
+        <action
+            android:id="@+id/navigate_from_register_to_login"
+            app:destination="@id/login" />
+    </fragment>
+    <fragment
+        android:id="@+id/newTask"
+        android:name="com.example.todoapp.fragments.NewTask"
+        android:label="fragment_new_task"
+        tools:layout="@layout/fragment_new_task" >
+        <action
+            android:id="@+id/navigate_from_newTask_to_todoMain"
+            app:destination="@id/todoMain" />
+    </fragment>
+    <fragment
+        android:id="@+id/editTask"
+        android:name="com.example.todoapp.fragments.EditTask"
+        android:label="fragment_edit_task"
+        tools:layout="@layout/fragment_edit_task" >
+        <action
+            android:id="@+id/navigate_from_edit_to_todoMain"
+            app:destination="@id/todoMain" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/otp"
+        android:name="com.example.todoapp.fragments.Otp"
+        android:label="fragment_otp"
+        tools:layout="@layout/fragment_otp" >
+        <action
+            android:id="@+id/navigate_from_otp_to_todoMain"
+            app:destination="@id/todoMain" />
+        <action
+            android:id="@+id/navigate_from_otp_to_register"
+            app:destination="@id/todoMain" />
+    </fragment>
+    <fragment
+        android:id="@+id/todoMain"
+        android:name="com.example.todoapp.fragments.TodoMain"
+        android:label="fragment_todo_main"
+        tools:layout="@layout/fragment_todo_main" >
+        <action
+            android:id="@+id/navigate_from_todoMain_to_newTask"
+            app:destination="@id/newTask" />
+        <action
+            android:id="@+id/navigate_from_todoMain_to_editTask"
+            app:destination="@id/editTask" />
+    </fragment>
+
+
+</navigation>
