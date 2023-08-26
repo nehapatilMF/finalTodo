@@ -36,6 +36,9 @@
         <action
             android:id="@+id/navigate_from_login_to_register"
             app:destination="@id/register" />
+        <action
+            android:id="@+id/back_to_intro"
+            app:destination="@id/intro" />
     </fragment>
     <fragment
         android:id="@+id/register"
@@ -48,6 +51,9 @@
         <action
             android:id="@+id/navigate_from_register_to_login"
             app:destination="@id/login" />
+        <action
+            android:id="@+id/back_to_intro"
+            app:destination="@id/intro" />
     </fragment>
     <fragment
         android:id="@+id/newTask"
@@ -79,6 +85,9 @@
         <action
             android:id="@+id/navigate_from_otp_to_register"
             app:destination="@id/todoMain" />
+        <action
+            android:id="@+id/back_to_register"
+            app:destination="@id/register" />
     </fragment>
     <fragment
         android:id="@+id/todoMain"

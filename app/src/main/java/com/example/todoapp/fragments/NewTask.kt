@@ -5,25 +5,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.CalenderUtil
 import com.example.todoapp.R
 import com.example.todoapp.TimePickerUtil
+import com.example.todoapp.databinding.FragmentIntroBinding
 import com.example.todoapp.databinding.FragmentNewTaskBinding
 import java.util.Calendar
 
 class NewTask : Fragment() {
     private var binding: FragmentNewTaskBinding? = null
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = FragmentNewTaskBinding.inflate(layoutInflater)
-    }
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigate(R.id.navigate_from_newTask_to_todoMain)
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
         binding?.tvDate?.setOnClickListener {
             CalenderUtil.showDatePickerDialog (requireContext()){ selectedDate ->
                 binding?.tvDate?.text = selectedDate
@@ -37,6 +38,14 @@ class NewTask : Fragment() {
         binding?.saveTask?.setOnClickListener {
             findNavController().navigate(R.id.navigate_from_newTask_to_todoMain)
         }
+    }
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentNewTaskBinding.inflate(layoutInflater, container, false)
+
+
         return binding?.root
     }
 
