@@ -27,10 +27,10 @@ class EditTask : Fragment() {
                 binding?.tvTime?.text = selectedTime
             }
         }
-        binding?.buttonDeleteTask?.setOnClickListener{
+     /**   binding?.buttonDeleteTask?.setOnClickListener{
             findNavController().navigate(R.id.navigate_from_edit_to_todoMain)
-        }
-        binding?.buttonSaveTask?.setOnClickListener{
+        }**/
+        binding?.btnSave?.setOnClickListener{
             findNavController().navigate(R.id.navigate_from_edit_to_todoMain)
         }
         binding?.tvDate?.setOnClickListener {

@@ -25,14 +25,12 @@ class Splash : Fragment() {
         binding?.splashScreen?.startAnimation(animation)
         animation.setAnimationListener(object : Animation.AnimationListener {
             override fun onAnimationStart(animation: Animation?) {
-                // Animation started
-            }
+                      }
             override fun onAnimationEnd(animation: Animation?) {
                 findNavController().navigate(R.id.navigate_to_intro)
                        }
             override fun onAnimationRepeat(animation: Animation?) {
-                // Animation repeated
-                binding?.splashScreen?.clearAnimation() // Clear the animation to stop it
+                        binding?.splashScreen?.clearAnimation() // Clear the animation to stop it
             }
         })
         return binding?.root

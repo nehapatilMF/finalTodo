@@ -32,7 +32,7 @@ class NewTask : Fragment() {
                 binding?.tvTime?.text = selectedTime
             }
         }
-        binding?.saveTask?.setOnClickListener {
+        binding?.btnSave?.setOnClickListener {
             findNavController().navigate(R.id.navigate_from_newTask_to_todoMain)
         }
     }

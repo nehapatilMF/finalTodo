@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,47 +7,87 @@
     android:orientation="vertical"
     android:padding="30dp"
     tools:context=".fragments.EditTask">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10sp"
+        android:text="Title"
+        android:textColor="@color/light_gray"
+        android:textSize="16sp" />
+
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editTextTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:hint="@string/title"
+        android:background="@drawable/edittext_no_underline"
         android:importantForAutofill="no"
         android:inputType="text" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10sp"
+        android:text="Description"
+        android:textColor="@color/light_gray"
+        android:textSize="16sp" />
+
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editTextDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:hint="@string/description"
+        android:background="@drawable/edittext_no_underline"
         android:importantForAutofill="no"
         android:inputType="textMultiLine" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10sp"
+        android:text="Date"
+        android:textColor="@color/light_gray"
+        android:textSize="16sp" />
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:hint="Date"
+        android:background="@drawable/edittext_no_underline"
         android:textSize="20sp"
-        android:textStyle="bold"/>
+        android:textStyle="normal" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10sp"
+        android:text="Time"
+        android:textColor="@color/light_gray"
+        android:textSize="16sp" />
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Time"
+        android:background="@drawable/edittext_no_underline"
         android:textSize="20sp"
-        android:textStyle="bold"/>
-    <Button
-        android:id="@+id/buttonDeleteTask"
-        android:layout_width="wrap_content"
+        android:textStyle="normal" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnSave"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="@string/delete_task" />
-    <Button
-        android:id="@+id/buttonSaveTask"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Save Task" />
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/button"
+        android:text="Save"
+        android:textSize="16sp" />
+
 </LinearLayout>
+

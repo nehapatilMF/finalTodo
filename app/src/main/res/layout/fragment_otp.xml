@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:text="@string/enter_otp"
-        android:textColor="@color/black"
+        android:textColor="@color/light_gray"
         android:textSize="18sp" />
 
     <LinearLayout
@@ -111,7 +111,7 @@
         android:layout_height="50dp"
         android:layout_marginEnd="32dp"
         android:gravity="center"
-        android:text="@string/_5_00"
+        android:text="@string/timer_placeholder"
         android:textColor="@color/black"
         android:textSize="20sp" />
 </LinearLayout>
@@ -125,6 +125,6 @@
         android:importantForAccessibility="yes"
         android:text="@string/authorise"
         android:textAllCaps="false"
-        android:textSize="20sp"
+        android:textSize="16sp"
         tools:ignore="RedundantDescriptionCheck" />
 </LinearLayout>

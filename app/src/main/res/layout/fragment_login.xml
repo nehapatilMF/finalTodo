@@ -92,5 +92,5 @@
         android:importantForAccessibility="yes"
         android:text="@string/log_in"
         android:textAllCaps="false"
-        android:textSize="20sp"   />
+        android:textSize="16sp"   />
 </LinearLayout>
