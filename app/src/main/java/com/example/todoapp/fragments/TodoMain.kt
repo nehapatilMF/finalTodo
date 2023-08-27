@@ -8,7 +8,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
-import com.example.todoapp.databinding.FragmentIntroBinding
 import com.example.todoapp.databinding.FragmentTodoMainBinding
 
 class TodoMain : Fragment() {
@@ -30,8 +29,6 @@ class TodoMain : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentTodoMainBinding.inflate(layoutInflater, container, false)
-
-
          return binding?.root
     }
 }

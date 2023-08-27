@@ -1,6 +1,5 @@
 package com.example.todoapp.fragments
 
-import android.app.TimePickerDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,12 +7,10 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.todoapp.CalenderUtil
+import com.example.todoapp.util.CalenderUtil
 import com.example.todoapp.R
-import com.example.todoapp.TimePickerUtil
-import com.example.todoapp.databinding.FragmentIntroBinding
+import com.example.todoapp.util.TimePickerUtil
 import com.example.todoapp.databinding.FragmentNewTaskBinding
-import java.util.Calendar
 
 class NewTask : Fragment() {
     private var binding: FragmentNewTaskBinding? = null

@@ -1,4 +1,4 @@
-package com.example.todoapp
+package com.example.todoapp.util
 
 import android.app.DatePickerDialog
 import java.util.Calendar
@@ -26,7 +26,7 @@ object CalenderUtil{
         )
         datePickerDialog.show()
     }
-    fun getFormattedDate(date: String): String {
+    private fun getFormattedDate(date: String): String {
         val myFormat = "dd-MMM-yyyy" // Define the date pattern you want
         val simpleDateFormat = SimpleDateFormat(myFormat, Locale.getDefault())
         val parsedDate = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).parse(date)

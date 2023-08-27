@@ -7,11 +7,10 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.todoapp.CalenderUtil
+import com.example.todoapp.util.CalenderUtil
 import com.example.todoapp.R
-import com.example.todoapp.TimePickerUtil
+import com.example.todoapp.util.TimePickerUtil
 import com.example.todoapp.databinding.FragmentEditTaskBinding
-import com.example.todoapp.databinding.FragmentNewTaskBinding
 
 class EditTask : Fragment() {
     private var binding : FragmentEditTaskBinding? = null
