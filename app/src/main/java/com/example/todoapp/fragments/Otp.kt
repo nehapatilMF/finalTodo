@@ -7,12 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
 import com.example.todoapp.databinding.FragmentOtpBinding
+import com.example.todoapp.util.NetworkUtil
 import com.example.todoapp.util.TimerUtil
 import com.example.todoapp.viewModels.RegisterViewModel
 
@@ -31,14 +33,22 @@ class Otp : Fragment() {
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
         binding?.buttonAuthorise?.setOnClickListener {
-            findNavController().navigate(R.id.navigate_from_otp_to_todoMain)
+            if(NetworkUtil.isNetworkAvailable(requireContext())) {
+                findNavController().navigate(R.id.navigate_from_otp_to_todoMain)
+            }else{
+                Toast.makeText(requireContext(),"No internet connection.",Toast.LENGTH_SHORT).show()
+            }
         }
 
         binding?.resendCode?.setOnClickListener {
-            binding?.timer?.visibility = View.VISIBLE
-            binding?.tvOtpExp?.visibility = View.VISIBLE
-            binding?.resendCode?.visibility = View.INVISIBLE
-            startOtpTimer()
+            if(NetworkUtil.isNetworkAvailable(requireContext())) {
+                binding?.timer?.visibility = View.VISIBLE
+                binding?.tvOtpExp?.visibility = View.VISIBLE
+                binding?.resendCode?.visibility = View.INVISIBLE
+                startOtpTimer()
+            }else{
+                Toast.makeText(requireContext(),"No internet connection.", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

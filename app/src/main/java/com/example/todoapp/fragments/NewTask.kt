@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -12,6 +13,7 @@ import com.example.todoapp.util.CalenderUtil
 import com.example.todoapp.R
 import com.example.todoapp.util.TimePickerUtil
 import com.example.todoapp.databinding.FragmentNewTaskBinding
+import com.example.todoapp.util.NetworkUtil
 
 class NewTask : Fragment() {
     private var binding: FragmentNewTaskBinding? = null
@@ -23,27 +25,25 @@ class NewTask : Fragment() {
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
-        val adapter: ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.spinner_items,  // An array resource containing your items
-            android.R.layout.simple_spinner_item
-        )
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-
-        binding?.spinnerStatus?.adapter = adapter
 
         binding?.tvDate?.setOnClickListener {
             CalenderUtil.showDatePickerDialog (requireContext()){ selectedDate ->
                 binding?.tvDate?.text = selectedDate
+                binding?.tvDate?.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
         }
         binding?.tvTime?.setOnClickListener {
             TimePickerUtil.showTimePickerDialog(requireContext()){ selectedTime ->
                 binding?.tvTime?.text = selectedTime
+                binding?.tvTime?.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
             }
         }
         binding?.btnSave?.setOnClickListener {
+            if(NetworkUtil.isNetworkAvailable(requireContext())){
             findNavController().navigate(R.id.navigate_from_newTask_to_todoMain)
+        }else{
+            Toast.makeText(requireContext(),"No internet connection",Toast.LENGTH_SHORT).show()
+            }
         }
     }
     override fun onCreateView(
@@ -51,8 +51,6 @@ class NewTask : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentNewTaskBinding.inflate(layoutInflater, container, false)
-
-
 
         return binding?.root
     }

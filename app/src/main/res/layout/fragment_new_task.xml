@@ -14,14 +14,16 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10sp"
         android:text="Title"
+        android:textStyle="bold"
         android:textColor="@color/black"
         android:textSize="20sp" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editTextTitle"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
+        android:textSize="22sp"
         android:background="@drawable/edittext_no_underline"
         android:importantForAutofill="no"
         android:inputType="text" />
@@ -32,43 +34,46 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10sp"
         android:text="Description"
+        android:textStyle="bold"
         android:textColor="@color/black"
         android:textSize="20sp" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editTextDescription"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
+        android:textSize="22sp"
         android:background="@drawable/edittext_no_underline"
         android:importantForAutofill="no"
         android:inputType="textMultiLine" />
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="10dp"
+
         android:orientation="horizontal">
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_status"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:text="Status"
+            android:textStyle="bold"
             android:textColor="@color/black"
             android:textSize="20sp" />
 
-        <Spinner
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/spinner_status"
             android:layout_width="0dp"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:dropDownWidth="wrap_content"
-            android:popupElevation="20dp"
-            android:spinnerMode="dropdown"
-         />
+            android:gravity="center"
+            android:text="todo"
+            android:textSize="22sp" />
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -77,16 +82,19 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10sp"
         android:text="Date"
+        android:textSize="20sp"
         android:textColor="@color/black"
-        android:textSize="20sp" />
+        android:textStyle="bold"
+        />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_date"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:background="@drawable/edittext_no_underline"
-        android:textSize="20sp"
+        android:drawableRight="@drawable/ic_calendar"
+        android:textSize="22sp"
         android:layout_gravity="center"
         android:textStyle="normal" />
 
@@ -94,8 +102,10 @@
         android:id="@+id/time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+
         android:layout_marginBottom="10sp"
         android:text="Time"
+        android:textStyle="bold"
         android:layout_gravity="center"
         android:textColor="@color/black"
         android:textSize="20sp" />
@@ -103,10 +113,11 @@
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_time"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/edittext_no_underline"
         android:layout_gravity="center"
-        android:textSize="20sp"
+        android:drawableRight="@drawable/ic_time"
+        android:textSize="22sp"
         android:textStyle="normal" />
 
     <androidx.appcompat.widget.AppCompatButton
@@ -117,7 +128,8 @@
         android:layout_marginTop="30dp"
         android:background="@drawable/button"
         android:text="Save"
-        android:textSize="16sp" />
+        android:textAllCaps="false"
+        android:textSize="18sp" />
 
 
 

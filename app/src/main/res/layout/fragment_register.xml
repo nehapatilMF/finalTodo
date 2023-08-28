@@ -21,6 +21,42 @@
         android:layout_marginBottom="50dp"/>
 
     <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="Enter Username"
+        android:textColor="@color/light_gray"
+        android:textSize="18sp"/>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/editTextUserName"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginBottom="10dp"
+        android:autofillHints="email"
+        android:background="@drawable/edittext_no_underline"
+        android:importantForAccessibility="yes"
+        android:inputType="textEmailAddress"
+        tools:ignore="VisualLintTextFieldSize"/>
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_mobile_no"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="Enter Mobile Number"
+        android:textColor="@color/light_gray"
+        android:textSize="18sp"/>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/editTextMobileNumber"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+         android:layout_marginBottom="10dp"
+        android:background="@drawable/edittext_no_underline"
+        android:importantForAccessibility="yes"
+        tools:ignore="VisualLintTextFieldSize"/>
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_enter_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

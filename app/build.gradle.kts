@@ -43,6 +43,9 @@ android {
 }
 
 dependencies {
+
+    implementation ("androidx.work:work-runtime:2.8.1")
+
 //RetroFit Dependencies
     implementation ("com.google.code.gson:gson:2.9.0")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")

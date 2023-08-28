@@ -21,6 +21,7 @@ class Intro : Fragment() {
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+
         binding?.buttonLogIn?.setOnClickListener {
             findNavController().navigate(R.id.navigate_to_login)
         }

@@ -4,13 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
-import com.example.todoapp.databinding.FragmentLoginBinding
 import com.example.todoapp.databinding.FragmentRegisterBinding
+import com.example.todoapp.util.NetworkUtil
 import com.example.todoapp.viewModels.RegisterViewModel
 
 class Register : Fragment() {
@@ -28,15 +29,23 @@ class Register : Fragment() {
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
-        binding?.login?.setOnClickListener{
-            findNavController().navigate(R.id.navigate_from_register_to_login)
+        binding?.login?.setOnClickListener {
+            if (NetworkUtil.isNetworkAvailable(requireContext())) {
+                findNavController().navigate(R.id.navigate_from_register_to_login)
+            } else {
+                Toast.makeText(requireContext(), "No internet connection.", Toast.LENGTH_SHORT).show()
+            }
         }
-        binding?.buttonNext?.setOnClickListener{
-            sharedViewModel.email = binding?.editTextEmail?.text.toString()
-            findNavController().navigate(R.id.navigate_from_register_to_otp)
+            binding?.buttonNext?.setOnClickListener {
+                if(NetworkUtil.isNetworkAvailable(requireContext())){
+                    findNavController().navigate(R.id.navigate_from_register_to_otp)
+                    sharedViewModel.email = binding?.editTextEmail?.text.toString()
+                }else{
+                    Toast.makeText(requireContext(),"No internet connection.", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
-    }
-    override fun onCreateView(
+        override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
