@@ -3,7 +3,6 @@ package com.example.todoapp.fragments
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,7 +17,7 @@ import com.example.todoapp.util.TimerUtil
 import com.example.todoapp.viewModels.RegisterViewModel
 
 class Otp : Fragment() {
-    private var binding : FragmentOtpBinding? = null
+    private var binding: FragmentOtpBinding? = null
     private val editTextList = mutableListOf<View>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -33,10 +32,18 @@ class Otp : Fragment() {
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
-        binding?.buttonAuthorise?.setOnClickListener{
+        binding?.buttonAuthorise?.setOnClickListener {
             findNavController().navigate(R.id.navigate_from_otp_to_todoMain)
         }
+
+        binding?.resendCode?.setOnClickListener {
+            binding?.timer?.visibility = View.VISIBLE
+            binding?.tvOtpExp?.visibility = View.VISIBLE
+            binding?.resendCode?.visibility = View.INVISIBLE
+            startOtpTimer()
+        }
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -62,6 +69,7 @@ class Otp : Fragment() {
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     editText.setBackgroundResource(R.drawable.otp_box_changed_background)
                 }
+
                 override fun afterTextChanged(s: Editable?) {
                     if (s?.length == 1) {
                         moveToNextBox(i)
@@ -71,20 +79,31 @@ class Otp : Fragment() {
                 }
             })
         }
+        binding?.timer?.visibility = View.VISIBLE
+        binding?.tvOtpExp?.visibility = View.VISIBLE
+        binding?.resendCode?.visibility = View.INVISIBLE
+       startOtpTimer()
+    return binding?.root
+    }
 
-        val timerDuration : Long = getString(R.string.timer_duration).toLongOrNull()?:0L
+    private fun startOtpTimer(){
+        val timerDuration: Long = getString(R.string.timer_duration).toLongOrNull() ?: 0L
         TimerUtil.startTimer(
             duration = timerDuration,
-            onTick = {remainingTime ->
+            onTick = { remainingTime ->
                 val minutes = remainingTime / 60
-                val seconds =  remainingTime % 60
+                val seconds = remainingTime % 60
                 binding?.timer?.text = String.format("%02d:%02d", minutes, seconds)
+
             },
             onFinish = {
                 binding?.timer?.text = getString(R.string.timer_placeholder)
+                binding?.timer?.visibility = View.INVISIBLE
+                binding?.tvOtpExp?.visibility = View.INVISIBLE
+                binding?.resendCode?.visibility = View.VISIBLE
+
             }
         )
-        return binding?.root
     }
 
     private fun moveToNextBox(currentIndex: Int) {
@@ -98,9 +117,7 @@ class Otp : Fragment() {
             editTextList[currentIndex].clearFocus()
             editTextList[currentIndex - 1].requestFocus()
         }
-
     }
-
     override fun onDestroy() {
         TimerUtil.cancelTimer()
         super.onDestroy()

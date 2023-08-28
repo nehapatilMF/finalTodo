@@ -96,31 +96,52 @@
             android:textColor="@color/otp_box_text_color"
             android:textSize="18sp" />
     </LinearLayout>
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:orientation="horizontal">
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tv_otp_exp"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="32dp"
-        android:gravity="center"
-        android:text="@string/your_otp_will_expire_in"
-        android:textColor="@color/black"
-        android:textSize="18sp" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_otp_exp"
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="32dp"
+                android:gravity="center"
+                android:text="@string/your_otp_will_expire_in"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:visibility="invisible" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/timer"
-        android:layout_width="80dp"
-        android:layout_height="50dp"
-        android:layout_marginEnd="32dp"
-        android:gravity="center"
-        android:text="@string/timer_placeholder"
-        android:textColor="@color/black"
-        android:textSize="20sp" />
-</LinearLayout>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/timer"
+                android:layout_width="80dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="32dp"
+                android:gravity="center"
+                android:text="@string/timer_placeholder"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:visibility="invisible" />
+
+        </LinearLayout>
+        <TextView
+            android:id="@+id/resendCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:clickable="true"
+            android:onClick="onResendCodeClick"
+            android:text="Resend Code"
+            android:textColor="#4763FF"
+            android:textSize="20sp"
+            android:visibility="invisible" />
+    </FrameLayout>
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonAuthorise"
         android:layout_width="130dp"
