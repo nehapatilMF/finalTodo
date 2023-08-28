@@ -42,12 +42,12 @@
 
     <LinearLayout
         android:id="@+id/ll_otp"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal">
         <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/editTextDigit1"
+            android:id="@+id/otp_box1"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
@@ -56,9 +56,10 @@
             android:inputType="number"
             android:maxLength="1"
             android:textAlignment="center"
-            android:textSize="20sp" />
+            android:textColor="@color/otp_box_text_color"
+            android:textSize="18sp" />
         <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/editTextDigit2"
+            android:id="@+id/otp_box2"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
@@ -67,9 +68,10 @@
             android:inputType="number"
             android:maxLength="1"
             android:textAlignment="center"
-            android:textSize="20sp" />
+            android:textColor="@color/otp_box_text_color"
+            android:textSize="18sp" />
         <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/editTextDigit3"
+            android:id="@+id/otp_box3"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
@@ -78,9 +80,10 @@
             android:inputType="number"
             android:maxLength="1"
             android:textAlignment="center"
-            android:textSize="20sp" />
+            android:textColor="@color/otp_box_text_color"
+            android:textSize="18sp" />
         <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/editTextDigit4"
+            android:id="@+id/otp_box4"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
@@ -88,7 +91,8 @@
             android:inputType="number"
             android:maxLength="1"
             android:textAlignment="center"
-            android:textSize="20sp" />
+            android:textColor="@color/otp_box_text_color"
+            android:textSize="18sp" />
     </LinearLayout>
 <LinearLayout
     android:layout_width="match_parent"
