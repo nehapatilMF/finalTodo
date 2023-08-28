@@ -3,19 +3,19 @@ package com.example.todoapp.fragments
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
 import com.example.todoapp.databinding.FragmentOtpBinding
-
-
 import com.example.todoapp.util.TimerUtil
-import kotlin.math.sign
+import com.example.todoapp.viewModels.RegisterViewModel
 
 class Otp : Fragment() {
     private var binding : FragmentOtpBinding? = null
@@ -23,6 +23,9 @@ class Otp : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val registerViewModel: RegisterViewModel by activityViewModels()
+
+        binding?.enteredEmail?.text = registerViewModel.email
 
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -56,7 +59,6 @@ class Otp : Fragment() {
                     after: Int
                 ) {
                 }
-
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     editText.setBackgroundResource(R.drawable.otp_box_changed_background)
                 }
