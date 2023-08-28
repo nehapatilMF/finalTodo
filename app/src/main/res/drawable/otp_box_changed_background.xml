@@ -5,7 +5,7 @@
 
     <stroke
         android:width="1dp"
-        android:color="#A7A0A0" />
+        android:color="@color/otp_box_text_color" />
     <solid android:color="@android:color/white" />
     <corners android:radius="8dp" />
 </shape>

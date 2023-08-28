@@ -8,7 +8,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
-import com.example.todoapp.databinding.FragmentIntroBinding
 import com.example.todoapp.databinding.FragmentLoginBinding
 
 class Login : Fragment() {

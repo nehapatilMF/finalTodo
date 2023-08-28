@@ -3,7 +3,6 @@ package com.example.todoapp.fragments
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +12,10 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
 import com.example.todoapp.databinding.FragmentOtpBinding
+
+
 import com.example.todoapp.util.TimerUtil
-import okhttp3.internal.toLongOrDefault
+import kotlin.math.sign
 
 class Otp : Fragment() {
     private var binding : FragmentOtpBinding? = null
@@ -43,10 +44,8 @@ class Otp : Fragment() {
         binding?.otpBox2?.let { editTextList.add(it) }
         binding?.otpBox3?.let { editTextList.add(it) }
         binding?.otpBox4?.let { editTextList.add(it) }
-
         binding?.otpBox1?.requestFocus()
-        val i: Int = 0
-        //val editText = editTextList[i]
+
         for (i in 0 until editTextList.size) {
             val editText = editTextList[i] as EditText
             editText.addTextChangedListener(object : TextWatcher {
@@ -58,8 +57,9 @@ class Otp : Fragment() {
                 ) {
                 }
 
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    editText.setBackgroundResource(R.drawable.otp_box_changed_background)
+                }
                 override fun afterTextChanged(s: Editable?) {
                     if (s?.length == 1) {
                         moveToNextBox(i)
@@ -84,22 +84,24 @@ class Otp : Fragment() {
         )
         return binding?.root
     }
-    override fun onDestroy() {
-        TimerUtil.cancelTimer()
-        super.onDestroy()
-        binding = null
-    }
+
     private fun moveToNextBox(currentIndex: Int) {
         if (currentIndex < editTextList.size - 1) {
             editTextList[currentIndex].clearFocus()
             editTextList[currentIndex + 1].requestFocus()
         }
     }
-
     private fun moveToPreviousBox(currentIndex: Int) {
         if (currentIndex > 0) {
             editTextList[currentIndex].clearFocus()
             editTextList[currentIndex - 1].requestFocus()
         }
+
+    }
+
+    override fun onDestroy() {
+        TimerUtil.cancelTimer()
+        super.onDestroy()
+        binding = null
     }
 }
