@@ -27,6 +27,13 @@
     <string name="delete_task">Delete Task</string>
 
     <string name="timer_placeholder">00:00</string>
-    <string name="timer_duration">5000</string>  //5*60*1000 = 300000
+    <string name="timer_duration">300000</string>  //5*60*1000 = 300000
+
+    <string-array name="spinner_items">
+        <item>Todo</item>
+        <item>In Progress</item>
+        <item>Done</item>
+        <!-- Add more items as needed -->
+    </string-array>
 
 </resources>

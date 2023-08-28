@@ -14,14 +14,14 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10sp"
         android:text="Title"
-        android:textColor="@color/light_gray"
-        android:textSize="16sp" />
+        android:textColor="@color/black"
+        android:textSize="20sp" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editTextTitle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/edittext_no_underline"
         android:importantForAutofill="no"
         android:inputType="text" />
@@ -32,17 +32,44 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10sp"
         android:text="Description"
-        android:textColor="@color/light_gray"
-        android:textSize="16sp" />
+        android:textColor="@color/black"
+        android:textSize="20sp" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editTextDescription"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/edittext_no_underline"
         android:importantForAutofill="no"
         android:inputType="textMultiLine" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_status"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="Status"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <Spinner
+            android:id="@+id/spinner_status"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:dropDownWidth="wrap_content"
+            android:popupElevation="20dp"
+            android:spinnerMode="dropdown"
+         />
+    </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/date"
@@ -50,16 +77,17 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10sp"
         android:text="Date"
-        android:textColor="@color/light_gray"
-        android:textSize="16sp" />
+        android:textColor="@color/black"
+        android:textSize="20sp" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_date"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/edittext_no_underline"
         android:textSize="20sp"
+        android:layout_gravity="center"
         android:textStyle="normal" />
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -68,14 +96,16 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10sp"
         android:text="Time"
-        android:textColor="@color/light_gray"
-        android:textSize="16sp" />
+        android:layout_gravity="center"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_time"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:background="@drawable/edittext_no_underline"
+        android:layout_gravity="center"
         android:textSize="20sp"
         android:textStyle="normal" />
 
@@ -88,6 +118,8 @@
         android:background="@drawable/button"
         android:text="Save"
         android:textSize="16sp" />
+
+
 
 </LinearLayout>
 

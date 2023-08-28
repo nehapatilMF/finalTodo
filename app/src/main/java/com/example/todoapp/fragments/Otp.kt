@@ -23,9 +23,7 @@ class Otp : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val registerViewModel: RegisterViewModel by activityViewModels()
-
         binding?.enteredEmail?.text = registerViewModel.email
-
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 findNavController().navigate(R.id.back_to_register)
