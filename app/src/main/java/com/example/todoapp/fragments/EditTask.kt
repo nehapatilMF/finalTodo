@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -27,9 +28,8 @@ class EditTask : Fragment() {
                 binding?.tvTime?.text = selectedTime
             }
         }
-     /**   binding?.buttonDeleteTask?.setOnClickListener{
-            findNavController().navigate(R.id.navigate_from_edit_to_todoMain)
-        }**/
+
+
         binding?.btnSave?.setOnClickListener{
             findNavController().navigate(R.id.navigate_from_edit_to_todoMain)
         }
@@ -45,7 +45,14 @@ class EditTask : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentEditTaskBinding.inflate(layoutInflater, container, false)
+        val adapter: ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(
+            requireContext(),
+            R.array.spinner_items,  // An array resource containing your items
+            android.R.layout.simple_spinner_item
+        )
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
+        binding?.spinnerStatus?.adapter = adapter
         return binding?.root
     }
 

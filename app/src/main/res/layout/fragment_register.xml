@@ -25,16 +25,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:text="Enter Username"
         android:textColor="@color/light_gray"
-        android:textSize="18sp"/>
+        android:text="Enter Username"
+        android:textSize="@dimen/text_size" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editTextUserName"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:autofillHints="email"
+        android:textSize="@dimen/text_size"
         android:background="@drawable/edittext_no_underline"
         android:importantForAccessibility="yes"
         android:inputType="textEmailAddress"
@@ -45,16 +46,19 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:text="Enter Mobile Number"
+
         android:textColor="@color/light_gray"
         android:textSize="18sp"/>
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editTextMobileNumber"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
          android:layout_marginBottom="10dp"
+        android:textSize="@dimen/text_size"
         android:background="@drawable/edittext_no_underline"
         android:importantForAccessibility="yes"
+
         tools:ignore="VisualLintTextFieldSize"/>
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_enter_email"
@@ -68,10 +72,11 @@
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editTextEmail"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
         android:autofillHints="email"
         android:layout_marginBottom="10dp"
+        android:textSize="@dimen/text_size"
         android:background="@drawable/edittext_no_underline"
         android:importantForAccessibility="yes"
         tools:ignore="VisualLintTextFieldSize"/>
@@ -87,14 +92,35 @@
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editTextPassword"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
         android:inputType="textPassword"
+        android:textSize="@dimen/text_size"
         android:importantForAccessibility="yes"
         android:importantForAutofill="no"
         android:layout_marginBottom="10dp"
         android:background="@drawable/edittext_no_underline"
         tools:ignore="VisualLintTextFieldSize"/>
 
+   <androidx.appcompat.widget.AppCompatTextView
+    android:id="@+id/tv_confirm_password"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:text="@string/confirm_password"
+    android:textColor="@color/light_gray"
+    android:textSize="18sp"/>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/editTextConfirmPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/edittext_no_underline"
+        android:importantForAccessibility="yes"
+        android:importantForAutofill="no"
+        android:inputType="textPassword"
+        android:textSize="@dimen/text_size"
+        tools:ignore="VisualLintTextFieldSize"/>
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txt3"
         android:layout_width="match_parent"

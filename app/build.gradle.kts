@@ -10,7 +10,7 @@ android {
     defaultConfig {
         applicationId = "com.example.todoapp"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -43,6 +43,8 @@ android {
 }
 
 dependencies {
+
+
 
     implementation ("androidx.work:work-runtime:2.8.1")
 

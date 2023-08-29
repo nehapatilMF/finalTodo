@@ -83,8 +83,9 @@
         android:textSize="18sp"
         android:layout_weight="1" />
     </LinearLayout>
+
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/buttonNext"
+        android:id="@+id/buttonlogin"
         android:layout_width="130dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -92,5 +93,5 @@
         android:importantForAccessibility="yes"
         android:text="@string/log_in"
         android:textAllCaps="false"
-        android:textSize="16sp"   />
+        android:textSize="16sp" />
 </LinearLayout>

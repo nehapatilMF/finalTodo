@@ -1,5 +1,6 @@
 package com.example.todoapp.fragments
 
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +18,7 @@ import com.example.todoapp.util.NetworkUtil
 
 class NewTask : Fragment() {
     private var binding: FragmentNewTaskBinding? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val callback = object : OnBackPressedCallback(true) {
@@ -29,20 +31,23 @@ class NewTask : Fragment() {
         binding?.tvDate?.setOnClickListener {
             CalenderUtil.showDatePickerDialog (requireContext()){ selectedDate ->
                 binding?.tvDate?.text = selectedDate
-                binding?.tvDate?.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                binding?.tvDate?.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
             }
         }
         binding?.tvTime?.setOnClickListener {
             TimePickerUtil.showTimePickerDialog(requireContext()){ selectedTime ->
                 binding?.tvTime?.text = selectedTime
-                binding?.tvTime?.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                binding?.tvTime?.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
             }
         }
+
+
+
         binding?.btnSave?.setOnClickListener {
             if(NetworkUtil.isNetworkAvailable(requireContext())){
             findNavController().navigate(R.id.navigate_from_newTask_to_todoMain)
         }else{
-            Toast.makeText(requireContext(),"No internet connection",Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(),getString(R.string.no_internet_connection),Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -54,9 +59,9 @@ class NewTask : Fragment() {
 
         return binding?.root
     }
-
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
+
     }
 }

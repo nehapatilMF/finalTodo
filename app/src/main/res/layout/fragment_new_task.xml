@@ -13,17 +13,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10sp"
-        android:text="Title"
-        android:textStyle="bold"
+        android:text="@string/title"
         android:textColor="@color/black"
-        android:textSize="20sp" />
+        android:textSize="@dimen/tv_text_size" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editTextTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:textSize="22sp"
+        android:layout_marginBottom="16dp"
+        android:textSize="@dimen/text_size"
+        android:textStyle="bold"
         android:background="@drawable/edittext_no_underline"
         android:importantForAutofill="no"
         android:inputType="text" />
@@ -33,26 +33,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10sp"
-        android:text="Description"
-        android:textStyle="bold"
+        android:text="@string/description"
         android:textColor="@color/black"
-        android:textSize="20sp" />
+        android:textSize="@dimen/tv_text_size" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editTextDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:textSize="22sp"
+        android:layout_marginBottom="16dp"
+        android:textSize="@dimen/text_size"
+
+        android:textStyle="bold"
         android:background="@drawable/edittext_no_underline"
         android:importantForAutofill="no"
         android:inputType="textMultiLine" />
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_gravity="center"
         android:layout_marginBottom="10dp"
-
         android:orientation="horizontal">
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_status"
@@ -60,20 +60,21 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
-            android:text="Status"
-            android:textStyle="bold"
+            android:text="@string/status"
             android:textColor="@color/black"
-            android:textSize="20sp" />
-
+            android:textSize="@dimen/tv_text_size" />
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/spinner_status"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="1"
+            android:text="@string/Todo"
+            android:textSize="@dimen/text_size"
+
             android:gravity="center"
-            android:text="todo"
-            android:textSize="22sp" />
+            android:textStyle="bold"
+            />
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -81,11 +82,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10sp"
-        android:text="Date"
-        android:textSize="20sp"
+        android:text="@string/date"
         android:textColor="@color/black"
-        android:textStyle="bold"
-        />
+        android:textSize="@dimen/tv_text_size" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_date"
@@ -93,32 +92,28 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:background="@drawable/edittext_no_underline"
-        android:drawableRight="@drawable/ic_calendar"
-        android:textSize="22sp"
         android:layout_gravity="center"
-        android:textStyle="normal" />
+        android:textSize="@dimen/text_size"
+
+        android:textStyle="bold"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:layout_marginBottom="10sp"
-        android:text="Time"
-        android:textStyle="bold"
-        android:layout_gravity="center"
+        android:text="@string/time"
         android:textColor="@color/black"
-        android:textSize="20sp" />
+        android:textSize="@dimen/tv_text_size"
+        />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/edittext_no_underline"
-        android:layout_gravity="center"
-        android:drawableRight="@drawable/ic_time"
-        android:textSize="22sp"
-        android:textStyle="normal" />
+        android:textSize="@dimen/text_size"
+        android:textStyle="bold" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnSave"
@@ -126,12 +121,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="30dp"
+android:gravity="center"
         android:background="@drawable/button"
-        android:text="Save"
-        android:textAllCaps="false"
-        android:textSize="18sp" />
-
-
+        android:text="@string/save"
+        android:textSize="16sp" />
 
 </LinearLayout>
 
