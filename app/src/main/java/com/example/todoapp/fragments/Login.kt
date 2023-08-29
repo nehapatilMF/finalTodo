@@ -1,7 +1,8 @@
 package com.example.todoapp.fragments
 
 import android.os.Bundle
-import android.util.Patterns
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ class Login : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupTextChangeListeners()
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 findNavController().navigate(R.id.back_to_intro)
@@ -25,10 +27,15 @@ class Login : Fragment() {
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
-
         binding?.buttonlogin?.setOnClickListener {
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
-                findNavController().navigate(R.id.navigate_from_login_to_todoMain)
+                val email = binding?.etEmail?.text.toString()
+                val password = binding?.etPassword?.text.toString()
+
+                if (isValidEmail(email) && isValidPassword(password)) {
+                    // Navigate to the next screen if both email and password are valid
+                    findNavController().navigate(R.id.navigate_from_login_to_todoMain)
+                }
             } else {
                 Toast.makeText(
                     requireContext(),
@@ -37,6 +44,7 @@ class Login : Fragment() {
                 ).show()
             }
         }
+
         binding?.signup?.setOnClickListener {
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
                 findNavController().navigate(R.id.navigate_from_login_to_register)
@@ -50,6 +58,55 @@ class Login : Fragment() {
         }
     }
 
+    private fun setupTextChangeListeners() {
+        binding?.etEmail?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // Not needed
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val email = s.toString()
+                if (!isValidEmail(email)) {
+                    binding?.etEmail?.error = getString(R.string.invalid_or_empty_email_id)
+                } else {
+                    binding?.etEmail?.error = null // Clear error message
+                }
+            }
+            override fun afterTextChanged(s: Editable?) {
+                // Not needed
+            }
+        })
+
+        binding?.etPassword?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // Not needed
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val password = s.toString()
+                if (!isValidPassword(password)) {
+                    binding?.etPassword?.error = "Password should be at least 6 characters long"
+                } else {
+                    binding?.etPassword?.error = null // Clear error message
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // Not needed
+            }
+        })
+    }
+
+    // Define your email and password validation methods
+    private fun isValidEmail(email: String): Boolean {
+        // You can use a regular expression or other validation logic here
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
+    private fun isValidPassword(password: String): Boolean {
+        // Add your password validation logic here (e.g., minimum length)
+        return password.length >= 6
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -57,27 +114,17 @@ class Login : Fragment() {
         binding = FragmentLoginBinding.inflate(layoutInflater, container, false)
         val email = binding?.etEmail?.text.toString()
         val password = binding?.etPassword?.text.toString()
+        if(email.isEmpty()){
+            binding?.etEmail?.error = "Email is Required"
+        }
+        if(password.isBlank()){
+            binding?.etPassword?.error = "Password is required"
+        }
         return binding?.root
     }
 
-    private fun validateInputs(emailAddress: String, password: String): Boolean {
-
-        if (emailAddress.isEmpty() || password.isEmpty()) {
-
-            binding?.etEmail?.error = "Email or Password cannot be empty."
-
-            return false
-
-        }
-        if (!Patterns.EMAIL_ADDRESS.matcher(emailAddress).matches()) {
-            binding?.etEmail?.error ="Invalid email address"
-            return false
-        }
-        return true
-    }
-override fun onDestroyView() {
+    override fun onDestroyView() {
         super.onDestroyView()
         binding = null
     }
 }
-

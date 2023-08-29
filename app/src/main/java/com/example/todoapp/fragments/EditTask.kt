@@ -45,6 +45,7 @@ class EditTask : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentEditTaskBinding.inflate(layoutInflater, container, false)
+
         val adapter: ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(
             requireContext(),
             R.array.spinner_items,  // An array resource containing your items

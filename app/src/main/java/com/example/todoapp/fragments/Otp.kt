@@ -36,7 +36,7 @@ class Otp : Fragment() {
             if(NetworkUtil.isNetworkAvailable(requireContext())) {
                 findNavController().navigate(R.id.navigate_from_otp_to_todoMain)
             }else{
-                Toast.makeText(requireContext(),"No internet connection.",Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(),getString(R.string.no_internet_connection),Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -47,7 +47,7 @@ class Otp : Fragment() {
                 binding?.resendCode?.visibility = View.INVISIBLE
                 startOtpTimer()
             }else{
-                Toast.makeText(requireContext(),"No internet connection.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(),getString(R.string.no_internet_connection), Toast.LENGTH_SHORT).show()
             }
         }
     }
