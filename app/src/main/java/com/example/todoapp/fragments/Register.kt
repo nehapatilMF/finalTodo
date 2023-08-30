@@ -22,8 +22,8 @@ class Register : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         setupTextChangeListeners()
+
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 findNavController().navigate(R.id.back_to_intro)
@@ -32,18 +32,34 @@ class Register : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
         binding?.login?.setOnClickListener {
-
-                if (NetworkUtil.isNetworkAvailable(requireContext())) {
-                    findNavController().navigate(R.id.navigate_from_register_to_login)
-                } else {
-                    showToast(getString(R.string.no_internet_connection))
-                }
-                    }
-        binding?.buttonNext?.setOnClickListener {
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
-                val email = binding?.editTextEmail?.text.toString().trim()
-                viewModel.email = email
-                findNavController().navigate(R.id.navigate_from_register_to_otp)
+                findNavController().navigate(R.id.navigate_from_register_to_login)
+            } else {
+                showToast(getString(R.string.no_internet_connection))
+            }
+        }
+        binding?.buttonNext?.setOnClickListener {
+            val userName = binding?.editTextUserName?.text.toString()
+            val mobileNumber = binding?.editTextMobileNumber?.text.toString()
+            val email = binding?.editTextEmail?.text.toString()
+            val password  = binding?.editTextPassword?.text.toString()
+            val confirmPassword = binding?.editTextConfirmPassword?.text.toString()
+            if (NetworkUtil.isNetworkAvailable(requireContext())) {
+                    if(userName.isNotEmpty()){
+                        if(isValidEmail(email) && email.isNotEmpty()){
+                            if(isValidNumber(mobileNumber) && mobileNumber.isNotEmpty()){
+                                if(isValidPassword(password) && password.isNotEmpty()){
+                                    val result = password.compareTo(confirmPassword)
+                                    if(result == 0 ){
+                                        viewModel.email = email
+                                        findNavController().navigate(R.id.navigate_from_register_to_otp)
+                                    }else{
+                                        binding?.editTextPassword?.error = "Password do not match."
+                                    }
+                                }else{showToast("required fields are empty.")}
+                            }else{showToast("required fields are empty.")}
+                        }else{showToast("required fields are empty.")}
+                    }else{showToast("required fields are empty.")}
             } else {
                 showToast(getString(R.string.no_internet_connection))
             }
@@ -53,7 +69,6 @@ class Register : Fragment() {
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
-
 
     private fun setupTextChangeListeners() {
         binding?.editTextMobileNumber?.addTextChangedListener(object :TextWatcher{
@@ -112,7 +127,6 @@ class Register : Fragment() {
         })
     }
 
-    // Define your email and password validation methods
     private fun isValidEmail(email: String): Boolean {
         // You can use a regular expression or other validation logic here
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
@@ -134,22 +148,28 @@ class Register : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentRegisterBinding.inflate(inflater, container, false)
-        val email = binding?.editTextEmail?.text.toString()
-        val password = binding?.editTextPassword?.text.toString()
         val username = binding?.editTextUserName?.text.toString()
         val mobileNumber = binding?.editTextMobileNumber?.text.toString()
+        val email = binding?.editTextEmail?.text.toString()
+        val password  = binding?.editTextPassword?.text.toString()
+        val confirmPassword = binding?.editTextConfirmPassword?.text.toString()
 
         if(email.isEmpty()){
-            binding?.editTextEmail?.error = "Email is Required"
+            binding?.editTextEmail?.error = "Email is Required."
         }
         if(password.isBlank()){
-            binding?.editTextPassword?.error = "Password is required"
+            binding?.editTextPassword?.error = "Password is required."
         }
+
+        if(confirmPassword.isBlank()){
+            binding?.editTextConfirmPassword?.error = "Confirm password is required."
+        }
+
         if(username.isBlank()){
-            binding?.editTextUserName?.error ="Required field"
+            binding?.editTextUserName?.error ="Username is required."
         }
         if(mobileNumber.isBlank()){
-            binding?.editTextMobileNumber?.error = "Required field"
+            binding?.editTextMobileNumber?.error = "Mobile number is required."
         }
         return binding?.root
     }
