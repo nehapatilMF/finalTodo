@@ -26,7 +26,17 @@ class Login : Fragment() {
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
-
+        binding?.forgotPassword?.setOnClickListener {
+            if (NetworkUtil.isNetworkAvailable(requireContext())) {
+                findNavController().navigate(R.id.navigate_from_login_to_forgotPassword)
+            }    else {
+            Toast.makeText(
+                requireContext(),
+                getString(R.string.no_internet_connection),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+        }
         binding?.buttonlogin?.setOnClickListener {
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
                 val email = binding?.etEmail?.text.toString()

@@ -39,6 +39,9 @@
         <action
             android:id="@+id/back_to_intro"
             app:destination="@id/intro" />
+        <action
+            android:id="@+id/navigate_from_login_to_forgotPassword"
+            app:destination="@id/forgotPassword" />
     </fragment>
     <fragment
         android:id="@+id/register"
@@ -100,6 +103,48 @@
         <action
             android:id="@+id/navigate_from_todoMain_to_editTask"
             app:destination="@id/editTask" />
+    </fragment>
+    <fragment
+        android:id="@+id/forgotPassword"
+        android:name="com.example.todoapp.fragments.ForgotPassword"
+        android:label="fragment_forgot_password"
+        tools:layout="@layout/fragment_forgot_password" >
+        <action
+            android:id="@+id/navigate_to_forgotPasswordOtp"
+            app:destination="@id/forgotPasswordOtp" />
+        <action
+            android:id="@+id/navigate_from_forgot_password_to_login"
+            app:destination="@id/login" />
+    </fragment>
+    <fragment
+        android:id="@+id/forgotPasswordOtp"
+        android:name="com.example.todoapp.fragments.ForgotPasswordOtp"
+        android:label="fragment_forgot_password_otp"
+        tools:layout="@layout/fragment_forgot_password_otp" >
+        <action
+            android:id="@+id/navigate_to_forgotPassword"
+            app:destination="@id/forgotPassword" />
+        <action
+            android:id="@+id/navigate_to_newPassword"
+            app:destination="@id/newPassword" />
+    </fragment>
+    <fragment
+        android:id="@+id/newPassword"
+        android:name="com.example.todoapp.fragments.NewPassword"
+        android:label="fragment_new_password"
+        tools:layout="@layout/fragment_new_password" >
+        <action
+            android:id="@+id/navigate_from__newPassword_to_login"
+            app:destination="@id/login" />
+    </fragment>
+    <fragment
+        android:id="@+id/changePassword"
+        android:name="com.example.todoapp.fragments.ChangePassword"
+        android:label="fragment_change_password"
+        tools:layout="@layout/fragment_change_password" >
+        <action
+            android:id="@+id/action_changePassword_to_login"
+            app:destination="@id/login" />
     </fragment>
 
 

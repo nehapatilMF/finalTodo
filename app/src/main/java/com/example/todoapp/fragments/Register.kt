@@ -3,7 +3,6 @@ package com.example.todoapp.fragments
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -139,6 +138,7 @@ class Register : Fragment() {
         val password = binding?.editTextPassword?.text.toString()
         val username = binding?.editTextUserName?.text.toString()
         val mobileNumber = binding?.editTextMobileNumber?.text.toString()
+
         if(email.isEmpty()){
             binding?.editTextEmail?.error = "Email is Required"
         }
