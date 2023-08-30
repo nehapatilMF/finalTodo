@@ -5,105 +5,114 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layout_marginTop="80dp"
-    android:padding="30dp"
     tools:context=".fragments.Login">
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/login"
-        android:text="@string/log_in"
-        android:textStyle="bold"
-        android:textSize="40sp"
-        android:textColor="@color/red"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp" />
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tv_enter_email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:textColor="@color/light_gray"
-        android:text="@string/Registered_email"
-        android:textSize="18sp" />
-
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/etEmail"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginBottom="10dp"
-        android:autofillHints="email"
-        android:background="@drawable/edittext_no_underline"
-        android:importantForAccessibility="yes"
-        android:inputType="textEmailAddress"
-        tools:ignore="SpeakableTextPresentCheck" />
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tv_enter_password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/light_gray"
-        android:text="@string/password"
-        android:textSize="18sp" />
-
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/etPassword"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginBottom="10dp"
-        android:background="@drawable/edittext_no_underline"
-        android:importantForAccessibility="yes"
-        android:importantForAutofill="no"
-        android:inputType="textPassword"
-        tools:ignore="SpeakableTextPresentCheck" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/forgotPassword"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        android:gravity="end"
-        android:text="@string/forgot_password"
-        android:textColor="@color/red"
-        android:textSize="20sp" />
-
-
+        android:layout_height="?android:attr/actionBarSize"
+        />
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:orientation="horizontal"
-        >
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/txt5"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="60dp"
-            android:layout_marginBottom="10dp"
-            android:layout_weight="1"
-            android:gravity="fill_horizontal"
-            android:text="@string/new_to_todo"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/signup"
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_marginEnd="40dp"
-            android:layout_marginBottom="10dp"
-            android:layout_weight="1"
-            android:text="@string/signup"
-            android:textColor="@color/red"
-            android:textSize="18sp" />
-    </LinearLayout>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="30dp">
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/buttonlogin"
-        android:layout_width="130dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@drawable/button"
-        android:importantForAccessibility="yes"
-        android:text="@string/log_in"
-        android:textAllCaps="false"
-        android:textSize="16sp" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="50dp"
+            android:text="@string/log_in"
+            android:textColor="@color/red"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_enter_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="@string/Registered_email"
+            android:textColor="@color/light_gray"
+            android:textSize="18sp" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginBottom="10dp"
+            android:autofillHints="email"
+            android:background="@drawable/edittext_no_underline"
+            android:importantForAccessibility="yes"
+            android:inputType="textEmailAddress"
+            tools:ignore="SpeakableTextPresentCheck" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_enter_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/password"
+            android:textColor="@color/light_gray"
+            android:textSize="18sp" />
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/edittext_no_underline"
+            android:importantForAccessibility="yes"
+            android:importantForAutofill="no"
+            android:inputType="textPassword"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/forgotPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:gravity="end"
+            android:text="@string/forgot_password"
+            android:textColor="@color/red"
+            android:textSize="20sp" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            >
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/txt5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="60dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:gravity="fill_horizontal"
+                android:text="@string/new_to_todo"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/signup"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:text="@string/signup"
+                android:textColor="@color/red"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/buttonlogin"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/button"
+            android:importantForAccessibility="yes"
+            android:text="@string/log_in"
+            android:textAllCaps="false"
+            android:textSize="16sp" />
+    </LinearLayout>
 </LinearLayout>

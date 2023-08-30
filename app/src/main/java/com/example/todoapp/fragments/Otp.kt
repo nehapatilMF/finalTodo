@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -24,14 +25,17 @@ class Otp : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
+        actionBar?.setDisplayHomeAsUpEnabled(true)
+        actionBar?.title = null
+
+        binding?.toolbar?.setNavigationOnClickListener{
+            findNavController().navigate(R.id.back_to_register)
+
+        }
         val registerViewModel: RegisterViewModel by activityViewModels()
         binding?.enteredEmail?.text = registerViewModel.email
-        val callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                findNavController().navigate(R.id.back_to_register)
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+
         binding?.buttonAuthorise?.setOnClickListener {
             if(NetworkUtil.isNetworkAvailable(requireContext())) {
                 findNavController().navigate(R.id.navigate_from_otp_to_todoMain)
@@ -57,6 +61,8 @@ class Otp : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentOtpBinding.inflate(layoutInflater, container, false)
+
+        (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
 
         binding?.otpBox1?.let { editTextList.add(it) }
         binding?.otpBox2?.let { editTextList.add(it) }

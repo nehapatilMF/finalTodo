@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.util.CalenderUtil
@@ -17,12 +18,13 @@ class EditTask : Fragment() {
     private var binding : FragmentEditTaskBinding? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                findNavController().navigate(R.id.navigate_from_newTask_to_todoMain)
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+        val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
+        actionBar?.setDisplayHomeAsUpEnabled(true)
+        actionBar?.title = null
+
+        binding?.toolbar?.setNavigationOnClickListener{
+            findNavController().navigate(R.id.navigate_from_newTask_to_todoMain)
+              }
         binding?.tvTime?.setOnClickListener {
             TimePickerUtil.showTimePickerDialog(requireContext()){ selectedTime ->
                 binding?.tvTime?.text = selectedTime
@@ -45,7 +47,7 @@ class EditTask : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentEditTaskBinding.inflate(layoutInflater, container, false)
-
+        (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
         val adapter: ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(
             requireContext(),
             R.array.spinner_items,  // An array resource containing your items

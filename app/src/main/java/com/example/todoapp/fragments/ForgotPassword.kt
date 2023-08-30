@@ -39,6 +39,8 @@ class ForgotPassword : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentForgotPasswordBinding.inflate(inflater,container,false)
+
+
         return binding?.root
     }
 

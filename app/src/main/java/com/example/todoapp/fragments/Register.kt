@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -22,14 +23,16 @@ class Register : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupTextChangeListeners()
 
-        val callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                findNavController().navigate(R.id.back_to_intro)
-            }
+        val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
+        actionBar?.setDisplayHomeAsUpEnabled(true)
+        actionBar?.title = null
+
+        binding?.toolbar?.setNavigationOnClickListener{
+            findNavController().navigate(R.id.back_to_intro)
+
         }
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+        setupTextChangeListeners()
 
         binding?.login?.setOnClickListener {
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
@@ -54,12 +57,12 @@ class Register : Fragment() {
                                         viewModel.email = email
                                         findNavController().navigate(R.id.navigate_from_register_to_otp)
                                     }else{
-                                        binding?.editTextPassword?.error = "Password do not match."
+                                        binding?.editTextPassword?.error = getString(R.string.no_match)
                                     }
-                                }else{showToast("required fields are empty.")}
-                            }else{showToast("required fields are empty.")}
-                        }else{showToast("required fields are empty.")}
-                    }else{showToast("required fields are empty.")}
+                                }else{showToast(getString(R.string.required_fields_are_empty))}
+                            }else{showToast(getString(R.string.required_fields_are_empty))}
+                        }else{showToast(getString(R.string.required_fields_are_empty))}
+                    }else{showToast(getString(R.string.required_fields_are_empty))}
             } else {
                 showToast(getString(R.string.no_internet_connection))
             }
@@ -73,13 +76,13 @@ class Register : Fragment() {
     private fun setupTextChangeListeners() {
         binding?.editTextMobileNumber?.addTextChangedListener(object :TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                binding?.editTextMobileNumber?.error = "Mobile number required"
+                binding?.editTextMobileNumber?.error = getString(R.string.mobile_number_required)
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val mobileNumber = s.toString()
                 if (!isValidNumber(mobileNumber)) {
-                    binding?.editTextMobileNumber?.error = "Invalid mobile number"
+                    binding?.editTextMobileNumber?.error = getString(R.string.invalid_mobile_number)
                 } else {
                     binding?.editTextMobileNumber?.error = null // Clear error message
                 }
@@ -115,7 +118,8 @@ class Register : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val password = s.toString()
                 if (!isValidPassword(password)) {
-                    binding?.editTextPassword?.error = "Password should be at least 6 characters long"
+                    binding?.editTextPassword?.error =
+                        getString(R.string.password_should_be_at_least_6_characters_long)
                 } else {
                     binding?.editTextPassword?.error = null // Clear error message
                 }
@@ -137,7 +141,7 @@ class Register : Fragment() {
         return password.length >= 6
     }
     private fun isValidNumber(phoneNumber : String):Boolean{
-        val pattern = Regex("^\\d{10}$")
+        val pattern = Regex(getString(R.string.d_10))
 
         // Use the matches() function to check if the input matches the pattern.
         return pattern.matches(phoneNumber)
@@ -148,6 +152,9 @@ class Register : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentRegisterBinding.inflate(inflater, container, false)
+
+        (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
+
         val username = binding?.editTextUserName?.text.toString()
         val mobileNumber = binding?.editTextMobileNumber?.text.toString()
         val email = binding?.editTextEmail?.text.toString()
@@ -166,10 +173,10 @@ class Register : Fragment() {
         }
 
         if(username.isBlank()){
-            binding?.editTextUserName?.error ="Username is required."
+            binding?.editTextUserName?.error = getString(R.string.username_is_required)
         }
         if(mobileNumber.isBlank()){
-            binding?.editTextMobileNumber?.error = "Mobile number is required."
+            binding?.editTextMobileNumber?.error = getString(R.string.mobile_number_is_required)
         }
         return binding?.root
     }
