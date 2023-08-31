@@ -17,15 +17,12 @@ import com.example.todoapp.util.ValidPatterns
 
 class ForgotPassword : Fragment() {
    private var binding:FragmentForgotPasswordBinding? = null
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupTextChangeListeners()
-
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.title = getString(R.string.forgot_password_title)
-
         binding?.toolbar?.setNavigationOnClickListener{
             findNavController().navigate(R.id.navigate_from_forgot_password_to_login)
         }
@@ -54,7 +51,6 @@ class ForgotPassword : Fragment() {
         binding?.enterEmail?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
-
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val email = s.toString()
                 if (!ValidPatterns.isValidEmail(email)) {
@@ -63,13 +59,10 @@ class ForgotPassword : Fragment() {
                     binding?.enterEmail?.error = null // Clear error message
                 }
             }
-
             override fun afterTextChanged(s: Editable?) {
-
             }
         })
     }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -81,7 +74,6 @@ class ForgotPassword : Fragment() {
         if(email.isEmpty()) {
             binding?.enterEmail?.error = getString(R.string.invalid_or_empty_email_id)
         }
-
         return binding?.root
     }
 }
