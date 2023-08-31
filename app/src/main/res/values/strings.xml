@@ -77,5 +77,6 @@
     <string name="email_is_required">Email is Required</string>
     <string name="password_is_required">Password is required.</string>
     <string name="confirm_password_is_required">Confirm password is required.</string>
+    <string name="todo1">todo</string>
 
 </resources>
