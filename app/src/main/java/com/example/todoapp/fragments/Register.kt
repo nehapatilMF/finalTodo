@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -15,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
 import com.example.todoapp.databinding.FragmentRegisterBinding
 import com.example.todoapp.util.NetworkUtil
+import com.example.todoapp.util.ValidPatterns
 import com.example.todoapp.viewModels.RegisterViewModel
 
 class Register : Fragment() {
@@ -49,9 +49,9 @@ class Register : Fragment() {
             val confirmPassword = binding?.editTextConfirmPassword?.text.toString()
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
                     if(userName.isNotEmpty()){
-                        if(isValidEmail(email) && email.isNotEmpty()){
-                            if(isValidNumber(mobileNumber) && mobileNumber.isNotEmpty()){
-                                if(isValidPassword(password) && password.isNotEmpty()){
+                        if(ValidPatterns.isValidEmail(email) && email.isNotEmpty()){
+                            if(ValidPatterns.isValidNumber(mobileNumber) && mobileNumber.isNotEmpty()){
+                                if(ValidPatterns.isValidPassword(password) && password.isNotEmpty()){
                                     val result = password.compareTo(confirmPassword)
                                     if(result == 0 ){
                                         viewModel.email = email
@@ -81,7 +81,7 @@ class Register : Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val mobileNumber = s.toString()
-                if (!isValidNumber(mobileNumber)) {
+                if (!ValidPatterns.isValidNumber(mobileNumber)) {
                     binding?.editTextMobileNumber?.error = getString(R.string.invalid_mobile_number)
                 } else {
                     binding?.editTextMobileNumber?.error = null // Clear error message
@@ -100,7 +100,7 @@ class Register : Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val email = s.toString()
-                if (!isValidEmail(email)) {
+                if (!ValidPatterns.isValidEmail(email)) {
                     binding?.editTextEmail?.error = getString(R.string.invalid_or_empty_email_id)
                 } else {
                     binding?.editTextEmail?.error = null // Clear error message
@@ -117,9 +117,9 @@ class Register : Fragment() {
             }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val password = s.toString()
-                if (!isValidPassword(password)) {
+                if (!ValidPatterns.isValidPassword(password)) {
                     binding?.editTextPassword?.error =
-                        getString(R.string.password_should_be_at_least_8_characters_long)
+                        getString(R.string.password_pattern_requirement)
                 } else {
                     binding?.editTextPassword?.error = null // Clear error message
                 }
@@ -131,23 +131,7 @@ class Register : Fragment() {
         })
     }
 
-    private fun isValidEmail(email: String): Boolean {
-        // You can use a regular expression or other validation logic here
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
-    }
-
-    private fun isValidPassword(password: String): Boolean {
-        // Add your password validation logic here (e.g., minimum length)
-        return password.length >= 8
-    }
-    private fun isValidNumber(phoneNumber : String):Boolean{
-        val pattern = Regex(getString(R.string.d_10))
-
-        // Use the matches() function to check if the input matches the pattern.
-        return pattern.matches(phoneNumber)
-    }
-
-    override fun onCreateView(
+       override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
@@ -162,17 +146,15 @@ class Register : Fragment() {
         val confirmPassword = binding?.editTextConfirmPassword?.text.toString()
 
         if(email.isEmpty()){
-            binding?.editTextEmail?.error = "Email is Required."
+            binding?.editTextEmail?.error = getString(R.string.email_is_required)
         }
         if(password.isBlank()){
             binding?.editTextPassword?.error = getString(R.string.password_is_required)
         }
-
         if(confirmPassword.isBlank()){
             binding?.editTextConfirmPassword?.error =
                 getString(R.string.confirm_password_is_required)
         }
-
         if(username.isBlank()){
             binding?.editTextUserName?.error = getString(R.string.username_is_required)
         }

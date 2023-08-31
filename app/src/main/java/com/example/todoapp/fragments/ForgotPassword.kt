@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
 import com.example.todoapp.databinding.FragmentForgotPasswordBinding
 import com.example.todoapp.util.NetworkUtil
+import com.example.todoapp.util.ValidPatterns
 
 class ForgotPassword : Fragment() {
    private var binding:FragmentForgotPasswordBinding? = null
@@ -31,7 +32,7 @@ class ForgotPassword : Fragment() {
         binding?.btnSubmit?.setOnClickListener{
             val email =binding?.enterEmail?.text.toString()
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
-                if( isValidEmail(email)&& email.isNotEmpty()) {
+                if( ValidPatterns.isValidEmail(email)&& email.isNotEmpty()) {
                     findNavController().navigate(R.id.navigate_to_forgotPasswordOtp)
                 }else{
                     Toast.makeText(
@@ -56,7 +57,7 @@ class ForgotPassword : Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val email = s.toString()
-                if (!isValidEmail(email)) {
+                if (!ValidPatterns.isValidEmail(email)) {
                     binding?.enterEmail?.error = getString(R.string.invalid_or_empty_email_id)
                 } else {
                     binding?.enterEmail?.error = null // Clear error message
@@ -67,10 +68,6 @@ class ForgotPassword : Fragment() {
 
             }
         })
-    }
-    private fun isValidEmail(email: String): Boolean {
-        // You can use a regular expression or other validation logic here
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
     }
 
     override fun onCreateView(

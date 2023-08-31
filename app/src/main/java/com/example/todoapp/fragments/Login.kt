@@ -14,6 +14,8 @@ import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
 import com.example.todoapp.databinding.FragmentLoginBinding
 import com.example.todoapp.util.NetworkUtil
+import com.example.todoapp.util.ValidPatterns
+import java.util.regex.Pattern
 
 
 class Login : Fragment() {
@@ -31,13 +33,7 @@ class Login : Fragment() {
         binding?.toolbar?.setNavigationOnClickListener{
             findNavController().navigate(R.id.back_to_intro)
        }
-       /** val callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                findNavController().navigate(R.id.back_to_intro)
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
-**/
+
         binding?.forgotPassword?.setOnClickListener {
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
                 findNavController().navigate(R.id.navigate_from_login_to_forgotPassword)
@@ -49,12 +45,12 @@ class Login : Fragment() {
             ).show()
         }
         }
-        binding?.buttonlogin?.setOnClickListener {
+        binding?.buttonLogin?.setOnClickListener {
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
                 val email = binding?.etEmail?.text.toString()
                 val password = binding?.etPassword?.text.toString()
 
-                if (isValidEmail(email) && isValidPassword(password)) {
+                if (ValidPatterns.isValidEmail(email) && ValidPatterns.isValidPassword(password)) {
                     // Navigate to the next screen if both email and password are valid
                     findNavController().navigate(R.id.navigate_from_login_to_todoMain)
                 }else{
@@ -93,7 +89,7 @@ class Login : Fragment() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val email = s.toString()
-                if (!isValidEmail(email)) {
+                if (!ValidPatterns.isValidEmail(email)) {
                     binding?.etEmail?.error = getString(R.string.invalid_or_empty_email_id)
                 } else {
                     binding?.etEmail?.error = null // Clear error message
@@ -110,8 +106,8 @@ class Login : Fragment() {
             }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val password = s.toString()
-                if (!isValidPassword(password)) {
-                    binding?.etPassword?.error = "Password should be at least 6 characters long"
+                if (!ValidPatterns.isValidPassword(password)) {
+                    binding?.etPassword?.error = getString(R.string.password_pattern_requirement)
                 } else {
                     binding?.etPassword?.error = null // Clear error message
                 }
@@ -121,17 +117,6 @@ class Login : Fragment() {
                 // Not needed
             }
         })
-    }
-
-    // Define your email and password validation methods
-    private fun isValidEmail(email: String): Boolean {
-        // You can use a regular expression or other validation logic here
-        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
-    }
-
-    private fun isValidPassword(password: String): Boolean {
-        // Add your password validation logic here (e.g., minimum length)
-        return password.length >= 8
     }
 
     override fun onCreateView(
@@ -149,7 +134,7 @@ class Login : Fragment() {
             binding?.etEmail?.error = getString(R.string.email_is_required)
         }
         if(password.isBlank()){
-            binding?.etPassword?.error = "Password is required"
+            binding?.etPassword?.error = getString(R.string.invalid_or_empty_password)
         }
         return binding?.root
     }

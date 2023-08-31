@@ -12,16 +12,17 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
 import com.example.todoapp.databinding.FragmentNewPasswordBinding
-import com.example.todoapp.databinding.FragmentNewTaskBinding
 import com.example.todoapp.util.NetworkUtil
+import com.example.todoapp.util.ValidPatterns
 
 class NewPassword : Fragment() {
     private var binding : FragmentNewPasswordBinding? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupTextChangeListeners()
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
-        actionBar?.title = "Forgot password"
+        actionBar?.title = getString(R.string.forgot_password)
         binding?.toolbar?.setNavigationOnClickListener {
             findNavController().navigate(R.id.navigate_from__newPassword_to_forgotPasswordOtp)
         }
@@ -29,16 +30,14 @@ class NewPassword : Fragment() {
             val password  = binding?.etNewPassword?.text.toString()
             val confirmPassword = binding?.etConfirmPassword?.text.toString()
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
-                if(password.isNotEmpty() && isValidPassword(password)){
-
-                    val result = password.compareTo(confirmPassword)
-                    if(result == 0 ){
-                        findNavController().navigate(R.id.navigate_from__newPassword_to_login)
-                    }else{
-                        binding?.etNewPassword?.error = getString(R.string.no_match)
-                    }
-                    if(confirmPassword.isNotEmpty() && isValidPassword(confirmPassword)){
-
+                if(password.isNotEmpty() && ValidPatterns.isValidPassword(password)){
+                    if(confirmPassword.isNotEmpty() && ValidPatterns.isValidPassword(confirmPassword)){
+                        val result = password.compareTo(confirmPassword)
+                        if(result == 0 ){
+                            findNavController().navigate(R.id.navigate_from__newPassword_to_login)
+                        }else{
+                            binding?.etNewPassword?.error = getString(R.string.no_match)
+                        }
                     } else {
                         Toast.makeText(requireContext(),
                             getString(R.string.required_fields_are_empty),
@@ -64,9 +63,9 @@ class NewPassword : Fragment() {
             }
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val password = s.toString()
-                if (!isValidPassword(password)) {
+                if (!ValidPatterns.isValidPassword(password)) {
                     binding?.etNewPassword?.error =
-                        getString(R.string.password_should_be_at_least_8_characters_long)
+                        getString(R.string.password_pattern_requirement)
                 } else {
                     binding?.etNewPassword?.error = null // Clear error message
                 }
@@ -77,10 +76,7 @@ class NewPassword : Fragment() {
             }
         })
     }
-    private fun isValidPassword(password: String): Boolean {
-        // Add your password validation logic here (e.g., minimum length)
-        return password.length >= 8
-    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
