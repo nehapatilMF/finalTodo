@@ -102,7 +102,7 @@
         android:background="@drawable/edittext_no_underline"
         android:layout_gravity="center"
         android:textSize="@dimen/text_size"
-
+        android:drawableRight="@drawable/ic_calendar"
         android:textStyle="bold"/>
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -121,6 +121,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/edittext_no_underline"
         android:textSize="@dimen/text_size"
+        android:drawableRight="@drawable/ic_time"
         android:textStyle="bold" />
 
     <androidx.appcompat.widget.AppCompatButton

@@ -103,6 +103,9 @@
         <action
             android:id="@+id/navigate_from_todoMain_to_editTask"
             app:destination="@id/editTask" />
+        <action
+            android:id="@+id/action_todoMain_to_profile"
+            app:destination="@id/profile" />
     </fragment>
     <fragment
         android:id="@+id/forgotPassword"
@@ -140,6 +143,47 @@
             android:id="@+id/navigate_from__newPassword_to_forgotPasswordOtp"
             app:destination="@id/login" />
 
+    </fragment>
+    <fragment
+        android:id="@+id/profile"
+        android:name="com.example.todoapp.fragments.Profile"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profile_to_todoMain"
+            app:destination="@id/todoMain" />
+        <action
+            android:id="@+id/action_profile_to_personalInformation"
+            app:destination="@id/personalInformation" />
+        <action
+            android:id="@+id/action_profile_to_changePassword"
+            app:destination="@id/changePassword" />
+        <action
+            android:id="@+id/action_profile_to_deleteAccount"
+            app:destination="@id/deleteAccount" />
+    </fragment>
+    <fragment
+        android:id="@+id/personalInformation"
+        android:name="com.example.todoapp.fragments.PersonalInformation"
+        android:label="fragment_personal_information"
+        tools:layout="@layout/fragment_personal_information" >
+        <action
+            android:id="@+id/action_personalInformation_to_profile"
+            app:destination="@id/profile" />
+    </fragment>
+    <fragment
+        android:id="@+id/changePassword"
+        android:name="com.example.todoapp.fragments.ChangePassword"
+        android:label="fragment_change_password2"
+        tools:layout="@layout/fragment_change_password" />
+    <fragment
+        android:id="@+id/deleteAccount"
+        android:name="com.example.todoapp.fragments.DeleteAccount"
+        android:label="fragment_delete_account"
+        tools:layout="@layout/fragment_delete_account" >
+        <action
+            android:id="@+id/action_deleteAccount_to_profile"
+            app:destination="@id/profile" />
     </fragment>
 
 

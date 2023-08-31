@@ -80,4 +80,8 @@
     <string name="password_pattern"><![CDATA[^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};\':\",./<>?|\\\\]).{8,}$]]></string>
     <string name="password_pattern_requirement">"At least one uppercase letter.\nAt least one lowercase letter.\nAt least one digit.\nAt least one special character.\nAt least 8 characters in total. "</string>
     <string name="sdfvbsrdv">"sdfvbsrdv "</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="logout">Logout</string>
+    <string name="change_password">Change Password</string>
+    <string name="personal_information">Personal Information</string>
 </resources>
