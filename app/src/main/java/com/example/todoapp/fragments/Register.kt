@@ -119,7 +119,7 @@ class Register : Fragment() {
                 val password = s.toString()
                 if (!isValidPassword(password)) {
                     binding?.editTextPassword?.error =
-                        getString(R.string.password_should_be_at_least_6_characters_long)
+                        getString(R.string.password_should_be_at_least_8_characters_long)
                 } else {
                     binding?.editTextPassword?.error = null // Clear error message
                 }
@@ -138,7 +138,7 @@ class Register : Fragment() {
 
     private fun isValidPassword(password: String): Boolean {
         // Add your password validation logic here (e.g., minimum length)
-        return password.length >= 6
+        return password.length >= 8
     }
     private fun isValidNumber(phoneNumber : String):Boolean{
         val pattern = Regex(getString(R.string.d_10))
@@ -165,11 +165,12 @@ class Register : Fragment() {
             binding?.editTextEmail?.error = "Email is Required."
         }
         if(password.isBlank()){
-            binding?.editTextPassword?.error = "Password is required."
+            binding?.editTextPassword?.error = getString(R.string.password_is_required)
         }
 
         if(confirmPassword.isBlank()){
-            binding?.editTextConfirmPassword?.error = "Confirm password is required."
+            binding?.editTextConfirmPassword?.error =
+                getString(R.string.confirm_password_is_required)
         }
 
         if(username.isBlank()){

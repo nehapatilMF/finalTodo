@@ -136,6 +136,9 @@
         <action
             android:id="@+id/navigate_from__newPassword_to_login"
             app:destination="@id/login" />
+        <action
+            android:id="@+id/navigate_from__newPassword_to_forgotPasswordOtp"
+            app:destination="@id/login" />
 
     </fragment>
 

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
@@ -21,7 +22,10 @@ class ForgotPasswordOtp : Fragment() {
     private val editTextList = mutableListOf<View>()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding?.btnBack?.setOnClickListener{
+        val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
+        actionBar?.setDisplayHomeAsUpEnabled(true)
+        actionBar?.title = "Forgot password"
+        binding?.toolbar?.setNavigationOnClickListener {
             findNavController().navigate(R.id.navigate_to_forgotPassword)
         }
         binding?.btnNext?.setOnClickListener {
@@ -39,6 +43,8 @@ class ForgotPasswordOtp : Fragment() {
             if(NetworkUtil.isNetworkAvailable(requireContext())) {
                 binding?.timer?.visibility = View.VISIBLE
                 binding?.tvOtpExp?.visibility = View.VISIBLE
+                binding?.tvMin?.visibility = View.VISIBLE
+
                 binding?.resendCode?.visibility = View.INVISIBLE
                 startOtpTimer()
             }else{
@@ -54,7 +60,7 @@ class ForgotPasswordOtp : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentForgotPasswordOtpBinding.inflate(inflater, container, false)
-
+        (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
         binding?.otpBox1?.let { editTextList.add(it) }
         binding?.otpBox2?.let { editTextList.add(it) }
         binding?.otpBox3?.let { editTextList.add(it) }
@@ -86,6 +92,7 @@ class ForgotPasswordOtp : Fragment() {
         }
         binding?.timer?.visibility = View.VISIBLE
         binding?.tvOtpExp?.visibility = View.VISIBLE
+        binding?.tvMin?.visibility = View.VISIBLE
         binding?.resendCode?.visibility = View.INVISIBLE
         startOtpTimer()
         return binding?.root
@@ -104,6 +111,7 @@ class ForgotPasswordOtp : Fragment() {
                 binding?.timer?.text = getString(R.string.timer_placeholder)
                 binding?.timer?.visibility = View.INVISIBLE
                 binding?.tvOtpExp?.visibility = View.INVISIBLE
+                binding?.tvMin?.visibility = View.INVISIBLE
                 binding?.resendCode?.visibility = View.VISIBLE
 
             }

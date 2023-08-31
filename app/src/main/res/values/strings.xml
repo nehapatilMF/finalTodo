@@ -27,7 +27,7 @@
     <string name="delete_task">Delete Task</string>
 
     <string name="timer_placeholder">00:00</string>
-    <string name="timer_duration">300000</string>
+    <string name="timer_duration">3000</string>
     //5*60*1000 = 300000
 
     <string-array name="spinner_items">
@@ -57,7 +57,7 @@
     <string name="back">Back</string>
     <string name="next">Next</string>
     <string name="resend_code">Resend Code</string>
-    <string name="no_worries_we_will_send_you_reset_instructions">No worries, we will send you reset Instructions.</string>
+    <string name="no_worries_we_will_send_you_reset_instructions">Please enter your email address. You will receive an OTP over email to reset your password</string>
     <string name="reset_password">Reset Password</string>
 
     <string name="go_back">are you sure you want to go back without saving?</string>
@@ -67,10 +67,15 @@
     <string name="no_match">Password do not match.</string>
     <string name="invalid_mobile_number">Invalid mobile number</string>
     <string name="mobile_number_required">Mobile number required</string>
-    <string name="password_should_be_at_least_6_characters_long">Password should be at least 6 characters long</string>
+    <string name="password_should_be_at_least_8_characters_long">Password should be at least 8 characters long</string>
     <string name="d_10">^\\d{10}$</string>
     <string name="mobile_number_is_required">Mobile number is required.</string>
     <string name="username_is_required">Username is required.</string>
     <string name="new_password">New Password</string>
+    <string name="_8_characters_minimum_case_sensitive"><![CDATA[8 characters minimum & case sensitive.]]></string>
+    <string name="forgot_password_title">Forgot password</string>
+    <string name="email_is_required">Email is Required</string>
+    <string name="password_is_required">Password is required.</string>
+    <string name="confirm_password_is_required">Confirm password is required.</string>
 
 </resources>

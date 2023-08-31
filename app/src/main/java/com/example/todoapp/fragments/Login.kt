@@ -131,7 +131,7 @@ class Login : Fragment() {
 
     private fun isValidPassword(password: String): Boolean {
         // Add your password validation logic here (e.g., minimum length)
-        return password.length >= 6
+        return password.length >= 8
     }
 
     override fun onCreateView(
@@ -146,7 +146,7 @@ class Login : Fragment() {
         val email = binding?.etEmail?.text.toString()
         val password = binding?.etPassword?.text.toString()
         if(email.isEmpty()){
-            binding?.etEmail?.error = "Email is Required"
+            binding?.etEmail?.error = getString(R.string.email_is_required)
         }
         if(password.isBlank()){
             binding?.etPassword?.error = "Password is required"
