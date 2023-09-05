@@ -84,4 +84,5 @@
     <string name="logout">Logout</string>
     <string name="change_password">Change Password</string>
     <string name="personal_information">Personal Information</string>
+    <string name="aready_user_exist">User already exist with this email id, kindly login to continue using the application.</string>
 </resources>

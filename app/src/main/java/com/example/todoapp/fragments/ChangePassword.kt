@@ -20,4 +20,8 @@ class ChangePassword : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_change_password, container, false)
     }
+    override fun onDestroyView() {
+        super.onDestroyView()
+       // binding = null
+    }
 }

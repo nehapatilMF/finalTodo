@@ -125,7 +125,7 @@
         android:label="fragment_forgot_password_otp"
         tools:layout="@layout/fragment_forgot_password_otp" >
         <action
-            android:id="@+id/navigate_to_forgotPassword"
+            android:id="@+id/navigate_From_forgotPasswordOtp_to_login"
             app:destination="@id/forgotPassword" />
         <action
             android:id="@+id/navigate_to_newPassword"
@@ -152,6 +152,9 @@
         <action
             android:id="@+id/action_profile_to_todoMain"
             app:destination="@id/todoMain" />
+        <action
+            android:id="@+id/action_profile_to_login"
+            app:destination="@id/login" />
         <action
             android:id="@+id/action_profile_to_personalInformation"
             app:destination="@id/personalInformation" />

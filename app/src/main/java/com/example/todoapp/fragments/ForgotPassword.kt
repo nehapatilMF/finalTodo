@@ -6,13 +6,13 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
 import com.example.todoapp.databinding.FragmentForgotPasswordBinding
+import com.example.todoapp.util.DialogUtils
 import com.example.todoapp.util.NetworkUtil
 import com.example.todoapp.util.ValidPatterns
 import com.example.todoapp.viewModels.ForgotPasswordViewModel
@@ -30,6 +30,7 @@ class ForgotPassword : Fragment() {
         actionBar?.title = getString(R.string.forgot_password_title)
         binding?.toolbar?.setNavigationOnClickListener{
             findNavController().navigate(R.id.navigate_from_forgot_password_to_login)
+
         }
         binding?.btnSubmit?.setOnClickListener{
             val email =binding?.enterEmail?.text.toString()
@@ -37,20 +38,14 @@ class ForgotPassword : Fragment() {
                 if( ValidPatterns.isValidEmail(email)&& email.isNotEmpty()) {
                     viewModel.email = email
                     viewModel.forgotPasswordRequestOtp(email)
-
                 }else{
-                    Toast.makeText(
-                        requireContext(),
-                        getString(R.string.required_fields_are_empty),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    val message =getString(R.string.required_fields_are_empty)
+                    DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
                 }
             }    else {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.no_internet_connection),
-                    Toast.LENGTH_SHORT
-                ).show()
+
+                val message = getString(R.string.no_internet_connection)
+                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
             }
         }
     }
@@ -82,7 +77,9 @@ class ForgotPassword : Fragment() {
             if(status == "200") {
                 findNavController().navigate(R.id.navigate_to_forgotPasswordOtp)
             }else{
-                Toast.makeText(requireContext(),"Invalid email Id.",Toast.LENGTH_SHORT).show()
+
+                val message = getString(R.string.invalid_or_empty_email_id)
+                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
             }
         }
         val email = binding?.enterEmail?.text.toString()
@@ -90,6 +87,11 @@ class ForgotPassword : Fragment() {
             binding?.enterEmail?.error = getString(R.string.invalid_or_empty_email_id)
         }
         return binding?.root
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
+
     }
 }
 

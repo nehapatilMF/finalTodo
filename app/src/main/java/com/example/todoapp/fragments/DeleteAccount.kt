@@ -18,4 +18,8 @@ class DeleteAccount : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_delete_account, container, false)
     }
+    override fun onDestroyView() {
+        super.onDestroyView()
+      //  binding = null
+    }
 }

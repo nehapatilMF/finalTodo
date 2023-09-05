@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -15,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
 import com.example.todoapp.base64.Base64
 import com.example.todoapp.databinding.FragmentRegisterBinding
+import com.example.todoapp.util.DialogUtils
 import com.example.todoapp.util.NetworkUtil
 import com.example.todoapp.util.ValidPatterns
 import com.example.todoapp.viewModels.RegisterViewModel
@@ -30,12 +30,6 @@ class Register : Fragment() {
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.title = null
-        val callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                requireActivity().finishAffinity()
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
         binding?.toolbar?.setNavigationOnClickListener{
             findNavController().navigate(R.id.back_to_intro)
@@ -61,10 +55,11 @@ class Register : Fragment() {
             if(status == "200") {
                 findNavController().navigate(R.id.navigate_from_register_to_otp)
             }else{
-                Toast.makeText(requireContext(),"The email has already been taken.",Toast.LENGTH_SHORT).show()
+                val message = getString(R.string.aready_user_exist)
+                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
             }
         }
-          return binding?.root
+        return binding?.root
     }
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
@@ -152,13 +147,16 @@ class Register : Fragment() {
         if (NetworkUtil.isNetworkAvailable(requireContext())) {
             findNavController().navigate(R.id.navigate_from_register_to_login)
         } else {
-            showToast(getString(R.string.no_internet_connection))
+
+            val message = getString(R.string.no_internet_connection)
+            DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
         }
     }
     private fun handleRegister(){
         val userName = binding?.editTextUserName?.text.toString()
         val mobileNumber = binding?.editTextMobileNumber?.text.toString()
-        val mobile =mobileNumber.toLong()
+       // val     mobile = mobileNumber.toLong()
+
         val email = binding?.editTextEmail?.text.toString()
         val password  = binding?.editTextPassword?.text.toString()
         val confirmPassword = binding?.editTextConfirmPassword?.text.toString()
@@ -171,22 +169,33 @@ class Register : Fragment() {
                             if(result == 0 ){
                                 viewModel.email = email
                                 val encodedPassword = Base64.encodeToBase64(password)
+                                val mobile = mobileNumber.toLong()
                                 viewModel.signup(userName, mobile, email, encodedPassword)
 
                             }else{
                                 binding?.editTextPassword?.error = getString(R.string.no_match)
                             }
-                        }else{showToast(getString(R.string.required_fields_are_empty))}
-                    }else{showToast(getString(R.string.required_fields_are_empty))}
-                }else{showToast(getString(R.string.required_fields_are_empty))}
-            }else{showToast(getString(R.string.required_fields_are_empty))}
+                        }else{
+                            val message = getString(R.string.required_fields_are_empty)
+                            DialogUtils.showAutoDismissAlertDialog(requireContext(), message) }
+                    }else{
+                        val message = getString(R.string.required_fields_are_empty)
+                        DialogUtils.showAutoDismissAlertDialog(requireContext(), message)}
+                }else{
+                    val message = getString(R.string.required_fields_are_empty)
+                    DialogUtils.showAutoDismissAlertDialog(requireContext(), message)}
+            }else{
+                val message = getString(R.string.required_fields_are_empty)
+                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)}
         } else {
-            showToast(getString(R.string.no_internet_connection))
+            val message = getString(R.string.no_internet_connection)
+            DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
         }
     }
-
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
+
     }
+
 }

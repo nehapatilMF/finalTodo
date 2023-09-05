@@ -19,7 +19,7 @@ class Intro : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (SDK_INT >= VERSION_CODES.ECLAIR) {
-            requireActivity().window.statusBarColor = resources.getColor(R.color.white)
+            requireActivity().window.statusBarColor = resources.getColor(R.color.bckcolor)
         }
 
         val callback = object : OnBackPressedCallback(true) {
@@ -47,5 +47,6 @@ class Intro : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
+
     }
 }

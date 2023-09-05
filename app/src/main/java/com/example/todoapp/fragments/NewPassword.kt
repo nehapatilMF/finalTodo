@@ -9,14 +9,22 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
+import com.example.todoapp.base64.Base64
 import com.example.todoapp.databinding.FragmentNewPasswordBinding
+import com.example.todoapp.util.DialogUtils
 import com.example.todoapp.util.NetworkUtil
 import com.example.todoapp.util.ValidPatterns
+import com.example.todoapp.viewModels.ForgotPasswordViewModel
+import com.example.todoapp.viewModels.NewPasswordViewModel
 
 class NewPassword : Fragment() {
     private var binding : FragmentNewPasswordBinding? = null
+
+    private val viewModel: NewPasswordViewModel by activityViewModels()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupTextChangeListeners()
@@ -25,7 +33,16 @@ class NewPassword : Fragment() {
         actionBar?.title = getString(R.string.forgot_password)
         binding?.toolbar?.setNavigationOnClickListener {
             findNavController().navigate(R.id.navigate_from__newPassword_to_forgotPasswordOtp)
+
         }
+        val forgotPasswordViewModel: ForgotPasswordViewModel by activityViewModels()
+        val email = forgotPasswordViewModel.email
+        var npOtp: String? = null
+
+        forgotPasswordViewModel.otpResult.observe(viewLifecycleOwner) { otp ->
+          npOtp = otp
+         }
+
         binding?.btnNext?.setOnClickListener {
             val password  = binding?.etNewPassword?.text.toString()
             val confirmPassword = binding?.etConfirmPassword?.text.toString()
@@ -34,24 +51,31 @@ class NewPassword : Fragment() {
                     if(confirmPassword.isNotEmpty() && ValidPatterns.isValidPassword(confirmPassword)){
                         val result = password.compareTo(confirmPassword)
                         if(result == 0 ){
-                            findNavController().navigate(R.id.navigate_from__newPassword_to_login)
+                            viewModel.email = email
+                            val encodedPassword = Base64.encodeToBase64(password)
+                            val otp = npOtp?.toLong()
+                            if (otp != null) {
+                                viewModel.resetPassword(otp,email,encodedPassword)
+                            }
                         }else{
                             binding?.etNewPassword?.error = getString(R.string.no_match)
                         }
                     } else {
-                        Toast.makeText(requireContext(),
-                            getString(R.string.required_fields_are_empty),
-                            Toast.LENGTH_SHORT).show()
+
+                        val message =  getString(R.string.required_fields_are_empty)
+                        DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+
                     }
                 }else{
-                    Toast.makeText(requireContext(),
-                        getString(R.string.required_fields_are_empty),
-                        Toast.LENGTH_SHORT).show()
+
+                    val message =  getString(R.string.required_fields_are_empty)
+                    DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+
                 }
             }else{
-                Toast.makeText(requireContext(),
-                    getString(R.string.no_internet_connection),
-                    Toast.LENGTH_SHORT).show()
+
+                val message = getString(R.string.no_internet_connection)
+                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
             }
 
         }
@@ -81,12 +105,24 @@ class NewPassword : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+
 
         binding = FragmentNewPasswordBinding.inflate(layoutInflater,container,false)
+
         val newPassword = binding?.etNewPassword?.text.toString()
         val confirmNewPassword = binding?.etConfirmPassword?.text.toString()
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
+        viewModel.resetPasswordResult.observe(viewLifecycleOwner){ status ->
+            Toast.makeText(requireContext(),status,Toast.LENGTH_SHORT).show()
+            if(status == "200"){
+                findNavController().navigate(R.id.navigate_from__newPassword_to_login)
+            }else{
+
+                val message = "Invalid otp"
+                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+
+            }
+        }
         if(newPassword.isBlank()){
             binding?.etNewPassword?.error = getString(R.string.password_is_required)
         }

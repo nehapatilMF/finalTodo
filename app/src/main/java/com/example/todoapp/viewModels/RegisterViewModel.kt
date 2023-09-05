@@ -30,9 +30,9 @@ class RegisterViewModel : ViewModel() {
     ) {
         viewModelScope.launch {
             try {
-                val signupResponse = apiInterface?.signup(name, mobile, email, password)
-                val response = signupResponse?.body()
-                    if(signupResponse?.isSuccessful == true) {
+                val apiResponse = apiInterface?.signup(name, mobile, email, password)
+                val response = apiResponse?.body()
+                    if(apiResponse?.isSuccessful == true) {
                         val status = response?.status.toString()
                         _signupResult.postValue(status)
                          _otpResult.value = response?.data?.otp.toString()

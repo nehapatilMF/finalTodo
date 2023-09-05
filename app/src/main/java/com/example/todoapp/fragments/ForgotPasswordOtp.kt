@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
 import com.example.todoapp.databinding.FragmentForgotPasswordOtpBinding
+import com.example.todoapp.util.DialogUtils
 import com.example.todoapp.util.NetworkUtil
 import com.example.todoapp.util.TimerUtil
 import com.example.todoapp.viewModels.ForgotPasswordOtpViewModel
@@ -26,7 +26,8 @@ class ForgotPasswordOtp : Fragment() {
         actionBar?.title = "Forgot password"
 
         binding?.toolbar?.setNavigationOnClickListener {
-            findNavController().navigate(R.id.navigate_to_forgotPassword)
+            findNavController().navigate(R.id.navigate_From_forgotPasswordOtp_to_login)
+
         }
         val forgotPasswordViewModel: ForgotPasswordViewModel by activityViewModels()
         val email = forgotPasswordViewModel.email
@@ -36,15 +37,22 @@ class ForgotPasswordOtp : Fragment() {
 
         binding?.btnNext?.setOnClickListener {
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
+
                 val otp = binding?.etOtp?.text.toString()
-                val otp1 = otp.toLong()
-                viewModel.forgotPasswordVerifyOtp(email, otp1)
+
+                if(otp.isNotEmpty()){
+                    val otp1 = otp.toLong()
+                    viewModel.forgotPasswordVerifyOtp(email, otp1)
+                }else{
+
+                    val message = "Please enter Otp"
+                    DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+                }
+
             } else {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.no_internet_connection),
-                    Toast.LENGTH_SHORT
-                ).show()
+
+                val message = getString(R.string.no_internet_connection)
+                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
             }
         }
         binding?.resendCode?.setOnClickListener {
@@ -56,11 +64,9 @@ class ForgotPasswordOtp : Fragment() {
                 startOtpTimer()
                 viewModel.forgotPasswordResendOtp(email)
             } else {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.no_internet_connection),
-                    Toast.LENGTH_SHORT
-                ).show()
+
+                val message = getString(R.string.no_internet_connection)
+                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
             }
         }
     }
@@ -79,6 +85,13 @@ class ForgotPasswordOtp : Fragment() {
         viewModel.otpResult.observe(viewLifecycleOwner) { status ->
             if (status == "200") {
                 findNavController().navigate(R.id.navigate_to_newPassword)
+            } else {
+                viewModel.otpResult.observe(viewLifecycleOwner){ msg ->
+                    val message = msg.toString()
+                    DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+                }
+
+
             }
         }
         viewModel.resendOtpResult.observe(viewLifecycleOwner) { status ->
@@ -86,6 +99,11 @@ class ForgotPasswordOtp : Fragment() {
                 viewModel.newOtpResult.observe(viewLifecycleOwner) { newOtp ->
                     binding?.jsonOtp?.text = newOtp
                 }
+                }else{
+                val message = getString(R.string.invalid_or_empty_email_id)
+                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+
+
             }
         }
 

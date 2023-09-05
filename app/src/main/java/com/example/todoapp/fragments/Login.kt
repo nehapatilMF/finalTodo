@@ -3,53 +3,49 @@ package com.example.todoapp.fragments
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
 import com.example.todoapp.base64.Base64
 import com.example.todoapp.databinding.FragmentLoginBinding
+import com.example.todoapp.util.DialogUtils
 import com.example.todoapp.util.NetworkUtil
 import com.example.todoapp.util.ValidPatterns
 import com.example.todoapp.viewModels.LoginViewModel
 
 class Login : Fragment() {
     private var binding: FragmentLoginBinding? = null
-    private lateinit var viewModel: LoginViewModel
+    private val viewModel: LoginViewModel by activityViewModels()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
-        setupTextChangeListeners()
+
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.title = null
+
         binding?.toolbar?.setNavigationOnClickListener{
-            val callback = object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    findNavController().navigate(R.id.back_to_intro)
-                }
-            }
-            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
-       }
+            findNavController().navigate(R.id.back_to_intro)
+        }
+        setupTextChangeListeners()
+
         binding?.forgotPassword?.setOnClickListener {
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
                 findNavController().navigate(R.id.navigate_from_login_to_forgotPassword)
             }    else {
-            Toast.makeText(
-                requireContext(),
-                getString(R.string.no_internet_connection),
-                Toast.LENGTH_SHORT
-            ).show()
-        }
+
+                val message = getString(R.string.no_internet_connection)
+                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+
+            }
         }
         binding?.buttonLogin?.setOnClickListener {
+
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
                 val email = binding?.etEmail?.text.toString()
                 val password = binding?.etPassword?.text.toString()
@@ -57,28 +53,31 @@ class Login : Fragment() {
                 if (ValidPatterns.isValidEmail(email) && ValidPatterns.isValidPassword(password)) {
                     // Navigate to the next screen if both email and password are valid
                     viewModel.login(email,encodedPassword)
+
+                    binding?.progressBar?.visibility = View.VISIBLE
+
                 }else{
-                    Toast.makeText(requireContext(),
-                        getString(R.string.required_fields_are_empty),
-                    Toast.LENGTH_SHORT).show()
+                    binding?.progressBar?.visibility = View.GONE
+
+                    val message = getString(R.string.required_fields_are_empty)
+                    DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+
                 }
             } else {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.no_internet_connection),
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+                binding?.progressBar?.visibility = View.GONE
+
+                val message = getString(R.string.no_internet_connection)
+                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)            }
         }
         binding?.signup?.setOnClickListener {
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
+                binding?.progressBar?.visibility = View.GONE
                 findNavController().navigate(R.id.navigate_from_login_to_register)
             } else {
-                Toast.makeText(
-                    requireContext(),
-                    getString(R.string.no_internet_connection),
-                    Toast.LENGTH_SHORT
-                ).show()
+                binding?.progressBar?.visibility = View.GONE
+
+                val message = getString(R.string.no_internet_connection)
+                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
             }
         }
     }
@@ -122,16 +121,17 @@ class Login : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentLoginBinding.inflate(layoutInflater, container, false)
-        viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
+
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
-       viewModel.loginResult.observe(viewLifecycleOwner) { status ->
-           Toast.makeText(requireContext(),status,Toast.LENGTH_SHORT).show()
-            if (status =="200") {
-                 findNavController().navigate(R.id.navigate_from_login_to_todoMain)
+        viewModel.loginResult.observe(viewLifecycleOwner) { status ->
+           if (status =="200") {
+                findNavController().navigate(R.id.navigate_from_login_to_todoMain)
             } else {
 
-                Log.e("Error","Error")
-            }
+                   val message = "Invalid email or password."
+                   DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+               binding?.progressBar?.visibility = View.GONE
+           }
         }
 
         val email = binding?.etEmail?.text.toString()

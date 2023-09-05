@@ -9,6 +9,7 @@ import com.example.todoapp.interfaces.ApiInterface
 import kotlinx.coroutines.launch
 
 class ForgotPasswordOtpViewModel : ViewModel() {
+
     private val apiInterface = RetrofitClient.getInstance()?.create(ApiInterface::class.java)
     private val _otpResult = MutableLiveData<String>()
     val otpResult : LiveData<String> get() =  _otpResult
@@ -21,12 +22,11 @@ class ForgotPasswordOtpViewModel : ViewModel() {
     fun forgotPasswordVerifyOtp(email: String, otp: Long){
         viewModelScope.launch {
             try {
-                val signupVerifyOtpResponse = apiInterface?.signupVerifyOtp( email, otp)
+                val signupVerifyOtpResponse = apiInterface?.forgotPasswordVerifyOtp( email, otp)
                 val response = signupVerifyOtpResponse?.body()
                 if(signupVerifyOtpResponse?.isSuccessful == true) {
                     val status = response?.status.toString()
                     _otpResult.postValue(status)
-
                 }else{
                     _otpResult.postValue(response?.message)
                 }

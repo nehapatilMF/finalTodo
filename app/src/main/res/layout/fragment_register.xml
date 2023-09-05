@@ -61,6 +61,7 @@
         android:layout_height="wrap_content"
          android:layout_marginBottom="10dp"
         android:textSize="@dimen/text_size"
+        android:inputType="number"
         android:background="@drawable/edittext_no_underline"
         android:importantForAccessibility="yes"
 
@@ -98,7 +99,7 @@
         android:id="@+id/editTextPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPassword"
+        android:inputType="textVisiblePassword"
         android:textSize="@dimen/text_size"
         android:importantForAccessibility="yes"
         android:importantForAutofill="no"
@@ -123,7 +124,7 @@
         android:background="@drawable/edittext_no_underline"
         android:importantForAccessibility="yes"
         android:importantForAutofill="no"
-        android:inputType="textPassword"
+        android:inputType="textVisiblePassword"
         android:textSize="@dimen/text_size"
         tools:ignore="VisualLintTextFieldSize"/>
     <androidx.appcompat.widget.AppCompatTextView

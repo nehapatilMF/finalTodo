@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
 import com.example.todoapp.databinding.FragmentOtpBinding
+import com.example.todoapp.util.DialogUtils
 import com.example.todoapp.util.NetworkUtil
 import com.example.todoapp.util.TimerUtil
 import com.example.todoapp.viewModels.OtpViewModel
@@ -21,8 +21,6 @@ class Otp : Fragment() {
     private val viewModel: OtpViewModel by activityViewModels()
     private var binding: FragmentOtpBinding? = null
 
-   // private val editTextList = mutableListOf<View>()
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -32,6 +30,7 @@ class Otp : Fragment() {
 
         binding?.toolbar?.setNavigationOnClickListener{
             findNavController().navigate(R.id.back_to_register)
+
         }
         val registerViewModel: RegisterViewModel by activityViewModels()
         val email = registerViewModel.email
@@ -44,10 +43,18 @@ class Otp : Fragment() {
         binding?.buttonAuthorise?.setOnClickListener {
             if(NetworkUtil.isNetworkAvailable(requireContext())) {
                 val otp = binding?.etOtp?.text.toString()
-                val otp1 = otp.toLong()
-                viewModel.signupVerifyOtp(email,otp1)
+
+                if(otp.isNotEmpty()) {
+                    val otp1 = otp.toLong()
+                    viewModel.signupVerifyOtp(email, otp1)
+                }else{
+
+                    val message = "Please enter Otp"
+                    DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+                }
             }else{
-                Toast.makeText(requireContext(),getString(R.string.no_internet_connection),Toast.LENGTH_SHORT).show()
+                val message = getString(R.string.no_internet_connection)
+                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
             }
         }
 
@@ -60,7 +67,9 @@ class Otp : Fragment() {
                 viewModel.resendUserOtp(email)
 
             }else{
-                Toast.makeText(requireContext(),getString(R.string.no_internet_connection), Toast.LENGTH_SHORT).show()
+
+                val message = getString(R.string.no_internet_connection)
+                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
             }
         }
     }
@@ -70,24 +79,34 @@ class Otp : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentOtpBinding.inflate(layoutInflater, container, false)
-       (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
+        (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
         binding?.timer?.visibility = View.VISIBLE
         binding?.tvOtpExp?.visibility = View.VISIBLE
         binding?.resendCode?.visibility = View.INVISIBLE
-       startOtpTimer()
+        startOtpTimer()
         viewModel.otpResult.observe(viewLifecycleOwner){ status ->
             if(status == "200"){
                 findNavController().navigate(R.id.navigate_from_otp_to_todoMain)
+            }else{
+                viewModel.otpResult.observe(viewLifecycleOwner){msg ->
+                    val message = msg.toString()
+                    DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+                }
             }
+
         }
         viewModel.resendOtpResult.observe(viewLifecycleOwner){ status ->
             if(status == "200"){
-                    viewModel.newOtpResult.observe(viewLifecycleOwner){ newOtp ->
+                viewModel.newOtpResult.observe(viewLifecycleOwner){ newOtp ->
                     binding?.jsonOtp?.text = newOtp
                 }
+
+            }else{
+                val message = getString(R.string.invalid_or_empty_email_id)
+                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
             }
         }
-    return binding?.root
+        return binding?.root
     }
 
 

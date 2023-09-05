@@ -56,5 +56,9 @@ class EditTask : Fragment() {
         binding?.spinnerStatus?.adapter = adapter
         return binding?.root
     }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
+    }
 
 }
