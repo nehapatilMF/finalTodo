@@ -11,4 +11,7 @@
     <color name="toolbar_color_control_normal">#FF000000</color>
     <color name="colorBottomNavSelected">#F43733</color>
     <color name="colorBottomNavUnselected">#9E9E9E</color>
+    <color name="backcolor">#DD7DAD</color>
+
+
 </resources>

@@ -1,36 +1,44 @@
 package com.example.todoapp.fragments
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
 import com.example.todoapp.databinding.FragmentForgotPasswordOtpBinding
 import com.example.todoapp.util.NetworkUtil
 import com.example.todoapp.util.TimerUtil
-
+import com.example.todoapp.viewModels.ForgotPasswordOtpViewModel
+import com.example.todoapp.viewModels.ForgotPasswordViewModel
 class ForgotPasswordOtp : Fragment() {
-
+    private val viewModel: ForgotPasswordOtpViewModel by activityViewModels()
     private var binding: FragmentForgotPasswordOtpBinding? = null
-    private val editTextList = mutableListOf<View>()
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.title = "Forgot password"
+
         binding?.toolbar?.setNavigationOnClickListener {
             findNavController().navigate(R.id.navigate_to_forgotPassword)
         }
+        val forgotPasswordViewModel: ForgotPasswordViewModel by activityViewModels()
+        val email = forgotPasswordViewModel.email
+        forgotPasswordViewModel.otpResult.observe(viewLifecycleOwner) { opt ->
+            binding?.jsonOtp?.text = opt
+        }
+
         binding?.btnNext?.setOnClickListener {
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
-                findNavController().navigate(R.id.navigate_to_newPassword)
+                val otp = binding?.etOtp?.text.toString()
+                val otp1 = otp.toLong()
+                viewModel.forgotPasswordVerifyOtp(email, otp1)
             } else {
                 Toast.makeText(
                     requireContext(),
@@ -40,61 +48,47 @@ class ForgotPasswordOtp : Fragment() {
             }
         }
         binding?.resendCode?.setOnClickListener {
-            if(NetworkUtil.isNetworkAvailable(requireContext())) {
+            if (NetworkUtil.isNetworkAvailable(requireContext())) {
                 binding?.timer?.visibility = View.VISIBLE
                 binding?.tvOtpExp?.visibility = View.VISIBLE
                 binding?.tvMin?.visibility = View.VISIBLE
-
                 binding?.resendCode?.visibility = View.INVISIBLE
                 startOtpTimer()
-            }else{
-                Toast.makeText(requireContext(),getString(R.string.no_internet_connection), Toast.LENGTH_SHORT).show()
+                viewModel.forgotPasswordResendOtp(email)
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.no_internet_connection),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         binding = FragmentForgotPasswordOtpBinding.inflate(inflater, container, false)
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
-        binding?.otpBox1?.let { editTextList.add(it) }
-        binding?.otpBox2?.let { editTextList.add(it) }
-        binding?.otpBox3?.let { editTextList.add(it) }
-        binding?.otpBox4?.let { editTextList.add(it) }
-        binding?.otpBox1?.requestFocus()
-
-        for (i in 0 until editTextList.size) {
-            val editText = editTextList[i] as EditText
-            editText.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                }
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    editText.setBackgroundResource(R.drawable.otp_box_changed_background)
-                }
-
-                override fun afterTextChanged(s: Editable?) {
-                    if (s?.length == 1) {
-                        moveToNextBox(i)
-                    } else if (s?.isEmpty() == true) {
-                        moveToPreviousBox(i)
-                    }
-                }
-            })
-        }
         binding?.timer?.visibility = View.VISIBLE
         binding?.tvOtpExp?.visibility = View.VISIBLE
         binding?.tvMin?.visibility = View.VISIBLE
         binding?.resendCode?.visibility = View.INVISIBLE
         startOtpTimer()
+        viewModel.otpResult.observe(viewLifecycleOwner) { status ->
+            if (status == "200") {
+                findNavController().navigate(R.id.navigate_to_newPassword)
+            }
+        }
+        viewModel.resendOtpResult.observe(viewLifecycleOwner) { status ->
+            if (status == "200") {
+                viewModel.newOtpResult.observe(viewLifecycleOwner) { newOtp ->
+                    binding?.jsonOtp?.text = newOtp
+                }
+            }
+        }
+
         return binding?.root
     }
     private fun startOtpTimer(){
@@ -116,19 +110,6 @@ class ForgotPasswordOtp : Fragment() {
 
             }
         )
-    }
-
-    private fun moveToNextBox(currentIndex: Int) {
-        if (currentIndex < editTextList.size - 1) {
-            editTextList[currentIndex].clearFocus()
-            editTextList[currentIndex + 1].requestFocus()
-        }
-    }
-    private fun moveToPreviousBox(currentIndex: Int) {
-        if (currentIndex > 0) {
-            editTextList[currentIndex].clearFocus()
-            editTextList[currentIndex - 1].requestFocus()
-        }
     }
     override fun onDestroy() {
         TimerUtil.cancelTimer()

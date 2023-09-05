@@ -1,23 +1,20 @@
 package com.example.todoapp.fragments
 
 import android.app.Dialog
-import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.todoapp.util.CalenderUtil
 import com.example.todoapp.R
 import com.example.todoapp.databinding.DialogCustomBackConfirmationBinding
-import com.example.todoapp.util.TimePickerUtil
 import com.example.todoapp.databinding.FragmentNewTaskBinding
+import com.example.todoapp.util.CalenderUtil
 import com.example.todoapp.util.NetworkUtil
+import com.example.todoapp.util.TimePickerUtil
 
 class NewTask : Fragment() {
     private var binding: FragmentNewTaskBinding? = null
@@ -30,10 +27,7 @@ class NewTask : Fragment() {
 
         binding?.toolbar?.setNavigationOnClickListener{
             customDialogForBackButton()
-
         }
-
-
         binding?.tvDate?.setOnClickListener {
             CalenderUtil.showDatePickerDialog (requireContext()){ selectedDate ->
                 binding?.tvDate?.text = selectedDate
@@ -46,9 +40,6 @@ class NewTask : Fragment() {
                 binding?.tvTime?.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
             }
         }
-
-
-
         binding?.btnSave?.setOnClickListener {
             if(NetworkUtil.isNetworkAvailable(requireContext())){
             findNavController().navigate(R.id.navigate_from_newTask_to_todoMain)
@@ -65,7 +56,6 @@ class NewTask : Fragment() {
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
         return binding?.root
     }
-
     private fun customDialogForBackButton() {
         val customDialog = Dialog(requireContext())
         val dialogBinding = DialogCustomBackConfirmationBinding.inflate(layoutInflater)
@@ -83,6 +73,5 @@ class NewTask : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
-
     }
 }

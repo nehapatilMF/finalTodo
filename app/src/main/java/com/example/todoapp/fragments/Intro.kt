@@ -1,5 +1,8 @@
 package com.example.todoapp.fragments
 
+import android.annotation.SuppressLint
+import android.os.Build.VERSION.SDK_INT
+import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,8 +15,12 @@ import com.example.todoapp.databinding.FragmentIntroBinding
 
 class Intro : Fragment() {
     private var binding : FragmentIntroBinding? = null
+    @SuppressLint("ObsoleteSdkInt")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (SDK_INT >= VERSION_CODES.ECLAIR) {
+            requireActivity().window.statusBarColor = resources.getColor(R.color.white)
+        }
 
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {

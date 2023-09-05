@@ -5,14 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.todoapp.util.CalenderUtil
 import com.example.todoapp.R
-import com.example.todoapp.util.TimePickerUtil
 import com.example.todoapp.databinding.FragmentEditTaskBinding
+import com.example.todoapp.util.CalenderUtil
+import com.example.todoapp.util.TimePickerUtil
 
 class EditTask : Fragment() {
     private var binding : FragmentEditTaskBinding? = null
@@ -21,7 +20,6 @@ class EditTask : Fragment() {
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.title = null
-
         binding?.toolbar?.setNavigationOnClickListener{
             findNavController().navigate(R.id.navigate_from_newTask_to_todoMain)
               }

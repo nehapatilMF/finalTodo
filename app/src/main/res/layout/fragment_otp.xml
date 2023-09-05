@@ -8,8 +8,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"
-        />
+        android:layout_height="?android:attr/actionBarSize" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -32,7 +31,6 @@
         android:text="@string/you_will_receive_otp"
         android:textColor="@color/black"
         android:textSize="18sp" />
-
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/entered_email"
         android:layout_width="match_parent"
@@ -40,8 +38,17 @@
         android:textColor="@color/black"
         android:textSize="20sp"
         android:layout_marginBottom="10dp" />
-
-    <LinearLayout
+  <EditText
+      android:id="@+id/etOtp"
+      android:layout_width="100dp"
+      android:layout_height="40dp"
+      android:layout_gravity="center"
+      android:background="@drawable/edittext_no_underline"
+      android:gravity="center"
+      android:textSize="20sp"
+      android:textStyle="bold"
+      />
+   <!-- <LinearLayout
         android:id="@+id/ll_otp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -94,7 +101,7 @@
             android:textAlignment="center"
             android:textColor="@color/otp_box_text_color"
             android:textSize="18sp" />
-    </LinearLayout>
+    </LinearLayout>-->
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -133,8 +140,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:clickable="true"
-            android:onClick="onResendCodeClick"
+
             android:text="Resend Code"
             android:textColor="#4763FF"
             android:textSize="20sp"
@@ -153,5 +159,13 @@
         android:textAllCaps="false"
         android:textSize="16sp"
         tools:ignore="RedundantDescriptionCheck" />
-</LinearLayout>
+        <TextView
+            android:id="@+id/jsonOtp"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="80dp"
+            android:gravity="center"
+            android:textSize="30sp"/>
+    </LinearLayout>
 </LinearLayout>

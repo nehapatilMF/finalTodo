@@ -1,5 +1,6 @@
 package com.example.todoapp.fragments
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,11 +12,16 @@ import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
 import com.example.todoapp.databinding.FragmentSplashBinding
 
+@Suppress("DEPRECATION")
 class Splash : Fragment() {
     private var binding : FragmentSplashBinding? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ECLAIR) {
+            requireActivity().window.statusBarColor = resources.getColor(R.color.backcolor)
+        }
         binding = FragmentSplashBinding.inflate(layoutInflater)
+
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

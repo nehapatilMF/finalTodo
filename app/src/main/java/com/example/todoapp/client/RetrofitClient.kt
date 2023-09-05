@@ -1,22 +1,18 @@
 package com.example.todoapp.client
 
-import android.annotation.SuppressLint
 
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
-    private val baseUrl = ""
-   private var retrofit: Retrofit? = null
-    @SuppressLint("SuspiciousIndentation")
+
+   private const val baseUrl = "http://13.127.90.201/api/v1/"
+      private var retrofit: Retrofit? = null
     fun getInstance():Retrofit? {
-            retrofit = Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
+        Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build().also { retrofit = it }
                return retrofit
-
     }
-
-
 }

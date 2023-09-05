@@ -9,13 +9,18 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
 import com.example.todoapp.databinding.FragmentForgotPasswordBinding
 import com.example.todoapp.util.NetworkUtil
 import com.example.todoapp.util.ValidPatterns
+import com.example.todoapp.viewModels.ForgotPasswordViewModel
+
 
 class ForgotPassword : Fragment() {
+    private val viewModel : ForgotPasswordViewModel by activityViewModels()
+
    private var binding:FragmentForgotPasswordBinding? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -30,7 +35,9 @@ class ForgotPassword : Fragment() {
             val email =binding?.enterEmail?.text.toString()
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
                 if( ValidPatterns.isValidEmail(email)&& email.isNotEmpty()) {
-                    findNavController().navigate(R.id.navigate_to_forgotPasswordOtp)
+                    viewModel.email = email
+                    viewModel.forgotPasswordRequestOtp(email)
+
                 }else{
                     Toast.makeText(
                         requireContext(),
@@ -70,6 +77,14 @@ class ForgotPassword : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentForgotPasswordBinding.inflate(inflater,container,false)
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
+
+        viewModel.forgotPasswordResult.observe(viewLifecycleOwner){ status ->
+            if(status == "200") {
+                findNavController().navigate(R.id.navigate_to_forgotPasswordOtp)
+            }else{
+                Toast.makeText(requireContext(),"Invalid email Id.",Toast.LENGTH_SHORT).show()
+            }
+        }
         val email = binding?.enterEmail?.text.toString()
         if(email.isEmpty()) {
             binding?.enterEmail?.error = getString(R.string.invalid_or_empty_email_id)
@@ -77,3 +92,4 @@ class ForgotPassword : Fragment() {
         return binding?.root
     }
 }
+

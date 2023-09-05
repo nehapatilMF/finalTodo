@@ -7,11 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
+import com.example.todoapp.base64.Base64
 import com.example.todoapp.databinding.FragmentRegisterBinding
 import com.example.todoapp.util.NetworkUtil
 import com.example.todoapp.util.ValidPatterns
@@ -19,6 +21,7 @@ import com.example.todoapp.viewModels.RegisterViewModel
 
 class Register : Fragment() {
     private val viewModel: RegisterViewModel by activityViewModels()
+
     private var binding: FragmentRegisterBinding? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -27,6 +30,12 @@ class Register : Fragment() {
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.title = null
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                requireActivity().finishAffinity()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
         binding?.toolbar?.setNavigationOnClickListener{
             findNavController().navigate(R.id.back_to_intro)
@@ -48,7 +57,14 @@ class Register : Fragment() {
         handleEmptyField()
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
 
-        return binding?.root
+        viewModel.signupResult.observe(viewLifecycleOwner){ status ->
+            if(status == "200") {
+                findNavController().navigate(R.id.navigate_from_register_to_otp)
+            }else{
+                Toast.makeText(requireContext(),"The email has already been taken.",Toast.LENGTH_SHORT).show()
+            }
+        }
+          return binding?.root
     }
     private fun showToast(message: String) {
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
@@ -142,6 +158,7 @@ class Register : Fragment() {
     private fun handleRegister(){
         val userName = binding?.editTextUserName?.text.toString()
         val mobileNumber = binding?.editTextMobileNumber?.text.toString()
+        val mobile =mobileNumber.toLong()
         val email = binding?.editTextEmail?.text.toString()
         val password  = binding?.editTextPassword?.text.toString()
         val confirmPassword = binding?.editTextConfirmPassword?.text.toString()
@@ -153,7 +170,9 @@ class Register : Fragment() {
                             val result = password.compareTo(confirmPassword)
                             if(result == 0 ){
                                 viewModel.email = email
-                                findNavController().navigate(R.id.navigate_from_register_to_otp)
+                                val encodedPassword = Base64.encodeToBase64(password)
+                                viewModel.signup(userName, mobile, email, encodedPassword)
+
                             }else{
                                 binding?.editTextPassword?.error = getString(R.string.no_match)
                             }
