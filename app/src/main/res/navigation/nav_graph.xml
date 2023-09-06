@@ -162,8 +162,8 @@
             android:id="@+id/action_profile_to_changePassword"
             app:destination="@id/changePassword" />
         <action
-            android:id="@+id/action_profile_to_deleteAccount"
-            app:destination="@id/deleteAccount" />
+            android:id="@+id/action_profile_to_intro"
+            app:destination="@id/intro" />
     </fragment>
     <fragment
         android:id="@+id/personalInformation"
@@ -179,15 +179,6 @@
         android:name="com.example.todoapp.fragments.ChangePassword"
         android:label="fragment_change_password2"
         tools:layout="@layout/fragment_change_password" />
-    <fragment
-        android:id="@+id/deleteAccount"
-        android:name="com.example.todoapp.fragments.DeleteAccount"
-        android:label="fragment_delete_account"
-        tools:layout="@layout/fragment_delete_account" >
-        <action
-            android:id="@+id/action_deleteAccount_to_profile"
-            app:destination="@id/profile" />
-    </fragment>
 
 
 </navigation>

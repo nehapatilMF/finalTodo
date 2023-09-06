@@ -8,19 +8,22 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.example.todoapp.Constants
 import com.example.todoapp.R
 import com.example.todoapp.databinding.FragmentProfileBinding
 import com.example.todoapp.util.DialogUtils
 import com.example.todoapp.util.NetworkUtil
+import com.example.todoapp.viewModels.DeleteViewModel
 import com.example.todoapp.viewModels.LoginViewModel
 import com.example.todoapp.viewModels.LogoutViewModel
 
 class Profile : Fragment() {
-    private val viewModel: LogoutViewModel by activityViewModels()
+
 
     private var binding : FragmentProfileBinding? = null
+    private val logoutViewModel: LogoutViewModel by activityViewModels()
+    private val deleteViewModel: DeleteViewModel by activityViewModels()
 
-    private var accessToken : String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
        super.onCreate(savedInstanceState)
 
@@ -42,17 +45,19 @@ class Profile : Fragment() {
         }
         binding?.Logout?.setOnClickListener {
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
-
-             viewModel.logout()
+             logoutViewModel.logout()
             }
         }
         binding?.deleteAccount?.setOnClickListener {
-            findNavController().navigate(R.id.action_profile_to_deleteAccount)
+            if (NetworkUtil.isNetworkAvailable(requireContext())) {
+                deleteViewModel.deleteUser()
+            }
         }
 
-        viewModel.logoutResult.observe(viewLifecycleOwner){ status ->
-
+        logoutViewModel.logoutResult.observe(viewLifecycleOwner){ status ->
             if(status == "200"){
+                // When adding the profile fragment, give it a unique tag
+
                 findNavController().navigate(R.id.action_profile_to_login)
             }else{
                 val message = "Logout Failed"
@@ -60,17 +65,31 @@ class Profile : Fragment() {
             }
 
         }
+
+        deleteViewModel.deleteUserResult.observe(viewLifecycleOwner){ status ->
+            if(status == "200"){
+                // When adding the profile fragment, give it a unique tag
+
+                findNavController().navigate(R.id.action_profile_to_intro)
+            }else{
+                val message = "user not deleted."
+                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+            }
+
+        }
         val loginViewModel: LoginViewModel by activityViewModels()
 
         loginViewModel.getAuthTokens().observe(viewLifecycleOwner){authTokens ->
-            accessToken = authTokens.accessToken
+            val accessToken = authTokens.accessToken
+            Constants.accessToken = accessToken
             val refreshToken = authTokens.refreshToken
+            Constants.refreshToken = refreshToken
         }
         return binding?.root
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
-
     }
 }

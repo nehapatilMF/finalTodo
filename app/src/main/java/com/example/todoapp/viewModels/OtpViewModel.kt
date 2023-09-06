@@ -45,6 +45,7 @@ class OtpViewModel : ViewModel()  {
                 _otpResult.postValue (e.message)
             }
         }
+
     }
 
     fun resendUserOtp(email : String){

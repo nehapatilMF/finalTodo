@@ -11,15 +11,12 @@ import kotlinx.coroutines.launch
 
 class RegisterViewModel : ViewModel() {
     lateinit var email: String
-
     private val apiInterface = RetrofitClient.getInstance()?.create(ApiInterface::class.java)
-
     private val _signupResult =MutableLiveData<String>()
     val signupResult : LiveData<String> get() =  _signupResult
 
     private val _otpResult = MutableLiveData<String>()
     val otpResult : LiveData<String> get() =  _otpResult
-
 
     @SuppressLint("SuspiciousIndentation")
     fun signup(
@@ -28,7 +25,7 @@ class RegisterViewModel : ViewModel() {
         email: String,
         password: String
     ) {
-        viewModelScope.launch {
+         viewModelScope.launch {
             try {
                 val apiResponse = apiInterface?.signup(name, mobile, email, password)
                 val response = apiResponse?.body()

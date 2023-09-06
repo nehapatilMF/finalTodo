@@ -17,7 +17,6 @@ class TodoMain : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding?.addTask?.setOnClickListener {
             findNavController().navigate(R.id.navigate_from_todoMain_to_newTask)
         }
@@ -25,24 +24,15 @@ class TodoMain : Fragment() {
             when(item.itemId){
                 R.id.nav_home -> {
                     findNavController().navigate(R.id.todoMain)
-
                     true
                 }
                 R.id.nav_profile ->{
                     findNavController().navigate(R.id.profile)
-
-
                     true
                 }else -> {false}
-
             }
         }
-
-
     }
-
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -53,6 +43,8 @@ class TodoMain : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
+
     }
+
 }
 

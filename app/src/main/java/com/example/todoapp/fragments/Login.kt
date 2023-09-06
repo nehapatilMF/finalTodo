@@ -34,6 +34,48 @@ class Login : Fragment() {
         }
         setupTextChangeListeners()
 
+
+    }
+
+    private fun setupTextChangeListeners() {
+        binding?.etEmail?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // Not needed
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val email = s.toString()
+                if (!ValidPatterns.isValidEmail(email)) {
+                    binding?.etEmail?.error = getString(R.string.invalid_or_empty_email_id)
+                } else {
+                    binding?.etEmail?.error = null // Clear error message
+                }
+            }
+            override fun afterTextChanged(s: Editable?) {
+                // Not needed
+            }
+        })
+        binding?.etPassword?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // Not needed
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val password = s.toString()
+                if (!ValidPatterns.isValidPassword(password)) {
+                    binding?.etPassword?.error = getString(R.string.password_pattern_requirement)
+                } else {
+                    binding?.etPassword?.error = null // Clear error message
+                }
+            }
+            override fun afterTextChanged(s: Editable?) {
+                // Not needed
+            }
+        })
+    }
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentLoginBinding.inflate(layoutInflater, container, false)
         binding?.forgotPassword?.setOnClickListener {
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
                 findNavController().navigate(R.id.navigate_from_login_to_forgotPassword)
@@ -80,47 +122,6 @@ class Login : Fragment() {
                 DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
             }
         }
-    }
-
-    private fun setupTextChangeListeners() {
-        binding?.etEmail?.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // Not needed
-            }
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val email = s.toString()
-                if (!ValidPatterns.isValidEmail(email)) {
-                    binding?.etEmail?.error = getString(R.string.invalid_or_empty_email_id)
-                } else {
-                    binding?.etEmail?.error = null // Clear error message
-                }
-            }
-            override fun afterTextChanged(s: Editable?) {
-                // Not needed
-            }
-        })
-        binding?.etPassword?.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // Not needed
-            }
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val password = s.toString()
-                if (!ValidPatterns.isValidPassword(password)) {
-                    binding?.etPassword?.error = getString(R.string.password_pattern_requirement)
-                } else {
-                    binding?.etPassword?.error = null // Clear error message
-                }
-            }
-            override fun afterTextChanged(s: Editable?) {
-                // Not needed
-            }
-        })
-    }
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentLoginBinding.inflate(layoutInflater, container, false)
 
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
         viewModel.loginResult.observe(viewLifecycleOwner) { status ->

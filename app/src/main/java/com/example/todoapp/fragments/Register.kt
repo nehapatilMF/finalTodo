@@ -35,19 +35,19 @@ class Register : Fragment() {
         }
         setupTextChangeListeners()
 
-        binding?.login?.setOnClickListener {
-            handleLogin()
-        }
-        binding?.buttonNext?.setOnClickListener {
-            handleRegister()
-        }
+
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentRegisterBinding.inflate(inflater, container, false)
-
+        binding?.login?.setOnClickListener {
+            handleLogin()
+        }
+        binding?.buttonNext?.setOnClickListener {
+            handleRegister()
+        }
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
 
         viewModel.signupResult.observe(viewLifecycleOwner){ status ->

@@ -1,17 +1,26 @@
 package com.example.todoapp.interfaces
 
+import com.example.todoapp.responses.AddTodoResponse
+import com.example.todoapp.responses.ChangePasswordResponse
+import com.example.todoapp.responses.DeleteTodoResponse
+import com.example.todoapp.responses.DeleteUserResponse
 import com.example.todoapp.responses.ForgotPasswordCheckEmailResponse
 import com.example.todoapp.responses.ForgotPasswordVerifyOtpResponse
 import com.example.todoapp.responses.LoginResponse
 import com.example.todoapp.responses.LogoutResponse
+import com.example.todoapp.responses.ProfileInfoResponse
 import com.example.todoapp.responses.ResendForgotPasswordResponse
 import com.example.todoapp.responses.ResendUserOtpResponse
 import com.example.todoapp.responses.ResetPasswordResponse
 import com.example.todoapp.responses.SignupResponse
 import com.example.todoapp.responses.SignupVerifyOtpResponse
+import com.example.todoapp.responses.UpdateProfileResponse
+import com.example.todoapp.responses.UpdateTodoResponse
+import com.example.todoapp.responses.getTodoListResponse
 import retrofit2.Response
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
+import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface ApiInterface {
@@ -79,9 +88,63 @@ interface ApiInterface {
     ):Response<ResetPasswordResponse>
 
     ////Logout
-
     @POST("logout")
     suspend fun logout():Response<LogoutResponse>
+
+    ////Delete User
+    @POST("profile/delete")
+    suspend fun deleteUser():Response<DeleteUserResponse>
+
+    ///Get List
+    @GET("todo/list")
+    suspend fun getTodoList(): Response<getTodoListResponse>
+
+    ////Add
+    @FormUrlEncoded
+    @POST("todo/add")
+    suspend fun addTodo(
+        @Field("title") title:String,
+        @Field("description") description : String,
+        @Field("todo_date") todo_date : String,
+        @Field("todo_time") todo_time : String,
+        @Field("status") status : Int
+    ) : Response<AddTodoResponse>
+
+    ////Update
+    @FormUrlEncoded
+    @POST("todo/update/{id}")
+    suspend fun updateTodo(
+        @Field("title") title:String,
+        @Field("description") description : String,
+        @Field("todo_date") todo_date : String,
+        @Field("todo_time") todo_time : String,
+        @Field("status") status : Int
+    ) : Response<UpdateTodoResponse>
+
+    ////Delete
+    @POST("todo/delete/{id}")
+    suspend fun deleteTodo():Response<DeleteTodoResponse>
+
+    ////Profile information
+    @GET("profile-info")
+    suspend fun profileInfo() : Response<ProfileInfoResponse>
+
+    ////Update Profile Information
+    @FormUrlEncoded
+    @POST("profile-update")
+    suspend fun updateProfile(
+        @Field("name") name : String,
+        @Field("mobile") mobile : Long
+    ):Response<UpdateProfileResponse>
+
+    ////Profile changes Password
+    @FormUrlEncoded
+    @POST("profile/change-password")
+    suspend fun changePassword(
+        @Field("old_password")  old_password : String,
+        @Field("password") password : String
+    ) : Response<ChangePasswordResponse>
+
 }
 
 
