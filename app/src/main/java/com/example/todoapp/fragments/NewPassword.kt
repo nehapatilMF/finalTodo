@@ -124,14 +124,7 @@ class NewPassword : Fragment() {
 
             }
         }
-        if(newPassword.isBlank()){
-            binding?.etNewPassword?.error = getString(R.string.password_is_required)
-        }
 
-        if(confirmNewPassword.isBlank()){
-            binding?.etConfirmPassword?.error =
-                getString(R.string.confirm_password_is_required)
-        }
         return binding?.root
     }
     override fun onDestroyView() {

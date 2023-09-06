@@ -47,7 +47,7 @@ class Register : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentRegisterBinding.inflate(inflater, container, false)
-        handleEmptyField()
+
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
 
         viewModel.signupResult.observe(viewLifecycleOwner){ status ->
@@ -61,30 +61,6 @@ class Register : Fragment() {
         return binding?.root
     }
 
-    private fun handleEmptyField(){
-        val username = binding?.editTextUserName?.text.toString()
-        val mobileNumber = binding?.editTextMobileNumber?.text.toString()
-        val email = binding?.editTextEmail?.text.toString()
-        val password  = binding?.editTextPassword?.text.toString()
-        val confirmPassword = binding?.editTextConfirmPassword?.text.toString()
-
-        if(email.isEmpty()){
-            binding?.editTextEmail?.error = getString(R.string.email_is_required)
-        }
-        if(password.isBlank()){
-            binding?.editTextPassword?.error = getString(R.string.password_is_required)
-        }
-        if(confirmPassword.isBlank()){
-            binding?.editTextConfirmPassword?.error =
-                getString(R.string.confirm_password_is_required)
-        }
-        if(username.isBlank()){
-            binding?.editTextUserName?.error = getString(R.string.username_is_required)
-        }
-        if(mobileNumber.isBlank()){
-            binding?.editTextMobileNumber?.error = getString(R.string.mobile_number_is_required)
-        }
-    }
     private fun setupTextChangeListeners() {
         binding?.editTextMobileNumber?.addTextChangedListener(object :TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {

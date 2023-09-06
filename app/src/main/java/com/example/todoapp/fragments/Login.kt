@@ -133,15 +133,6 @@ class Login : Fragment() {
                binding?.progressBar?.visibility = View.GONE
            }
         }
-
-        val email = binding?.etEmail?.text.toString()
-        val password = binding?.etPassword?.text.toString()
-        if(email.isEmpty()){
-            binding?.etEmail?.error = getString(R.string.email_is_required)
-        }
-        if(password.isBlank()){
-            binding?.etPassword?.error = getString(R.string.invalid_or_empty_password)
-        }
         return binding?.root
     }
     override fun onDestroyView() {

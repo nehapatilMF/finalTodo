@@ -82,10 +82,7 @@ class ForgotPassword : Fragment() {
                 DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
             }
         }
-        val email = binding?.enterEmail?.text.toString()
-        if(email.isEmpty()) {
-            binding?.enterEmail?.error = getString(R.string.invalid_or_empty_email_id)
-        }
+
         return binding?.root
     }
     override fun onDestroyView() {
