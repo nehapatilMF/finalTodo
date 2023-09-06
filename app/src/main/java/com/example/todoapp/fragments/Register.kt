@@ -6,7 +6,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -61,9 +60,7 @@ class Register : Fragment() {
         }
         return binding?.root
     }
-    private fun showToast(message: String) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-    }
+
     private fun handleEmptyField(){
         val username = binding?.editTextUserName?.text.toString()
         val mobileNumber = binding?.editTextMobileNumber?.text.toString()
@@ -155,9 +152,7 @@ class Register : Fragment() {
     private fun handleRegister(){
         val userName = binding?.editTextUserName?.text.toString()
         val mobileNumber = binding?.editTextMobileNumber?.text.toString()
-       // val     mobile = mobileNumber.toLong()
-
-        val email = binding?.editTextEmail?.text.toString()
+          val email = binding?.editTextEmail?.text.toString()
         val password  = binding?.editTextPassword?.text.toString()
         val confirmPassword = binding?.editTextConfirmPassword?.text.toString()
         if (NetworkUtil.isNetworkAvailable(requireContext())) {

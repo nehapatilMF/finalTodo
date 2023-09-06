@@ -18,14 +18,12 @@ class LogoutViewModel : ViewModel() {
 
     fun logout(){
         viewModelScope.launch {
-
             try {
-                val loginResponse: Response<LogoutResponse>? = apiInterface?.logout()
-                val response = loginResponse?.body()
-                if(loginResponse?.isSuccessful == true ){
+                val apiResponse: Response<LogoutResponse>? = apiInterface?.logout()
+                val response = apiResponse?.body()
+                if(apiResponse?.isSuccessful == true ){
                     val status = response?.status.toString()
                     _logoutResult.postValue(status)
-
                 } else{
                     _logoutResult.value = response?.message
                 }

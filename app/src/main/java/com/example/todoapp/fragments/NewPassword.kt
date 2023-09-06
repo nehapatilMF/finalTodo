@@ -17,6 +17,7 @@ import com.example.todoapp.databinding.FragmentNewPasswordBinding
 import com.example.todoapp.util.DialogUtils
 import com.example.todoapp.util.NetworkUtil
 import com.example.todoapp.util.ValidPatterns
+import com.example.todoapp.viewModels.ForgotPasswordOtpViewModel
 import com.example.todoapp.viewModels.ForgotPasswordViewModel
 import com.example.todoapp.viewModels.NewPasswordViewModel
 
@@ -38,8 +39,8 @@ class NewPassword : Fragment() {
         val forgotPasswordViewModel: ForgotPasswordViewModel by activityViewModels()
         val email = forgotPasswordViewModel.email
         var npOtp: String? = null
-
-        forgotPasswordViewModel.otpResult.observe(viewLifecycleOwner) { otp ->
+        val forgotPasswordOtpViewModel: ForgotPasswordOtpViewModel by activityViewModels()
+        forgotPasswordOtpViewModel.otp.observe(viewLifecycleOwner) { otp ->
           npOtp = otp
          }
 
