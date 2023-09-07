@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
 import com.example.todoapp.databinding.FragmentOtpBinding
 import com.example.todoapp.util.DialogUtils
+import com.example.todoapp.util.NetworkUtil
 import com.example.todoapp.util.TimerUtil
 import com.example.todoapp.viewModels.OtpViewModel
 import com.example.todoapp.viewModels.RegisterViewModel
@@ -39,7 +40,38 @@ class Otp : Fragment() {
             binding?.jsonOtp?.text = opt
         }
 
+        binding?.buttonAuthorise?.setOnClickListener {
+            if(NetworkUtil.isNetworkAvailable(requireContext())) {
+                val otp = binding?.etOtp?.text.toString()
 
+                if(otp.isNotEmpty()) {
+                    val otp1 = otp.toLong()
+                    viewModel.signupVerifyOtp(email, otp1)
+                }else{
+
+                    val message = "Please enter Otp"
+                    DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+                }
+            }else{
+                val message = getString(R.string.no_internet_connection)
+                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+            }
+        }
+
+        binding?.resendCode?.setOnClickListener {
+            if(NetworkUtil.isNetworkAvailable(requireContext())) {
+                binding?.timer?.visibility = View.VISIBLE
+                binding?.tvOtpExp?.visibility = View.VISIBLE
+                binding?.resendCode?.visibility = View.INVISIBLE
+                startOtpTimer()
+                viewModel.resendUserOtp(email)
+
+            }else{
+
+                val message = getString(R.string.no_internet_connection)
+                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+            }
+        }
     }
 
     override fun onCreateView(

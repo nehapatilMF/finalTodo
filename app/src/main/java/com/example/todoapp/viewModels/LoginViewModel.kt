@@ -9,9 +9,7 @@ import com.example.todoapp.AuthTokens
 import com.example.todoapp.client.RetrofitClient
 import com.example.todoapp.interfaces.ApiInterface
 import com.example.todoapp.responses.LoginResponse
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import retrofit2.Response
 
 
@@ -37,7 +35,7 @@ class LoginViewModel : ViewModel() {
 
     fun login(email : String, password : String){
         viewModelScope.launch {
-            withContext(Dispatchers.Main) {
+
                 try {
                     val loginResponse: Response<LoginResponse>? = apiInterface?.login(email,password)
                     val response = loginResponse?.body()
@@ -59,4 +57,4 @@ class LoginViewModel : ViewModel() {
         }
     }
 
-}
+

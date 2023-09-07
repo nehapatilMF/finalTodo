@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.example.todoapp.Constants
 import com.example.todoapp.R
 import com.example.todoapp.base64.Base64
 import com.example.todoapp.databinding.FragmentLoginBinding
@@ -32,7 +33,19 @@ class Login : Fragment() {
         binding?.toolbar?.setNavigationOnClickListener{
             findNavController().navigate(R.id.back_to_intro)
         }
+
         setupTextChangeListeners()
+
+        binding?.forgotPassword?.setOnClickListener {
+            if (NetworkUtil.isNetworkAvailable(requireContext())) {
+                findNavController().navigate(R.id.navigate_from_login_to_forgotPassword)
+            }    else {
+
+                val message = getString(R.string.no_internet_connection)
+                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+
+            }
+        }
 
 
     }
@@ -71,23 +84,22 @@ class Login : Fragment() {
             }
         })
     }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentLoginBinding.inflate(layoutInflater, container, false)
-        binding?.forgotPassword?.setOnClickListener {
-            if (NetworkUtil.isNetworkAvailable(requireContext())) {
-                findNavController().navigate(R.id.navigate_from_login_to_forgotPassword)
-            }    else {
 
-                val message = getString(R.string.no_internet_connection)
-                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+        val loginViewModel: LoginViewModel by activityViewModels()
 
-            }
+        loginViewModel.getAuthTokens().observe(viewLifecycleOwner){ authTokens ->
+            val accessToken = authTokens.accessToken
+            Constants.accessToken = accessToken
+            val refreshToken = authTokens.refreshToken
+            Constants.refreshToken = refreshToken
         }
         binding?.buttonLogin?.setOnClickListener {
-
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
                 val email = binding?.etEmail?.text.toString()
                 val password = binding?.etPassword?.text.toString()

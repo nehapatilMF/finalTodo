@@ -1,54 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- res/layout/todo_item.xml -->
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/cardView"
+    android:layout_margin="15dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:backgroundTint="#F1DCDC"
     app:cardElevation="4dp"
-    app:cardCornerRadius="8dp">
+    android:padding="10dp"
+    app:cardCornerRadius="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="10dp">
 
-        <!-- TextViews for Title and Description -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
         <TextView
             android:id="@+id/textViewTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="To-Do Title"
-            android:textSize="18sp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="16sp"
             android:textStyle="bold"
-            android:layout_marginBottom="8dp"/>
+           />
 
         <TextView
-            android:id="@+id/textViewDescription"
+            android:id="@+id/textViewStatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="To-Do Description"
-            android:textSize="16sp"
-            android:layout_marginBottom="8dp"/>
+            android:layout_gravity="center"
+            android:layout_weight="3"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:text="Status"
+            android:textSize="16sp"/>
+        </LinearLayout>
 
-        <!-- TextViews for Date and Time -->
+
+    <TextView
+        android:id="@+id/textViewDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="To-Do Description"
+        android:textSize="16sp"
+     />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
         <TextView
             android:id="@+id/textViewDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:text="Date: 01/01/2023"
-            android:textSize="14sp"/>
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/textViewTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Time: 12:00 PM"
-            android:textSize="14sp"/>
+            android:layout_weight="1"
+            android:textSize="16sp"
+            android:textStyle="bold"
+           />
 
+    </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

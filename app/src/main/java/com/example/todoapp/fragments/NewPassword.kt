@@ -33,7 +33,7 @@ class NewPassword : Fragment() {
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.title = getString(R.string.forgot_password)
         binding?.toolbar?.setNavigationOnClickListener {
-            findNavController().navigate(R.id.navigate_from__newPassword_to_forgotPasswordOtp)
+            findNavController().navigate(R.id.navigate_from_newPassword_to_forgotPasswordOtp)
 
         }
         val forgotPasswordViewModel: ForgotPasswordViewModel by activityViewModels()
@@ -116,7 +116,7 @@ class NewPassword : Fragment() {
         viewModel.resetPasswordResult.observe(viewLifecycleOwner){ status ->
             Toast.makeText(requireContext(),status,Toast.LENGTH_SHORT).show()
             if(status == "200"){
-                findNavController().navigate(R.id.navigate_from__newPassword_to_login)
+                findNavController().navigate(R.id.navigate_from_newPassword_to_login)
             }else{
 
                 val message = "Invalid otp"

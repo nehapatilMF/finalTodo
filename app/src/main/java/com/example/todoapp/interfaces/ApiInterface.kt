@@ -6,6 +6,7 @@ import com.example.todoapp.responses.DeleteTodoResponse
 import com.example.todoapp.responses.DeleteUserResponse
 import com.example.todoapp.responses.ForgotPasswordCheckEmailResponse
 import com.example.todoapp.responses.ForgotPasswordVerifyOtpResponse
+import com.example.todoapp.responses.GetTodoListResponse
 import com.example.todoapp.responses.LoginResponse
 import com.example.todoapp.responses.LogoutResponse
 import com.example.todoapp.responses.ProfileInfoResponse
@@ -16,7 +17,6 @@ import com.example.todoapp.responses.SignupResponse
 import com.example.todoapp.responses.SignupVerifyOtpResponse
 import com.example.todoapp.responses.UpdateProfileResponse
 import com.example.todoapp.responses.UpdateTodoResponse
-import com.example.todoapp.responses.getTodoListResponse
 import retrofit2.Response
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -97,7 +97,7 @@ interface ApiInterface {
 
     ///Get List
     @GET("todo/list")
-    suspend fun getTodoList(): Response<getTodoListResponse>
+    suspend fun getTodoList(): Response<GetTodoListResponse>
 
     ////Add
     @FormUrlEncoded
