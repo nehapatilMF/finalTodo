@@ -18,8 +18,8 @@ class RegisterViewModel : ViewModel() {
     private val _otpResult = MutableLiveData<String>()
     val otpResult : LiveData<String> get() =  _otpResult
 
-    @SuppressLint("SuspiciousIndentation")
-    fun signup(
+      @SuppressLint("SuspiciousIndentation")
+      fun signup(
         name: String,
         mobile: Long,
         email: String,

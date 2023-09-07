@@ -73,8 +73,8 @@
         android:label="fragment_edit_task"
         tools:layout="@layout/fragment_edit_task" >
         <action
-            android:id="@+id/navigate_from_edit_to_todoMain"
-            app:destination="@+id/todoMain" />
+            android:id="@+id/action_editTask_to_todoMain"
+            app:destination="@id/todoMain" />
     </fragment>
 
     <fragment
@@ -97,18 +97,22 @@
         android:name="com.example.todoapp.fragments.TodoMain"
         android:label="fragment_todo_main"
         tools:layout="@layout/fragment_todo_main" >
-        <action
-            android:id="@+id/navigate_from_todoMain_to_newTask"
-            app:destination="@+id/newTask" />
-        <action
-            android:id="@+id/navigate_from_todoMain_to_editTask"
-            app:destination="@+id/editTask" />
+
         <action
             android:id="@+id/action_todoMain_to_profile"
             app:destination="@+id/profile" />
         <action
             android:id="@+id/navigate_to_intro"
             app:destination="@+id/intro"/>
+        <action
+            android:id="@+id/action_todoMain_to_home"
+            app:destination="@id/home" />
+        <action
+            android:id="@+id/action_todoMain_to_newTask"
+            app:destination="@id/newTask" />
+        <action
+            android:id="@+id/action_todoMain_to_editTask"
+            app:destination="@id/editTask" />
     </fragment>
     <fragment
         android:id="@+id/forgotPassword"
@@ -177,12 +181,19 @@
         android:id="@+id/changePassword"
         android:name="com.example.todoapp.fragments.ChangePassword"
         android:label="fragment_change_password2"
-        tools:layout="@layout/fragment_change_password" />
+        tools:layout="@layout/fragment_change_password" >
+        <action
+            android:id="@+id/action_changePassword_to_login"
+            app:destination="@id/login" />
+    </fragment>
     <fragment
         android:id="@+id/home"
         android:name="com.example.todoapp.fragments.Home"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
-
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/action_home_to_todoMain"
+            app:destination="@id/todoMain" />
+    </fragment>
 
 </navigation>

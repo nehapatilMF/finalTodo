@@ -12,7 +12,7 @@ import com.example.todoapp.databinding.FragmentTodoMainBinding
 
 class TodoMain : Fragment() {
     private var binding :FragmentTodoMainBinding? = null
-   private var fragmentManager : FragmentManager ? = null
+    private var fragmentManager : FragmentManager ? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
            binding?.bottomNav?.setOnItemSelectedListener { menuItem ->
@@ -27,10 +27,11 @@ class TodoMain : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+            binding = FragmentTodoMainBinding.inflate(layoutInflater, container, false)
             binding?.bottomNav?.menu?.findItem(R.id.home)?.isChecked = true
             fragmentManager = activity?.supportFragmentManager
             loadFragment(Home())
-        binding = FragmentTodoMainBinding.inflate(layoutInflater, container, false)
+
             return binding?.root
     }
     private fun loadFragment(fragment: Fragment?): Boolean {
@@ -45,8 +46,6 @@ class TodoMain : Fragment() {
 override fun onDestroyView() {
         super.onDestroyView()
         binding = null
-
     }
-
 }
 

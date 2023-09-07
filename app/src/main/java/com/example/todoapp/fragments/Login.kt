@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.Constants
 import com.example.todoapp.R
@@ -21,7 +21,7 @@ import com.example.todoapp.viewModels.LoginViewModel
 
 class Login : Fragment() {
     private var binding: FragmentLoginBinding? = null
-    private val viewModel: LoginViewModel by activityViewModels()
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -91,9 +91,8 @@ class Login : Fragment() {
     ): View? {
         binding = FragmentLoginBinding.inflate(layoutInflater, container, false)
 
-        val loginViewModel: LoginViewModel by activityViewModels()
-
-        loginViewModel.getAuthTokens().observe(viewLifecycleOwner){ authTokens ->
+        val viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
+        viewModel.getAuthTokens().observe(viewLifecycleOwner){ authTokens ->
             val accessToken = authTokens.accessToken
             Constants.accessToken = accessToken
             val refreshToken = authTokens.refreshToken

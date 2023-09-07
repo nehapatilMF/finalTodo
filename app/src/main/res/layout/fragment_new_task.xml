@@ -130,7 +130,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="30dp"
-android:gravity="center"
+        android:gravity="center"
         android:background="@drawable/button"
         android:text="@string/save"
         android:textSize="16sp" />

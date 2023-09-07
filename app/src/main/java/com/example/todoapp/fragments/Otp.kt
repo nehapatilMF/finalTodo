@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
 import com.example.todoapp.databinding.FragmentOtpBinding
@@ -18,12 +19,11 @@ import com.example.todoapp.viewModels.RegisterViewModel
 
 class Otp : Fragment() {
 
-    private val viewModel: OtpViewModel by activityViewModels()
-    private var binding: FragmentOtpBinding? = null
+      private var binding: FragmentOtpBinding? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        val viewModel = ViewModelProvider(this)[OtpViewModel::class.java]
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.title = null
@@ -79,6 +79,7 @@ class Otp : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentOtpBinding.inflate(layoutInflater, container, false)
+        val viewModel = ViewModelProvider(this)[OtpViewModel::class.java]
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
         binding?.timer?.visibility = View.VISIBLE
         binding?.tvOtpExp?.visibility = View.VISIBLE

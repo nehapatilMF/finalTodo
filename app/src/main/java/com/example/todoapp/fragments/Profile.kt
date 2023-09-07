@@ -6,25 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
 import com.example.todoapp.databinding.FragmentProfileBinding
 import com.example.todoapp.util.DialogUtils
 import com.example.todoapp.util.NetworkUtil
-import com.example.todoapp.viewModels.DeleteViewModel
-import com.example.todoapp.viewModels.LogoutViewModel
+import com.example.todoapp.viewModels.ProfileViewModel
 
 class Profile : Fragment() {
-
-
     private var binding : FragmentProfileBinding? = null
-    private val logoutViewModel: LogoutViewModel by activityViewModels()
-    private val deleteViewModel: DeleteViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+       val viewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
         binding?.personalInformation?.setOnClickListener {
             Toast.makeText(requireContext(),"personalInfoClicked", Toast.LENGTH_SHORT).show()
             findNavController().navigate(R.id.action_profile_to_personalInformation)
@@ -34,12 +29,12 @@ class Profile : Fragment() {
         }
         binding?.Logout?.setOnClickListener {
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
-                logoutViewModel.logout()
+                viewModel.logout()
             }
         }
         binding?.deleteAccount?.setOnClickListener {
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
-                deleteViewModel.deleteUser()
+                viewModel.deleteUser()
             }
         }
 
@@ -50,26 +45,27 @@ class Profile : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
+
         binding = FragmentProfileBinding.inflate(layoutInflater, container, false)
 
+        val viewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
 
-
-        logoutViewModel.logoutResult.observe(viewLifecycleOwner){ status ->
+        viewModel.logoutResult.observe(viewLifecycleOwner){ status ->
             if(status == "200"){
 
-                findNavController().popBackStack(R.id.intro, false)
-               // findNavController().navigate(R.id.navigate_to_intro)
+               // findNavController().popBackStack(R.id.intro, false)
+              findNavController().navigate(R.id.navigate_to_intro)
             }else{
                 val message = "Logout Failed"
                 DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
             }
         }
 
-        deleteViewModel.deleteUserResult.observe(viewLifecycleOwner){ status ->
+        viewModel.deleteUserResult.observe(viewLifecycleOwner){ status ->
             if(status == "200"){
 
-                findNavController().popBackStack(R.id.intro, false)
-               // findNavController().navigate(R.id.navigate_to_intro)
+               // findNavController().popBackStack(R.id.intro, false)
+                findNavController().navigate(R.id.navigate_to_intro)
             }else{
                 val message = "user not deleted."
                 DialogUtils.showAutoDismissAlertDialog(requireContext(), message)

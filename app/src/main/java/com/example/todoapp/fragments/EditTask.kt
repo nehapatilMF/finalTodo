@@ -7,21 +7,40 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
 import com.example.todoapp.databinding.FragmentEditTaskBinding
 import com.example.todoapp.util.CalenderUtil
 import com.example.todoapp.util.TimePickerUtil
+import com.example.todoapp.viewModels.UpdateTodoViewModel
 
 class EditTask : Fragment() {
+
     private var binding : FragmentEditTaskBinding? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val viewModel = ViewModelProvider(this)[UpdateTodoViewModel::class.java]
+
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.title = null
+
+        val title = arguments?.getString("title")
+        val description = arguments?.getString("description")
+        val status = arguments?.getString("status")
+        val date = arguments?.getString("date")
+        val time = arguments?.getString("time")
+        val id = arguments?.getString("id")
+
+        binding?.editTextTitle?.setText(title)
+        binding?.editTextTitle?.setText(description)
+        binding?.tvTime?.text = time
+        binding?.tvDate?.text = date
+
+
         binding?.toolbar?.setNavigationOnClickListener{
-            findNavController().navigate(R.id.navigate_from_newTask_to_todoMain)
+            findNavController().navigate(R.id.action_editTask_to_todoMain)
               }
         binding?.tvTime?.setOnClickListener {
             TimePickerUtil.showTimePickerDialog(requireContext()){ selectedTime ->
@@ -31,7 +50,7 @@ class EditTask : Fragment() {
 
 
         binding?.btnSave?.setOnClickListener{
-            findNavController().navigate(R.id.navigate_from_edit_to_todoMain)
+           findNavController().navigate(R.id.action_editTask_to_todoMain)
         }
         binding?.tvDate?.setOnClickListener {
             CalenderUtil.showDatePickerDialog (requireContext()){ selectedDate ->

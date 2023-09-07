@@ -12,8 +12,6 @@ import com.example.todoapp.responses.LoginResponse
 import kotlinx.coroutines.launch
 import retrofit2.Response
 
-
-
 class LoginViewModel : ViewModel() {
 
     private val apiInterface = RetrofitClient.getInstance()?.create(ApiInterface::class.java)

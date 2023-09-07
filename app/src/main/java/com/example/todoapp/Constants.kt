@@ -6,4 +6,7 @@ object Constants {
     fun clearAccessToken() {
         accessToken = null
     }
-}
+
+    var fpEmail : String? = null
+
+    }

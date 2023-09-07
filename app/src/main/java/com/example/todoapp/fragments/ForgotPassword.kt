@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
 import com.example.todoapp.databinding.FragmentForgotPasswordBinding
@@ -19,12 +19,12 @@ import com.example.todoapp.viewModels.ForgotPasswordViewModel
 
 
 class ForgotPassword : Fragment() {
-    private val viewModel : ForgotPasswordViewModel by activityViewModels()
 
    private var binding:FragmentForgotPasswordBinding? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupTextChangeListeners()
+        val viewModel = ViewModelProvider(this)[ForgotPasswordViewModel::class.java]
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.title = getString(R.string.forgot_password_title)
@@ -71,6 +71,8 @@ class ForgotPassword : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentForgotPasswordBinding.inflate(inflater,container,false)
+        val viewModel = ViewModelProvider(this)[ForgotPasswordViewModel::class.java]
+
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
 
         viewModel.forgotPasswordResult.observe(viewLifecycleOwner){ status ->

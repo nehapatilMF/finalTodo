@@ -6,6 +6,7 @@ import java.util.Calendar
 import java.util.Locale
 
 object TimePickerUtil {
+
     fun showTimePickerDialog(
         context: Context,
         onTimeSelected: (formattedTime: String) -> Unit
@@ -13,34 +14,30 @@ object TimePickerUtil {
         val calendar = Calendar.getInstance()
         val hourOfDay = calendar.get(Calendar.HOUR_OF_DAY)
         val minute = calendar.get(Calendar.MINUTE)
+        val second = calendar.get(Calendar.SECOND)
 
         val timePickerDialog = TimePickerDialog(
             context,
-            { _, selectedHourOfDay, selectedMinute ->
-                val formattedTime = formatTime(selectedHourOfDay, selectedMinute)
-                onTimeSelected(formattedTime)
+            { _, selectedHour, selectedMinute ->
+                val selectedTime = formatTime(selectedHour,selectedMinute, second)
+                onTimeSelected(selectedTime)
             },
             hourOfDay,
             minute,
-            false // 12-hour format
+             true// 12-hour format
         )
 
         timePickerDialog.show()
     }
 
-    private fun formatTime(hourOfDay: Int, minute: Int): String {
-        val amPm = if (hourOfDay < 12) "AM" else "PM"
-        val formattedHour = if (hourOfDay % 12 == 0) 12 else hourOfDay % 12
-        val timeFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
+    private fun formatTime(hourOfDay: Int, minute: Int, second: Int): String {
+        val timeFormat = SimpleDateFormat("hh:mm:ss", Locale.getDefault())
         val calendar = Calendar.getInstance()
-        calendar.set(Calendar.HOUR_OF_DAY, formattedHour)
+        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
         calendar.set(Calendar.MINUTE, minute)
+        calendar.set(Calendar.SECOND, second)
         return timeFormat.format(calendar.time)
     }
 }
-
-
-
-
 
 

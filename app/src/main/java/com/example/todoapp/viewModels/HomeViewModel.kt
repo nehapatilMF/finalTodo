@@ -10,15 +10,15 @@ import com.example.todoapp.responses.GetTodoListResponse
 import com.example.todoapp.responses.TodoItem
 import kotlinx.coroutines.launch
 import retrofit2.Response
-class GetTodoListViewModel : ViewModel() {
+class HomeViewModel : ViewModel() {
     private val apiInterface = RetrofitClient.getInstance()?.create(ApiInterface::class.java)
 
     private val _todoList = MutableLiveData<List<TodoItem>>()
     val todoList: LiveData<List<TodoItem>> get() = _todoList
 
-
     private val _fetchTodoListStatus = MutableLiveData<String>()
     val fetchTodoListStatus: LiveData<String> get() = _fetchTodoListStatus
+
 
     fun fetchTodoList() {
         viewModelScope.launch {
@@ -39,4 +39,6 @@ class GetTodoListViewModel : ViewModel() {
             }
         }
     }
+
+
   }
