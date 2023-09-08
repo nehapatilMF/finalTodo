@@ -85,4 +85,6 @@
     <string name="change_password">Change Password</string>
     <string name="personal_information">Personal Information</string>
     <string name="aready_user_exist">User already exist with this email id, kindly login to continue using the application.</string>
+    <string name="are_you_sure_you_want_to_delete_account">Are you sure you want to delete account</string>
+    <string name="delete_todo">Are you sure,\nyou want to delete todo</string>
 </resources>

@@ -1,16 +1,17 @@
 package com.example.todoapp.fragments
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
+import com.example.todoapp.databinding.DialogDeleteConfirmationBinding
 import com.example.todoapp.databinding.FragmentEditTaskBinding
 import com.example.todoapp.util.CalenderUtil
 import com.example.todoapp.util.TimePickerUtil
@@ -19,7 +20,14 @@ import com.example.todoapp.viewModels.TodoViewModel
 class EditTask : Fragment() {
 
     private var binding : FragmentEditTaskBinding? = null
-
+    private fun getStatusInt(statusText: String): Int {
+        return when (statusText) {
+            "Todo" -> 0
+            "In Progress" -> 1
+            "Done" -> 2
+            else -> -1
+        }
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val viewModel = ViewModelProvider(this)[TodoViewModel::class.java]
@@ -34,6 +42,8 @@ class EditTask : Fragment() {
         val date = arguments?.getString("date")
         val time = arguments?.getString("time")
         val id = arguments?.getString("id")
+
+
 
         binding?.editTextTitle?.setText(title)
         binding?.editTextDescription?.setText(description)
@@ -51,23 +61,21 @@ class EditTask : Fragment() {
 
         binding?.btnSave?.setOnClickListener {
             val id1 = id.toString()
-            val title1 = title.toString()
-            val description1 = description.toString()
-            val date1 = date.toString()
-            val time1 = time.toString()
-            val status1 = 2
-            if (id != null &&
-                title != null &&
-                description != null && date != null && time != null
-            ) {
-                Toast.makeText(requireContext(),"$title,$description, $date, $time, $status", Toast.LENGTH_SHORT).show()
+            val title1 = binding?.editTextTitle?.text.toString()
+            val description1 = binding?.editTextDescription?.text.toString()
+            val date1 = binding?.tvDate?.text.toString()
+            val time1 = binding?.tvTime?.text?.toString()
+            val status1 = getStatusInt(binding?.spinnerStatus?.selectedItem.toString())
+            if (id != null && time1 != null){
                 viewModel.updateTodo(id1, title1, description1, status1, date1, time1)
+                goBack()
             }
         }
-
         binding?.btnDelete?.setOnClickListener {
+
             if (id != null) {
                 viewModel.deleteTodo(id)
+                customDialogForDeleteButton()
             }
         }
         binding?.tvDate?.setOnClickListener {
@@ -84,28 +92,47 @@ class EditTask : Fragment() {
         binding = FragmentEditTaskBinding.inflate(layoutInflater, container, false)
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
 
-        val viewModel = ViewModelProvider(this)[TodoViewModel::class.java]
+        val viewModel = ViewModelProvider(requireActivity())[TodoViewModel::class.java]
 
         viewModel.deleteTodoStatus.observe(viewLifecycleOwner){ status ->
             if(status == "200"){
-                findNavController().navigate(R.id.action_editTask_to_todoMain)
+                goBack()
+               // findNavController().navigate(R.id.action_editTask_to_todoMain)
             }
             viewModel.updateTodoStatus.observe(viewLifecycleOwner){ status ->
                 if(status == "200"){
-                    findNavController().navigate(R.id.action_editTask_to_todoMain)
+
                 }
             }
 
         }
         val adapter: ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(
             requireContext(),
-            R.array.spinner_items,  // An array resource containing your items
+            R.array.spinner_items,
             android.R.layout.simple_spinner_item
         )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
         binding?.spinnerStatus?.adapter = adapter
         return binding?.root
+    }
+    private fun goBack(){
+        findNavController().navigate(R.id.action_editTask_to_todoMain)
+    }
+
+    private fun customDialogForDeleteButton() {
+        val customDialog = Dialog(requireContext())
+        val dialogBinding = DialogDeleteConfirmationBinding.inflate(layoutInflater)
+        customDialog.setContentView(dialogBinding.root)
+        customDialog.setCanceledOnTouchOutside(false)
+        dialogBinding.tvYes.setOnClickListener {
+            findNavController().navigate(R.id.action_editTask_to_todoMain)
+            customDialog.dismiss()
+        }
+        dialogBinding.tvNo.setOnClickListener {
+            customDialog.dismiss()
+        }
+        customDialog.show()
     }
     override fun onDestroyView() {
         super.onDestroyView()

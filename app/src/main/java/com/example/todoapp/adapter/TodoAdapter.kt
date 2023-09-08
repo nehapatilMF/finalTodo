@@ -13,25 +13,34 @@ import com.example.todoapp.responses.TodoItem
 
 class TodoAdapter(private var listView : List<TodoItem>) :
     RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
-
+    private fun getStatusText(statusCode: Int): String {
+        return when (statusCode) {
+            0 -> "Todo"
+            1 -> "In Progress"
+            2 -> "Done"
+            else -> "Unknown"
+        }
+    }
     inner class TodoViewHolder(val binding: TodoItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bindItem(list: TodoItem) {
             val title: TextView = binding.textViewTitle
             val description: TextView = binding.textViewDescription
             val status: TextView = binding.textViewStatus
+
             val date: TextView = binding.textViewDate
             val time: TextView = binding.textViewTime
-
 
             title.text = list.title
             description.text = list.description
             date.text = list.todo_date
             time.text = list.todo_time
             val id = list.id
-            status.text = list.status.toString()
-
+            //status.text = list.status.toString()
+            status.text = getStatusText(list.status)
         }
+
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
@@ -60,14 +69,14 @@ class TodoAdapter(private var listView : List<TodoItem>) :
             bundle.putString("date", currentItem.todo_date)
             bundle.putString("time", currentItem.todo_time)
             bundle.putString("id", currentItem.id.toString())
-             val editTaskFragment = EditTask()
+            val editTaskFragment = EditTask()
             editTaskFragment.arguments = bundle
 
             holder.itemView.findNavController().navigate(R.id.action_todoMain_to_editTask,bundle)
         }
 
-        }
     }
+}
 
 
 

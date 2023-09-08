@@ -53,6 +53,7 @@ class NewTask : Fragment() {
             if(NetworkUtil.isNetworkAvailable(requireContext())){
 
                 viewModel.addTodo(title,description,date,time,status)
+                goBackToTodoMain()
 
             }else{
                 Toast.makeText(requireContext(),getString(R.string.no_internet_connection),Toast.LENGTH_SHORT).show()
@@ -69,12 +70,16 @@ class NewTask : Fragment() {
         val viewModel = ViewModelProvider(this)[TodoViewModel::class.java]
         viewModel.addTodoStatus.observe(viewLifecycleOwner){ status ->
             if(status == "200"){
-                findNavController().navigate(R.id.navigate_from_newTask_to_todoMain)
+                goBackToTodoMain()
             }else{
                 Log.e("error","error")
             }
         }
         return binding?.root
+    }
+
+    private fun goBackToTodoMain(){
+        findNavController().navigate(R.id.navigate_from_newTask_to_todoMain)
     }
     private fun customDialogForBackButton() {
         val customDialog = Dialog(requireContext())
