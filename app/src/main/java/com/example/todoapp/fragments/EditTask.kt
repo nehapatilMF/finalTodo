@@ -31,19 +31,15 @@ class EditTask : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val viewModel = ViewModelProvider(this)[TodoViewModel::class.java]
-
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.title = null
-
         val title = arguments?.getString("title")
         val description = arguments?.getString("description")
         val status = arguments?.getString("status")
         val date = arguments?.getString("date")
         val time = arguments?.getString("time")
         val id = arguments?.getString("id")
-
-
 
         binding?.editTextTitle?.setText(title)
         binding?.editTextDescription?.setText(description)
