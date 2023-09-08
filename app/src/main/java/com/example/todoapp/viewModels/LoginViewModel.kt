@@ -34,25 +34,25 @@ class LoginViewModel : ViewModel() {
     fun login(email : String, password : String){
         viewModelScope.launch {
 
-                try {
-                    val loginResponse: Response<LoginResponse>? = apiInterface?.login(email,password)
-                    val response = loginResponse?.body()
-                    if(loginResponse?.isSuccessful == true ){
-                        val status = response?.status.toString()
-                        _loginResult.postValue(status)
-                        val accessToken = response?.data?.token?.access_token.toString()
+            try {
+                val loginResponse: Response<LoginResponse>? = apiInterface?.login(email,password)
+                val response = loginResponse?.body()
+                if(loginResponse?.isSuccessful == true ){
+                    val status = response?.status.toString()
+                    _loginResult.postValue(status)
+                    val accessToken = response?.data?.token?.access_token.toString()
 
-                        val refreshToken = response?.data?.token?.refresh_token.toString()
-                        saveTokens(accessToken, refreshToken)
+                    val refreshToken = response?.data?.token?.refresh_token.toString()
+                    saveTokens(accessToken, refreshToken)
 
-                    } else{
-                        _loginResult.value = response?.message
-                    }
-                } catch (e : Exception){
-                    _loginResult.value = e.message
+                } else{
+                    _loginResult.value = response?.message
                 }
+            } catch (e : Exception){
+                _loginResult.value = e.message
             }
         }
     }
+}
 
 

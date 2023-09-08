@@ -79,7 +79,6 @@
             android:layout_weight="1"
             android:text="@string/Todo"
             android:textSize="@dimen/text_size"
-
             android:gravity="center"
             android:textStyle="bold"
             />

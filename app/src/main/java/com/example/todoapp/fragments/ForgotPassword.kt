@@ -20,7 +20,7 @@ import com.example.todoapp.viewModels.ForgotPasswordViewModel
 
 class ForgotPassword : Fragment() {
 
-   private var binding:FragmentForgotPasswordBinding? = null
+    private var binding:FragmentForgotPasswordBinding? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupTextChangeListeners()

@@ -18,10 +18,12 @@ import com.example.todoapp.responses.SignupVerifyOtpResponse
 import com.example.todoapp.responses.UpdateProfileResponse
 import com.example.todoapp.responses.UpdateTodoResponse
 import retrofit2.Response
+import retrofit2.http.DELETE
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Path
 
 interface ApiInterface {
     ////Sign Up
@@ -114,16 +116,19 @@ interface ApiInterface {
     @FormUrlEncoded
     @POST("todo/update/{id}")
     suspend fun updateTodo(
+        @Path("id") id : String,
         @Field("title") title:String,
         @Field("description") description : String,
+        @Field("status") status : Int,
         @Field("todo_date") todo_date : String,
-        @Field("todo_time") todo_time : String,
-        @Field("status") status : Int
+        @Field("todo_time") todo_time : String
     ) : Response<UpdateTodoResponse>
 
     ////Delete
-    @POST("todo/delete/{id}")
-    suspend fun deleteTodo():Response<DeleteTodoResponse>
+    @DELETE("todo/delete/{id}")
+    suspend fun deleteTodo(
+        @Path("id") id :String
+    ) : Response<DeleteTodoResponse>
 
     ////Profile information
     @GET("profile-info")

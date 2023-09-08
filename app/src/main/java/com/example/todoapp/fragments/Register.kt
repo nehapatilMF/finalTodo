@@ -19,7 +19,7 @@ import com.example.todoapp.util.ValidPatterns
 import com.example.todoapp.viewModels.RegisterViewModel
 
 class Register : Fragment() {
-       private var binding: FragmentRegisterBinding? = null
+    private var binding: FragmentRegisterBinding? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
@@ -128,7 +128,7 @@ class Register : Fragment() {
         val viewModel = ViewModelProvider(this)[RegisterViewModel::class.java]
         val userName = binding?.editTextUserName?.text.toString()
         val mobileNumber = binding?.editTextMobileNumber?.text.toString()
-          val email = binding?.editTextEmail?.text.toString()
+        val email = binding?.editTextEmail?.text.toString()
         val password  = binding?.editTextPassword?.text.toString()
         val confirmPassword = binding?.editTextConfirmPassword?.text.toString()
         if (NetworkUtil.isNetworkAvailable(requireContext())) {

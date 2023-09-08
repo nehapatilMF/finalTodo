@@ -19,7 +19,7 @@ import com.example.todoapp.viewModels.RegisterViewModel
 
 class Otp : Fragment() {
 
-      private var binding: FragmentOtpBinding? = null
+    private var binding: FragmentOtpBinding? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

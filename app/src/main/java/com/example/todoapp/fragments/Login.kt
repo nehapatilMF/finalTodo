@@ -136,14 +136,14 @@ class Login : Fragment() {
 
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
         viewModel.loginResult.observe(viewLifecycleOwner) { status ->
-           if (status =="200") {
+            if (status =="200") {
                 findNavController().navigate(R.id.navigate_from_login_to_todoMain)
             } else {
 
-                   val message = "Invalid email or password."
-                   DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
-               binding?.progressBar?.visibility = View.GONE
-           }
+                val message = "Invalid email or password."
+                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+                binding?.progressBar?.visibility = View.GONE
+            }
         }
         return binding?.root
     }

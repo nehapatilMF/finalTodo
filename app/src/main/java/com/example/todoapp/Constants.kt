@@ -7,6 +7,20 @@ object Constants {
         accessToken = null
     }
 
-    var fpEmail : String? = null
 
+    var fpEmail : String? = null
+    fun getEmail(){
+        this.fpEmail
+    }
+    fun clearEmail(){
+        fpEmail = null
+    }
+
+    var fpOtp : String? = null
+    fun setfpOtp (){
+        this.fpOtp
+    }
+    fun clearfpOtp(){
+        fpOtp = null
+    }
     }

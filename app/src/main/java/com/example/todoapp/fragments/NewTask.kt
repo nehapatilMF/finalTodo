@@ -17,14 +17,14 @@ import com.example.todoapp.databinding.FragmentNewTaskBinding
 import com.example.todoapp.util.CalenderUtil
 import com.example.todoapp.util.NetworkUtil
 import com.example.todoapp.util.TimePickerUtil
-import com.example.todoapp.viewModels.AddTodoViewModel
+import com.example.todoapp.viewModels.TodoViewModel
 
 class NewTask : Fragment() {
     private var binding: FragmentNewTaskBinding? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val viewModel = ViewModelProvider(this)[AddTodoViewModel::class.java]
+        val viewModel = ViewModelProvider(this)[TodoViewModel::class.java]
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.title = null
@@ -51,7 +51,7 @@ class NewTask : Fragment() {
             val time = binding?.tvTime?.text.toString()
             val status = 0
             if(NetworkUtil.isNetworkAvailable(requireContext())){
-                Toast.makeText(requireContext(),"$title,$description, $date, $time, $status", Toast.LENGTH_SHORT).show()
+
                 viewModel.addTodo(title,description,date,time,status)
 
             }else{
@@ -66,7 +66,7 @@ class NewTask : Fragment() {
     ): View? {
         binding = FragmentNewTaskBinding.inflate(layoutInflater, container, false)
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
-        val viewModel = ViewModelProvider(this)[AddTodoViewModel::class.java]
+        val viewModel = ViewModelProvider(this)[TodoViewModel::class.java]
         viewModel.addTodoStatus.observe(viewLifecycleOwner){ status ->
             if(status == "200"){
                 findNavController().navigate(R.id.navigate_from_newTask_to_todoMain)

@@ -26,10 +26,11 @@ class TodoAdapter(private var listView : List<TodoItem>) :
 
             title.text = list.title
             description.text = list.description
-            status.text = list.status.toString()
             date.text = list.todo_date
             time.text = list.todo_time
             val id = list.id
+            status.text = list.status.toString()
+
         }
     }
 

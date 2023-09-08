@@ -55,6 +55,7 @@ class Profile : Fragment() {
 
                // findNavController().popBackStack(R.id.intro, false)
               findNavController().navigate(R.id.navigate_to_intro)
+
             }else{
                 val message = "Logout Failed"
                 DialogUtils.showAutoDismissAlertDialog(requireContext(), message)

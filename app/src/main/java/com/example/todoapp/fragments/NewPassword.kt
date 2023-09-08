@@ -10,7 +10,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
 import com.example.todoapp.base64.Base64
@@ -25,13 +24,11 @@ import com.example.todoapp.viewModels.NewPasswordViewModel
 class NewPassword : Fragment() {
     private var binding : FragmentNewPasswordBinding? = null
 
-
-
+    private val viewModel: NewPasswordViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupTextChangeListeners()
-        val viewModel = ViewModelProvider(this)[NewPasswordViewModel::class.java]
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.title = getString(R.string.forgot_password)
@@ -112,7 +109,6 @@ class NewPassword : Fragment() {
 
 
         binding = FragmentNewPasswordBinding.inflate(layoutInflater,container,false)
-        val viewModel = ViewModelProvider(this)[NewPasswordViewModel::class.java]
 
         val newPassword = binding?.etNewPassword?.text.toString()
         val confirmNewPassword = binding?.etConfirmPassword?.text.toString()
