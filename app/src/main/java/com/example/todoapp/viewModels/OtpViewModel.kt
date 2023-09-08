@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.todoapp.AuthTokens
 import com.example.todoapp.client.RetrofitClient
 import com.example.todoapp.interfaces.ApiInterface
 import kotlinx.coroutines.launch
@@ -20,6 +21,11 @@ class OtpViewModel : ViewModel()  {
     private val _resendOtpResult = MutableLiveData<String>()
     val resendOtpResult : LiveData<String> get() = _resendOtpResult
 
+    private val _authTokens = MutableLiveData<AuthTokens>()
+
+    fun getAuthTokens(): LiveData<AuthTokens> {
+        return _authTokens
+    }
 
     private val _accessToken = MutableLiveData<String>()
     val accessToken : LiveData<String> get() =  _accessToken

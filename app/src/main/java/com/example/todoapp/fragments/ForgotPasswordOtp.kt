@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.example.todoapp.Constants
 import com.example.todoapp.R
 import com.example.todoapp.databinding.FragmentForgotPasswordOtpBinding
 import com.example.todoapp.util.DialogUtils
@@ -80,12 +79,7 @@ class ForgotPasswordOtp : Fragment() {
     ): View? {
         binding = FragmentForgotPasswordOtpBinding.inflate(inflater, container, false)
 
-        viewModel.getAuthTokens().observe(viewLifecycleOwner){ authTokens ->
-            val accessToken = authTokens.accessToken
-            Constants.accessToken = accessToken
-            val refreshToken = authTokens.refreshToken
-            Constants.refreshToken = refreshToken
-        }
+
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
         binding?.timer?.visibility = View.VISIBLE
         binding?.tvOtpExp?.visibility = View.VISIBLE

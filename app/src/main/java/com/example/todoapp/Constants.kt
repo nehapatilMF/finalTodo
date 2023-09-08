@@ -6,5 +6,4 @@ object Constants {
     fun clearAccessToken() {
         accessToken = null
     }
-
 }

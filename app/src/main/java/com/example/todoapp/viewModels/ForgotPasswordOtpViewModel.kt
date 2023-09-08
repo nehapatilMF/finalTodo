@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.todoapp.AuthTokens
 import com.example.todoapp.client.RetrofitClient
 import com.example.todoapp.interfaces.ApiInterface
 import kotlinx.coroutines.launch
@@ -25,15 +24,6 @@ class ForgotPasswordOtpViewModel : ViewModel() {
     val newOtpResult : LiveData<String> get() = _newOtpResult
 
 
-    private val _authTokens = MutableLiveData<AuthTokens>()
-
-    fun getAuthTokens(): LiveData<AuthTokens> {
-        return _authTokens
-    }
-    private fun saveTokens(accessToken: String, refreshToken: String) {
-        val authTokens = AuthTokens(accessToken, refreshToken)
-        _authTokens.postValue(authTokens)
-    }
 
     fun forgotPasswordVerifyOtp(email: String, otp: Long){
         viewModelScope.launch {
@@ -45,10 +35,6 @@ class ForgotPasswordOtpViewModel : ViewModel() {
                     _otpResult.postValue(status)
                     _otp.postValue(response?.data?.user?.otp.toString())
                     _email.postValue(response?.data?.user?.email.toString())
-                    val accessToken = response?.data?.token?.access_token.toString()
-
-                    val refreshToken = response?.data?.token?.refresh_token.toString()
-                    saveTokens(accessToken, refreshToken)
 
                 }else{
                     _otpResult.postValue(response?.message)
