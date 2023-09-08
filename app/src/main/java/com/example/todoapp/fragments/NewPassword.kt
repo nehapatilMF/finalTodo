@@ -6,7 +6,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -34,15 +33,14 @@ class NewPassword : Fragment() {
         actionBar?.title = getString(R.string.forgot_password)
         binding?.toolbar?.setNavigationOnClickListener {
             findNavController().navigate(R.id.navigate_from_newPassword_to_forgotPasswordOtp)
-
         }
         val forgotPasswordViewModel: ForgotPasswordViewModel by activityViewModels()
         val email = forgotPasswordViewModel.email
         var npOtp: String? = null
         val forgotPasswordOtpViewModel: ForgotPasswordOtpViewModel by activityViewModels()
         forgotPasswordOtpViewModel.otp.observe(viewLifecycleOwner) { otp ->
-          npOtp = otp
-         }
+            npOtp = otp
+        }
 
         binding?.btnNext?.setOnClickListener {
             val password  = binding?.etNewPassword?.text.toString()
@@ -65,7 +63,6 @@ class NewPassword : Fragment() {
 
                         val message =  getString(R.string.required_fields_are_empty)
                         DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
-
                     }
                 }else{
 
@@ -114,14 +111,13 @@ class NewPassword : Fragment() {
         val confirmNewPassword = binding?.etConfirmPassword?.text.toString()
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
         viewModel.resetPasswordResult.observe(viewLifecycleOwner){ status ->
-            Toast.makeText(requireContext(),status,Toast.LENGTH_SHORT).show()
+
             if(status == "200"){
                 findNavController().navigate(R.id.navigate_from_newPassword_to_login)
             }else{
 
                 val message = "Invalid otp"
                 DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
-
             }
         }
 

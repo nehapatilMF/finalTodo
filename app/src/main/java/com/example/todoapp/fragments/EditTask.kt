@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -15,6 +16,7 @@ import com.example.todoapp.databinding.DialogCustomBackConfirmationBinding
 import com.example.todoapp.databinding.DialogDeleteConfirmationBinding
 import com.example.todoapp.databinding.FragmentEditTaskBinding
 import com.example.todoapp.util.CalenderUtil
+import com.example.todoapp.util.NetworkUtil
 import com.example.todoapp.util.TimePickerUtil
 import com.example.todoapp.viewModels.TodoViewModel
 
@@ -66,8 +68,11 @@ class EditTask : Fragment() {
             val time1 = binding?.tvTime?.text?.toString()
             val status1 = getStatusInt(binding?.spinnerStatus?.selectedItem.toString())
             if (id != null && time1 != null){
-                viewModel.updateTodo(id1, title1, description1, status1, date1, time1)
-                goBack()
+                if(NetworkUtil.isNetworkAvailable(requireContext())) {
+                    viewModel.updateTodo(id1, title1, description1, status1, date1, time1)
+                    goBack()
+                } else{
+                    Toast.makeText(requireContext(),getString(R.string.no_internet_connection),Toast.LENGTH_SHORT).show()}
             }
         }
         binding?.btnDelete?.setOnClickListener {

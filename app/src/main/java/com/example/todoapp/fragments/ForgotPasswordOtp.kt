@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.todoapp.Constants
 import com.example.todoapp.R
 import com.example.todoapp.databinding.FragmentForgotPasswordOtpBinding
 import com.example.todoapp.util.DialogUtils
@@ -18,10 +18,12 @@ import com.example.todoapp.viewModels.ForgotPasswordOtpViewModel
 import com.example.todoapp.viewModels.ForgotPasswordViewModel
 
 class ForgotPasswordOtp : Fragment() {
+    private val viewModel: ForgotPasswordOtpViewModel by activityViewModels()
+
     private var binding: FragmentForgotPasswordOtpBinding? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val viewModel = ViewModelProvider(this)[ForgotPasswordOtpViewModel::class.java]
+
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.title = "Forgot password"
@@ -32,19 +34,24 @@ class ForgotPasswordOtp : Fragment() {
         }
         val forgotPasswordViewModel: ForgotPasswordViewModel by activityViewModels()
         val email = forgotPasswordViewModel.email
-
         forgotPasswordViewModel.otpResult.observe(viewLifecycleOwner) { opt ->
             binding?.jsonOtp?.text = opt
         }
 
-
         binding?.btnNext?.setOnClickListener {
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
+
                 val otp = binding?.etOtp?.text.toString()
-                if(otp.isNotEmpty()) {
+
+                if(otp.isNotEmpty()){
                     val otp1 = otp.toLong()
                     viewModel.forgotPasswordVerifyOtp(email, otp1)
+                }else{
+
+                    val message = "Please enter Otp"
+                    DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
                 }
+
             } else {
 
                 val message = getString(R.string.no_internet_connection)
@@ -60,6 +67,7 @@ class ForgotPasswordOtp : Fragment() {
                 startOtpTimer()
                 viewModel.forgotPasswordResendOtp(email)
             } else {
+
                 val message = getString(R.string.no_internet_connection)
                 DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
             }
@@ -71,33 +79,35 @@ class ForgotPasswordOtp : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentForgotPasswordOtpBinding.inflate(inflater, container, false)
-        val viewModel = ViewModelProvider(this)[ForgotPasswordOtpViewModel::class.java]
+
+        viewModel.getAuthTokens().observe(viewLifecycleOwner){ authTokens ->
+            val accessToken = authTokens.accessToken
+            Constants.accessToken = accessToken
+            val refreshToken = authTokens.refreshToken
+            Constants.refreshToken = refreshToken
+        }
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
         binding?.timer?.visibility = View.VISIBLE
         binding?.tvOtpExp?.visibility = View.VISIBLE
         binding?.tvMin?.visibility = View.VISIBLE
         binding?.resendCode?.visibility = View.INVISIBLE
         startOtpTimer()
-
         viewModel.otpResult.observe(viewLifecycleOwner) { status ->
+
             if (status == "200") {
                 findNavController().navigate(R.id.navigate_to_newPassword)
-            } else {
-                viewModel.otpResult.observe(viewLifecycleOwner){ msg ->
-                    val message = msg.toString()
-                    DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
-                }
-            }
+                        }
         }
         viewModel.resendOtpResult.observe(viewLifecycleOwner) { status ->
             if (status == "200") {
-                viewModel.newOtpResult.observe(viewLifecycleOwner){ newOtp ->
+                viewModel.newOtpResult.observe(viewLifecycleOwner) { newOtp ->
                     binding?.jsonOtp?.text = newOtp
                 }
-
             }else{
                 val message = getString(R.string.invalid_or_empty_email_id)
                 DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+
+
             }
         }
 
@@ -119,6 +129,7 @@ class ForgotPasswordOtp : Fragment() {
                 binding?.tvOtpExp?.visibility = View.INVISIBLE
                 binding?.tvMin?.visibility = View.INVISIBLE
                 binding?.resendCode?.visibility = View.VISIBLE
+
             }
         )
     }

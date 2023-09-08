@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
 import com.example.todoapp.base64.Base64
@@ -19,10 +19,11 @@ import com.example.todoapp.util.ValidPatterns
 import com.example.todoapp.viewModels.RegisterViewModel
 
 class Register : Fragment() {
+    private val viewModel: RegisterViewModel by activityViewModels()
+
     private var binding: FragmentRegisterBinding? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         super.onViewCreated(view, savedInstanceState)
 
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
@@ -34,21 +35,20 @@ class Register : Fragment() {
         }
         setupTextChangeListeners()
 
-
-    }
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentRegisterBinding.inflate(inflater, container, false)
         binding?.login?.setOnClickListener {
             handleLogin()
         }
         binding?.buttonNext?.setOnClickListener {
             handleRegister()
         }
+    }
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentRegisterBinding.inflate(inflater, container, false)
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
-        val viewModel = ViewModelProvider(this)[RegisterViewModel::class.java]
+
         viewModel.signupResult.observe(viewLifecycleOwner){ status ->
             if(status == "200") {
                 findNavController().navigate(R.id.navigate_from_register_to_otp)
@@ -59,6 +59,7 @@ class Register : Fragment() {
         }
         return binding?.root
     }
+
 
     private fun setupTextChangeListeners() {
         binding?.editTextMobileNumber?.addTextChangedListener(object :TextWatcher{
@@ -125,7 +126,6 @@ class Register : Fragment() {
         }
     }
     private fun handleRegister(){
-        val viewModel = ViewModelProvider(this)[RegisterViewModel::class.java]
         val userName = binding?.editTextUserName?.text.toString()
         val mobileNumber = binding?.editTextMobileNumber?.text.toString()
         val email = binding?.editTextEmail?.text.toString()

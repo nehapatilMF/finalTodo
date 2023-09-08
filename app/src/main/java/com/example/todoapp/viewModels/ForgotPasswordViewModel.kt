@@ -9,6 +9,7 @@ import com.example.todoapp.interfaces.ApiInterface
 import kotlinx.coroutines.launch
 
 class ForgotPasswordViewModel : ViewModel(){
+
     lateinit var email: String
 
     private val apiInterface = RetrofitClient.getInstance()?.create(ApiInterface::class.java)

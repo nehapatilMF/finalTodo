@@ -94,6 +94,7 @@ class Login : Fragment() {
         val viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
         viewModel.getAuthTokens().observe(viewLifecycleOwner){ authTokens ->
             val accessToken = authTokens.accessToken
+            Constants.clearAccessToken()
             Constants.accessToken = accessToken
             val refreshToken = authTokens.refreshToken
             Constants.refreshToken = refreshToken
