@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
+import com.example.todoapp.databinding.DialogCustomBackConfirmationBinding
 import com.example.todoapp.databinding.DialogDeleteConfirmationBinding
 import com.example.todoapp.databinding.FragmentEditTaskBinding
 import com.example.todoapp.util.CalenderUtil
@@ -30,10 +31,12 @@ class EditTask : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val viewModel = ViewModelProvider(this)[TodoViewModel::class.java]
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.title = null
+
         val title = arguments?.getString("title")
         val description = arguments?.getString("description")
         val status = arguments?.getString("status")
@@ -47,7 +50,7 @@ class EditTask : Fragment() {
         binding?.tvDate?.text = date
 
         binding?.toolbar?.setNavigationOnClickListener{
-            findNavController().navigate(R.id.action_editTask_to_todoMain)
+         customDialogForBackButton()
         }
         binding?.tvTime?.setOnClickListener {
             TimePickerUtil.showTimePickerDialog(requireContext()){ selectedTime ->
@@ -115,7 +118,20 @@ class EditTask : Fragment() {
     private fun goBack(){
         findNavController().navigate(R.id.action_editTask_to_todoMain)
     }
-
+    private fun customDialogForBackButton() {
+        val customDialog = Dialog(requireContext())
+        val dialogBinding = DialogCustomBackConfirmationBinding.inflate(layoutInflater)
+        customDialog.setContentView(dialogBinding.root)
+        customDialog.setCanceledOnTouchOutside(false)
+        dialogBinding.tvYes.setOnClickListener {
+            findNavController().navigate(R.id.action_editTask_to_todoMain)
+            customDialog.dismiss()
+        }
+        dialogBinding.tvNo.setOnClickListener {
+            customDialog.dismiss()
+        }
+        customDialog.show()
+    }
     private fun customDialogForDeleteButton() {
         val customDialog = Dialog(requireContext())
         val dialogBinding = DialogDeleteConfirmationBinding.inflate(layoutInflater)

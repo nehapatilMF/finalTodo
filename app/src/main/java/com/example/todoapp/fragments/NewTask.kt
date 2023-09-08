@@ -15,6 +15,7 @@ import com.example.todoapp.R
 import com.example.todoapp.databinding.DialogCustomBackConfirmationBinding
 import com.example.todoapp.databinding.FragmentNewTaskBinding
 import com.example.todoapp.util.CalenderUtil
+import com.example.todoapp.util.DialogUtils
 import com.example.todoapp.util.NetworkUtil
 import com.example.todoapp.util.TimePickerUtil
 import com.example.todoapp.viewModels.TodoViewModel
@@ -51,15 +52,15 @@ class NewTask : Fragment() {
             val time = binding?.tvTime?.text.toString()
             val status = 0
             if(NetworkUtil.isNetworkAvailable(requireContext())){
-
-                viewModel.addTodo(title,description,date,time,status)
-                goBackToTodoMain()
-
+                if(title.isNotEmpty() && description.isNotEmpty() && date.isNotEmpty() && time.isNotEmpty()){
+                    viewModel.addTodo(title,description,date,time,status)
+                    goBackToTodoMain()
+                } else{
+                    DialogUtils.showAutoDismissAlertDialog(requireContext(), "requires fields are empty")}
             }else{
                 Toast.makeText(requireContext(),getString(R.string.no_internet_connection),Toast.LENGTH_SHORT).show()
             }
         }
-
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -77,6 +78,7 @@ class NewTask : Fragment() {
         }
         return binding?.root
     }
+
 
     private fun goBackToTodoMain(){
         findNavController().navigate(R.id.navigate_from_newTask_to_todoMain)

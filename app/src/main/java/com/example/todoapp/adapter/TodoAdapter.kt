@@ -39,8 +39,6 @@ class TodoAdapter(private var listView : List<TodoItem>) :
             //status.text = list.status.toString()
             status.text = getStatusText(list.status)
         }
-
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
@@ -71,7 +69,6 @@ class TodoAdapter(private var listView : List<TodoItem>) :
             bundle.putString("id", currentItem.id.toString())
             val editTaskFragment = EditTask()
             editTaskFragment.arguments = bundle
-
             holder.itemView.findNavController().navigate(R.id.action_todoMain_to_editTask,bundle)
         }
 
