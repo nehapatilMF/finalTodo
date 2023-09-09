@@ -40,10 +40,8 @@ class OtpViewModel : ViewModel()  {
                     val status = response?.status.toString()
                     _otpResult.postValue(status)
                     val accessToken = response?.data?.token?.access_token.toString()
-
                     val refreshToken = response?.data?.token?.refresh_token.toString()
                     saveTokens(accessToken, refreshToken)
-
 
                 }else{
                     _otpResult.postValue(response?.message)

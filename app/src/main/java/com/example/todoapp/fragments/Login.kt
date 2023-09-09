@@ -25,7 +25,6 @@ class Login : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.title = null
@@ -100,28 +99,16 @@ class Login : Fragment() {
             Constants.refreshToken = refreshToken
         }
         binding?.buttonLogin?.setOnClickListener {
-            if (NetworkUtil.isNetworkAvailable(requireContext())) {
-                val email = binding?.etEmail?.text.toString()
-                val password = binding?.etPassword?.text.toString()
-                val encodedPassword = Base64.encodeToBase64(password)
-                if (ValidPatterns.isValidEmail(email) && ValidPatterns.isValidPassword(password)) {
-                    // Navigate to the next screen if both email and password are valid
-                    viewModel.login(email,encodedPassword)
+            val email = binding?.etEmail?.text.toString()
+            val password = binding?.etPassword?.text.toString()
+            val encodedPassword = Base64.encodeToBase64(password)
+            when{
+                !NetworkUtil.isNetworkAvailable(requireContext()) -> DialogUtils.showAutoDismissAlertDialog(requireContext(), getString(R.string.no_internet_connection))
+                !ValidPatterns.isValidEmail(email) -> DialogUtils.showAutoDismissAlertDialog(requireContext(),"Invalid email Id." )
+                !ValidPatterns.isValidPassword(password) -> DialogUtils.showAutoDismissAlertDialog(requireContext(),"Invalid Password")
+                else -> viewModel.login(email,encodedPassword)
 
-                    binding?.progressBar?.visibility = View.VISIBLE
-
-                }else{
-                    binding?.progressBar?.visibility = View.GONE
-
-                    val message = getString(R.string.required_fields_are_empty)
-                    DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
-
-                }
-            } else {
-                binding?.progressBar?.visibility = View.GONE
-
-                val message = getString(R.string.no_internet_connection)
-                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)            }
+            }
         }
         binding?.signup?.setOnClickListener {
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
@@ -139,9 +126,9 @@ class Login : Fragment() {
         viewModel.loginResult.observe(viewLifecycleOwner) { status ->
             if (status =="200") {
                 findNavController().navigate(R.id.navigate_from_login_to_todoMain)
+                binding?.progressBar?.visibility = View.VISIBLE
             } else {
-
-                val message = "Invalid email or password."
+                val message = status.toString()
                 DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
                 binding?.progressBar?.visibility = View.GONE
             }

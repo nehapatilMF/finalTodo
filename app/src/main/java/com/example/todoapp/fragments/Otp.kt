@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.Constants
@@ -24,7 +23,6 @@ class Otp : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val viewModel = ViewModelProvider(this)[OtpViewModel::class.java]
 
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
@@ -33,15 +31,31 @@ class Otp : Fragment() {
 
         binding?.toolbar?.setNavigationOnClickListener{
             findNavController().navigate(R.id.back_to_register)
-
+            activity?.finishAffinity()
         }
-        val registerViewModel: RegisterViewModel by activityViewModels()
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentOtpBinding.inflate(layoutInflater, container, false)
+
+        val viewModel = ViewModelProvider(this)[OtpViewModel::class.java]
+
+        val registerViewModel= ViewModelProvider(this)[RegisterViewModel::class.java]
         val email = registerViewModel.email
         binding?.enteredEmail?.text = email
 
         registerViewModel.otpResult.observe(viewLifecycleOwner) { opt ->
             binding?.jsonOtp?.text = opt
         }
+
+        (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
+        binding?.timer?.visibility = View.VISIBLE
+        binding?.tvOtpExp?.visibility = View.VISIBLE
+        binding?.resendCode?.visibility = View.INVISIBLE
+        startOtpTimer()
 
         binding?.buttonAuthorise?.setOnClickListener {
             if(NetworkUtil.isNetworkAvailable(requireContext())) {
@@ -75,21 +89,7 @@ class Otp : Fragment() {
                 DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
             }
         }
-    }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentOtpBinding.inflate(layoutInflater, container, false)
-        val viewModel = ViewModelProvider(this)[OtpViewModel::class.java]
-
-
-        (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
-        binding?.timer?.visibility = View.VISIBLE
-        binding?.tvOtpExp?.visibility = View.VISIBLE
-        binding?.resendCode?.visibility = View.INVISIBLE
-        startOtpTimer()
         viewModel.otpResult.observe(viewLifecycleOwner){ status ->
             if(status == "200"){
                 findNavController().navigate(R.id.navigate_from_otp_to_todoMain)

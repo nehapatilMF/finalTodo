@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
 import com.example.todoapp.base64.Base64
@@ -23,7 +23,7 @@ import com.example.todoapp.viewModels.NewPasswordViewModel
 class NewPassword : Fragment() {
     private var binding : FragmentNewPasswordBinding? = null
 
-    private val viewModel: NewPasswordViewModel by activityViewModels()
+  //  private val viewModel: NewPasswordViewModel by activityViewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -34,14 +34,46 @@ class NewPassword : Fragment() {
         binding?.toolbar?.setNavigationOnClickListener {
             findNavController().navigate(R.id.navigate_from_newPassword_to_forgotPasswordOtp)
         }
-        val forgotPasswordViewModel: ForgotPasswordViewModel by activityViewModels()
+
+
+
+    }
+    private fun setupTextChangeListeners() {
+        binding?.etNewPassword?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // Not needed
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val password = s.toString()
+                if (!ValidPatterns.isValidPassword(password)) {
+                    binding?.etNewPassword?.error =
+                        getString(R.string.password_pattern_requirement)
+                } else {
+                    binding?.etNewPassword?.error = null // Clear error message
+                }
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // Not needed
+            }
+        })
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+
+
+        binding = FragmentNewPasswordBinding.inflate(layoutInflater,container,false)
+        val viewModel = ViewModelProvider(this)[NewPasswordViewModel::class.java]
+        val forgotPasswordViewModel = ViewModelProvider(this)[ForgotPasswordViewModel::class.java]
         val email = forgotPasswordViewModel.email
         var npOtp: String? = null
-        val forgotPasswordOtpViewModel: ForgotPasswordOtpViewModel by activityViewModels()
+        val forgotPasswordOtpViewModel = ViewModelProvider(this)[ForgotPasswordOtpViewModel::class.java]
         forgotPasswordOtpViewModel.otp.observe(viewLifecycleOwner) { otp ->
             npOtp = otp
         }
-
         binding?.btnNext?.setOnClickListener {
             val password  = binding?.etNewPassword?.text.toString()
             val confirmPassword = binding?.etConfirmPassword?.text.toString()
@@ -77,36 +109,6 @@ class NewPassword : Fragment() {
             }
 
         }
-    }
-    private fun setupTextChangeListeners() {
-        binding?.etNewPassword?.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // Not needed
-            }
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val password = s.toString()
-                if (!ValidPatterns.isValidPassword(password)) {
-                    binding?.etNewPassword?.error =
-                        getString(R.string.password_pattern_requirement)
-                } else {
-                    binding?.etNewPassword?.error = null // Clear error message
-                }
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                // Not needed
-            }
-        })
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-
-
-        binding = FragmentNewPasswordBinding.inflate(layoutInflater,container,false)
-
         val newPassword = binding?.etNewPassword?.text.toString()
         val confirmNewPassword = binding?.etConfirmPassword?.text.toString()
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)

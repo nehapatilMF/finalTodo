@@ -45,12 +45,12 @@ class ProfileViewModel : ViewModel() {
             try {
                 val apiResponse: Response<DeleteUserResponse>? = apiInterface?.deleteUser()
                 val response = apiResponse?.body()
-                if(apiResponse?.isSuccessful == true ){
-                    val status = response?.status.toString()
+                if(response?.success == true ){
+                    val status = response.status.toString()
                     _deleteUserResult.postValue(status)
                     Constants.clearAccessToken()
                 } else{
-                    _deleteUserResult.value = response?.message
+                    _deleteUserResult.postValue(response?.message)
                 }
             } catch (e : Exception){
                 _deleteUserResult.value = e.message

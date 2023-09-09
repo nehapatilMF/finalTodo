@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
 import com.example.todoapp.databinding.FragmentForgotPasswordOtpBinding
@@ -17,7 +17,7 @@ import com.example.todoapp.viewModels.ForgotPasswordOtpViewModel
 import com.example.todoapp.viewModels.ForgotPasswordViewModel
 
 class ForgotPasswordOtp : Fragment() {
-    private val viewModel: ForgotPasswordOtpViewModel by activityViewModels()
+   // private val viewModel: ForgotPasswordOtpViewModel by activityViewModels()
 
     private var binding: FragmentForgotPasswordOtpBinding? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -31,7 +31,37 @@ class ForgotPasswordOtp : Fragment() {
             findNavController().navigate(R.id.navigate_From_forgotPasswordOtp_to_login)
 
         }
-        val forgotPasswordViewModel: ForgotPasswordViewModel by activityViewModels()
+
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentForgotPasswordOtpBinding.inflate(layoutInflater, container, false)
+        val viewModel = ViewModelProvider(this)[ForgotPasswordOtpViewModel::class.java]
+        binding?.timer?.visibility = View.VISIBLE
+        binding?.tvOtpExp?.visibility = View.VISIBLE
+        binding?.tvMin?.visibility = View.VISIBLE
+        binding?.resendCode?.visibility = View.INVISIBLE
+        startOtpTimer()
+        viewModel.otpResult.observe(viewLifecycleOwner) { status ->
+
+            if (status == "200") {
+                findNavController().navigate(R.id.navigate_to_newPassword)
+                        }
+        }
+        viewModel.resendOtpResult.observe(viewLifecycleOwner) { status ->
+            if (status == "200") {
+                viewModel.newOtpResult.observe(viewLifecycleOwner) { newOtp ->
+                    binding?.jsonOtp?.text = newOtp
+                }
+            }else{
+                val message = getString(R.string.invalid_or_empty_email_id)
+                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+            }
+        }
+        val forgotPasswordViewModel = ViewModelProvider(this)[ForgotPasswordViewModel::class.java]
         val email = forgotPasswordViewModel.email
         forgotPasswordViewModel.otpResult.observe(viewLifecycleOwner) { opt ->
             binding?.jsonOtp?.text = opt
@@ -69,39 +99,6 @@ class ForgotPasswordOtp : Fragment() {
 
                 val message = getString(R.string.no_internet_connection)
                 DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
-            }
-        }
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentForgotPasswordOtpBinding.inflate(inflater, container, false)
-
-
-        (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
-        binding?.timer?.visibility = View.VISIBLE
-        binding?.tvOtpExp?.visibility = View.VISIBLE
-        binding?.tvMin?.visibility = View.VISIBLE
-        binding?.resendCode?.visibility = View.INVISIBLE
-        startOtpTimer()
-        viewModel.otpResult.observe(viewLifecycleOwner) { status ->
-
-            if (status == "200") {
-                findNavController().navigate(R.id.navigate_to_newPassword)
-                        }
-        }
-        viewModel.resendOtpResult.observe(viewLifecycleOwner) { status ->
-            if (status == "200") {
-                viewModel.newOtpResult.observe(viewLifecycleOwner) { newOtp ->
-                    binding?.jsonOtp?.text = newOtp
-                }
-            }else{
-                val message = getString(R.string.invalid_or_empty_email_id)
-                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
-
-
             }
         }
 

@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
 import com.example.todoapp.base64.Base64
@@ -19,11 +19,9 @@ import com.example.todoapp.util.ValidPatterns
 import com.example.todoapp.viewModels.RegisterViewModel
 
 class Register : Fragment() {
-    private val viewModel: RegisterViewModel by activityViewModels()
-
     private var binding: FragmentRegisterBinding? = null
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         super.onViewCreated(view, savedInstanceState)
 
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
@@ -34,26 +32,46 @@ class Register : Fragment() {
             findNavController().navigate(R.id.back_to_intro)
         }
         setupTextChangeListeners()
-
         binding?.login?.setOnClickListener {
             handleLogin()
-        }
-        binding?.buttonNext?.setOnClickListener {
-            handleRegister()
         }
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentRegisterBinding.inflate(inflater, container, false)
-        (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
+        binding = FragmentRegisterBinding.inflate(layoutInflater, container, false)
+        val viewModel = ViewModelProvider(this)[RegisterViewModel::class.java]
 
+        binding?.buttonNext?.setOnClickListener {
+            val userName = binding?.editTextUserName?.text.toString()
+            val mobileNumber = binding?.editTextMobileNumber?.text.toString()
+            val email = binding?.editTextEmail?.text.toString()
+            val password  = binding?.editTextPassword?.text.toString()
+            val confirmPassword = binding?.editTextConfirmPassword?.text.toString()
+            viewModel.email = email
+            when {
+                !NetworkUtil.isNetworkAvailable(requireContext()) -> showErrorDialog(getString(R.string.no_internet_connection))
+                !ValidPatterns.isValidEmail(email) -> showErrorDialog("Invalid email id.")
+                !ValidPatterns.isValidNumber(mobileNumber) -> showErrorDialog(getString(R.string.invalid_mobile_number))
+                !ValidPatterns.isValidPassword(password) ->showErrorDialog( "Invalid password.")
+                password != confirmPassword -> binding?.editTextPassword?.error = getString(R.string.no_match)
+                else -> {
+
+                    val encodedPassword = Base64.encodeToBase64(password)
+                    val mobile = mobileNumber.toLong()
+                    viewModel.signup(userName, mobile, email, encodedPassword)
+                }
+            }
+
+        }
+              //  val viewModel = ViewModelProvider(this)[RegisterViewModel::class.java]
         viewModel.signupResult.observe(viewLifecycleOwner){ status ->
             if(status == "200") {
-                findNavController().navigate(R.id.navigate_from_register_to_otp)
+
+                findNavController().navigate(R.id.navigate_from_register_to_otp )
             }else{
-                val message = getString(R.string.aready_user_exist)
+                val message = status.toString()
                 DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
             }
         }
@@ -61,6 +79,9 @@ class Register : Fragment() {
     }
 
 
+    private fun showErrorDialog(message: String) {
+        DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+    }
     private fun setupTextChangeListeners() {
         binding?.editTextMobileNumber?.addTextChangedListener(object :TextWatcher{
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -118,55 +139,17 @@ class Register : Fragment() {
     }
     private fun handleLogin() {
         if (NetworkUtil.isNetworkAvailable(requireContext())) {
-            findNavController().navigate(R.id.navigate_from_register_to_login)
+            findNavController().navigate(R.id.navigate_from_register_to_login,)
         } else {
 
             val message = getString(R.string.no_internet_connection)
             DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
         }
     }
-    private fun handleRegister(){
-        val userName = binding?.editTextUserName?.text.toString()
-        val mobileNumber = binding?.editTextMobileNumber?.text.toString()
-        val email = binding?.editTextEmail?.text.toString()
-        val password  = binding?.editTextPassword?.text.toString()
-        val confirmPassword = binding?.editTextConfirmPassword?.text.toString()
-        if (NetworkUtil.isNetworkAvailable(requireContext())) {
-            if(userName.isNotEmpty()){
-                if(ValidPatterns.isValidEmail(email) && email.isNotEmpty()){
-                    if(ValidPatterns.isValidNumber(mobileNumber) && mobileNumber.isNotEmpty()){
-                        if(ValidPatterns.isValidPassword(password) && password.isNotEmpty()){
-                            val result = password.compareTo(confirmPassword)
-                            if(result == 0 ){
-                                viewModel.email = email
-                                val encodedPassword = Base64.encodeToBase64(password)
-                                val mobile = mobileNumber.toLong()
-                                viewModel.signup(userName, mobile, email, encodedPassword)
 
-                            }else{
-                                binding?.editTextPassword?.error = getString(R.string.no_match)
-                            }
-                        }else{
-                            val message = getString(R.string.required_fields_are_empty)
-                            DialogUtils.showAutoDismissAlertDialog(requireContext(), message) }
-                    }else{
-                        val message = getString(R.string.required_fields_are_empty)
-                        DialogUtils.showAutoDismissAlertDialog(requireContext(), message)}
-                }else{
-                    val message = getString(R.string.required_fields_are_empty)
-                    DialogUtils.showAutoDismissAlertDialog(requireContext(), message)}
-            }else{
-                val message = getString(R.string.required_fields_are_empty)
-                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)}
-        } else {
-            val message = getString(R.string.no_internet_connection)
-            DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
-        }
-    }
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null
 
     }
-
 }

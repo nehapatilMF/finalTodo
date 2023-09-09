@@ -96,7 +96,7 @@ class EditTask : Fragment() {
         binding = FragmentEditTaskBinding.inflate(layoutInflater, container, false)
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
 
-        val viewModel = ViewModelProvider(requireActivity())[TodoViewModel::class.java]
+        val viewModel = ViewModelProvider(this)[TodoViewModel::class.java]
 
         viewModel.deleteTodoStatus.observe(viewLifecycleOwner){ status ->
             if(status == "200"){
