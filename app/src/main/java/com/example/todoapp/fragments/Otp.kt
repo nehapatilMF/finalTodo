@@ -25,9 +25,11 @@ class Otp : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val viewModel = ViewModelProvider(this)[OtpViewModel::class.java]
+
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.title = null
+
 
         binding?.toolbar?.setNavigationOnClickListener{
             findNavController().navigate(R.id.back_to_register)
@@ -80,15 +82,9 @@ class Otp : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentOtpBinding.inflate(layoutInflater, container, false)
-
-
         val viewModel = ViewModelProvider(this)[OtpViewModel::class.java]
-        viewModel.getAuthTokens().observe(viewLifecycleOwner){ authTokens ->
-            val accessToken = authTokens.accessToken
-            Constants.accessToken = accessToken
-            val refreshToken = authTokens.refreshToken
-            Constants.refreshToken = refreshToken
-        }
+
+
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
         binding?.timer?.visibility = View.VISIBLE
         binding?.tvOtpExp?.visibility = View.VISIBLE
@@ -116,6 +112,15 @@ class Otp : Fragment() {
                 DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
             }
         }
+
+        viewModel.getAuthTokens().observe(viewLifecycleOwner){ authTokens ->
+            Constants.clearAccessToken()
+            val accessToken = authTokens.accessToken
+            Constants.accessToken = accessToken
+            val refreshToken = authTokens.refreshToken
+            Constants.refreshToken = refreshToken
+        }
+
         return binding?.root
     }
 

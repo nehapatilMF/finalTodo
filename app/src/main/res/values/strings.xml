@@ -27,7 +27,7 @@
     <string name="delete_task">Delete Task</string>
 
     <string name="timer_placeholder">00:00</string>
-    <string name="timer_duration">300000</string>
+    <string name="timer_duration">3000</string>
     //5*60*1000 = 300000
 
     <string-array name="spinner_items">

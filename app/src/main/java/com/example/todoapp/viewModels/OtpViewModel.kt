@@ -20,18 +20,16 @@ class OtpViewModel : ViewModel()  {
     val newOtpResult : LiveData<String> get() =  _newOtpResult
     private val _resendOtpResult = MutableLiveData<String>()
     val resendOtpResult : LiveData<String> get() = _resendOtpResult
-
     private val _authTokens = MutableLiveData<AuthTokens>()
 
     fun getAuthTokens(): LiveData<AuthTokens> {
         return _authTokens
     }
+    private fun saveTokens(accessToken: String, refreshToken: String) {
+        val authTokens = AuthTokens(accessToken, refreshToken)
+        _authTokens.postValue(authTokens)
+    }
 
-    private val _accessToken = MutableLiveData<String>()
-    val accessToken : LiveData<String> get() =  _accessToken
-
-    private val _refreshToken = MutableLiveData<String>()
-    val refreshToken : LiveData<String> get() =  _refreshToken
 
     fun signupVerifyOtp(email: String, otp: Long){
         viewModelScope.launch {
@@ -41,8 +39,11 @@ class OtpViewModel : ViewModel()  {
                 if(signupVerifyOtpResponse?.isSuccessful == true) {
                     val status = response?.status.toString()
                     _otpResult.postValue(status)
-                    _accessToken.value = response?.data?.token?.access_token.toString()
-                    _refreshToken.value = response?.data?.token?.refresh_token.toString()
+                    val accessToken = response?.data?.token?.access_token.toString()
+
+                    val refreshToken = response?.data?.token?.refresh_token.toString()
+                    saveTokens(accessToken, refreshToken)
+
 
                 }else{
                     _otpResult.postValue(response?.message)
