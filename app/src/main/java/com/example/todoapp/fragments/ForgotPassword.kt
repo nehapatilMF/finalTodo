@@ -72,7 +72,9 @@ class ForgotPassword : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentForgotPasswordBinding.inflate(inflater,container,false)
+        binding = FragmentForgotPasswordBinding.inflate(layoutInflater,container,false)
+        (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
+
 
         val viewModel = ViewModelProvider(this)[ForgotPasswordViewModel::class.java]
 

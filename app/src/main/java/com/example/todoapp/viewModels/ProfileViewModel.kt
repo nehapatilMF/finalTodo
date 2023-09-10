@@ -21,6 +21,9 @@ class ProfileViewModel : ViewModel() {
     private val _deleteUserResult = MutableLiveData<String>()
     val deleteUserResult : LiveData<String> get() =_deleteUserResult
 
+    private val _msg = MutableLiveData<String>()
+    val msg : LiveData<String> get() = _msg
+
     fun logout(){
     viewModelScope.launch {
             try {
@@ -45,11 +48,14 @@ class ProfileViewModel : ViewModel() {
             try {
                 val apiResponse: Response<DeleteUserResponse>? = apiInterface?.deleteUser()
                 val response = apiResponse?.body()
-                if(response?.success == true ){
-                    val status = response.status.toString()
+                if(apiResponse?.isSuccessful == true ){
+                    val status = response?.status.toString()
                     _deleteUserResult.postValue(status)
                     Constants.clearAccessToken()
+                    _msg.postValue(response?.message.toString())
+
                 } else{
+                    _msg.postValue(response?.message.toString())
                     _deleteUserResult.postValue(response?.message)
                 }
             } catch (e : Exception){

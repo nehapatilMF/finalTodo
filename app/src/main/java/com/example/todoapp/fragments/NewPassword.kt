@@ -55,8 +55,6 @@ class NewPassword : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-
         binding = FragmentNewPasswordBinding.inflate(layoutInflater,container,false)
         val viewModel = ViewModelProvider(this)[NewPasswordViewModel::class.java]
         val email = Constants.userEmail.toString()

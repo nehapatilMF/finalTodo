@@ -15,7 +15,6 @@ class PersonalInformation : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-      //  val viewModel = ViewModelProvider(this)[ForgotPasswordViewModel::class.java]
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.title = "Personal Information"
@@ -28,7 +27,9 @@ class PersonalInformation : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = FragmentPersonalInformationBinding.inflate(inflater,container,false)
+        binding = FragmentPersonalInformationBinding.inflate(layoutInflater,container,false)
+        (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
+
         return binding?.root
     }
     override fun onDestroyView() {

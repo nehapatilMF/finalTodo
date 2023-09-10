@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -16,13 +15,14 @@ import com.example.todoapp.databinding.DialogCustomBackConfirmationBinding
 import com.example.todoapp.databinding.DialogDeleteConfirmationBinding
 import com.example.todoapp.databinding.FragmentEditTaskBinding
 import com.example.todoapp.util.CalenderUtil
+import com.example.todoapp.util.DialogUtils
 import com.example.todoapp.util.NetworkUtil
 import com.example.todoapp.util.TimePickerUtil
 import com.example.todoapp.viewModels.TodoViewModel
 
 class EditTask : Fragment() {
 
-    private var binding : FragmentEditTaskBinding? = null
+    private var binding: FragmentEditTaskBinding? = null
     private fun getStatusInt(statusText: String): Int {
         return when (statusText) {
             "Todo" -> 0
@@ -31,6 +31,7 @@ class EditTask : Fragment() {
             else -> -1
         }
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -51,11 +52,11 @@ class EditTask : Fragment() {
         binding?.tvTime?.text = time
         binding?.tvDate?.text = date
 
-        binding?.toolbar?.setNavigationOnClickListener{
-         customDialogForBackButton()
+        binding?.toolbar?.setNavigationOnClickListener {
+            customDialogForBackButton()
         }
         binding?.tvTime?.setOnClickListener {
-            TimePickerUtil.showTimePickerDialog(requireContext()){ selectedTime ->
+            TimePickerUtil.showTimePickerDialog(requireContext()) { selectedTime ->
                 binding?.tvTime?.text = selectedTime
             }
         }
@@ -67,23 +68,46 @@ class EditTask : Fragment() {
             val date1 = binding?.tvDate?.text.toString()
             val time1 = binding?.tvTime?.text?.toString()
             val status1 = getStatusInt(binding?.spinnerStatus?.selectedItem.toString())
-            if (id != null && time1 != null){
-                if(NetworkUtil.isNetworkAvailable(requireContext())) {
-                    viewModel.updateTodo(id1, title1, description1, status1, date1, time1)
-                    goBack()
-                } else{
-                    Toast.makeText(requireContext(),getString(R.string.no_internet_connection),Toast.LENGTH_SHORT).show()}
+            if (id != null && time1 != null) {
+                when {
+                    !NetworkUtil.isNetworkAvailable(requireContext()) -> {
+                        DialogUtils.showAutoDismissAlertDialog(
+                            requireContext(),
+                            getString(R.string.no_internet_connection)
+                        )
+                    }
+                    else -> {
+                        viewModel.updateTodo(id1, title1, description1, status1, date1, time1)
+                    }
+                }
             }
         }
-        binding?.btnDelete?.setOnClickListener {
 
+
+        binding?.btnDelete?.setOnClickListener {
             if (id != null) {
-                viewModel.deleteTodo(id)
-                customDialogForDeleteButton()
+                val customDialog = Dialog(requireContext())
+                val dialogBinding = DialogDeleteConfirmationBinding.inflate(layoutInflater)
+                customDialog.setContentView(dialogBinding.root)
+                customDialog.setCanceledOnTouchOutside(false)
+                dialogBinding.tvYes.setOnClickListener {
+                    viewModel.deleteTodo(id)
+                    goBack()
+                    DialogUtils.showAutoDismissAlertDialog(
+                        requireContext(),
+                        "Todo details has been deleted Successfully"
+                    )
+                    customDialog.dismiss()
+                }
+                dialogBinding.tvNo.setOnClickListener {
+                    customDialog.dismiss()
+                }
+                customDialog.show()
             }
         }
+
         binding?.tvDate?.setOnClickListener {
-            CalenderUtil.showDatePickerDialog (requireContext()){ selectedDate ->
+            CalenderUtil.showDatePickerDialog(requireContext()) { selectedDate ->
                 binding?.tvDate?.text = selectedDate
             }
         }
@@ -98,18 +122,34 @@ class EditTask : Fragment() {
 
         val viewModel = ViewModelProvider(this)[TodoViewModel::class.java]
 
-        viewModel.deleteTodoStatus.observe(viewLifecycleOwner){ status ->
-            if(status == "200"){
+        viewModel.deleteTodoStatus.observe(viewLifecycleOwner) { status ->
+            if (status == "204") {
                 goBack()
-               // findNavController().navigate(R.id.action_editTask_to_todoMain)
-            }
-            viewModel.updateTodoStatus.observe(viewLifecycleOwner){ status ->
-                if(status == "200"){
-
+            } else {
+                viewModel.todoMessage.observe(viewLifecycleOwner) { msg ->
+                    val errorMsg = msg.toString()
+                    DialogUtils.showAutoDismissAlertDialog(requireContext(), errorMsg)
                 }
             }
-
         }
+
+        viewModel.updateTodoStatus.observe(viewLifecycleOwner) { status ->
+            if (status == "200") {
+                viewModel.todoMessage.observe(viewLifecycleOwner) { msg ->
+                    val toastMsg = msg.toString()
+                    DialogUtils.showAutoDismissAlertDialog(requireContext(), toastMsg)
+                    goBack()
+                }
+            } else {
+                viewModel.todoMessage.observe(viewLifecycleOwner) { msg ->
+                    val errorMsg = msg.toString()
+                    DialogUtils.showAutoDismissAlertDialog(requireContext(), errorMsg)
+                }
+            }
+        }
+
+
+
         val adapter: ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(
             requireContext(),
             R.array.spinner_items,
@@ -137,20 +177,7 @@ class EditTask : Fragment() {
         }
         customDialog.show()
     }
-    private fun customDialogForDeleteButton() {
-        val customDialog = Dialog(requireContext())
-        val dialogBinding = DialogDeleteConfirmationBinding.inflate(layoutInflater)
-        customDialog.setContentView(dialogBinding.root)
-        customDialog.setCanceledOnTouchOutside(false)
-        dialogBinding.tvYes.setOnClickListener {
-            findNavController().navigate(R.id.action_editTask_to_todoMain)
-            customDialog.dismiss()
-        }
-        dialogBinding.tvNo.setOnClickListener {
-            customDialog.dismiss()
-        }
-        customDialog.show()
-    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null

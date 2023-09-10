@@ -23,6 +23,10 @@ class TodoViewModel : ViewModel() {
 
     private val _updateTodoStatus = MutableLiveData<String>()
     val updateTodoStatus: LiveData<String> get() = _updateTodoStatus
+
+    private val _todoMessage =MutableLiveData<String>()
+    val todoMessage : LiveData<String> get() = _todoMessage
+
     fun addTodo(title : String,
                 description : String,
                 todo_date : String,
@@ -35,6 +39,7 @@ class TodoViewModel : ViewModel() {
                 if(apiResponse?.isSuccessful == true){
                     val addTodoStatus = response?.status.toString()
                     _addTodoStatus.postValue(addTodoStatus)
+                    _todoMessage.postValue(response?.message)
                 }else{
                     _addTodoStatus.value = response?.message
                 }
@@ -52,6 +57,8 @@ class TodoViewModel : ViewModel() {
                 if(apiResponse?.isSuccessful == true){
                     val deleteTodoStatus = response?.status.toString()
                     _deleteTodoStatus.postValue(deleteTodoStatus)
+                    _todoMessage.postValue(response?.message)
+
                 }else{
                     _deleteTodoStatus.value = response?.message
                 }
@@ -79,6 +86,8 @@ class TodoViewModel : ViewModel() {
                 if(apiResponse?.isSuccessful == true){
                     val updateTodoStatus = response?.status.toString()
                     _updateTodoStatus.postValue(updateTodoStatus)
+                    _todoMessage.postValue(response?.message)
+
                 }else{
                     _updateTodoStatus.value = response?.message
                 }

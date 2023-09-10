@@ -42,6 +42,8 @@ class Register : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentRegisterBinding.inflate(layoutInflater, container, false)
+        (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
+
         val viewModel = ViewModelProvider(this)[RegisterViewModel::class.java]
         binding?.buttonNext?.setOnClickListener {
             val userName = binding?.editTextUserName?.text.toString()

@@ -2,11 +2,9 @@ package com.example.todoapp.fragments
 
 import android.app.Dialog
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -25,10 +23,9 @@ class NewTask : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val viewModel = ViewModelProvider(this)[TodoViewModel::class.java]
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
-        actionBar?.title = null
+        actionBar?.title = "New Todo"
 
         binding?.toolbar?.setNavigationOnClickListener{
             customDialogForBackButton()
@@ -45,22 +42,6 @@ class NewTask : Fragment() {
                 binding?.tvTime?.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0)
             }
         }
-        binding?.btnSave?.setOnClickListener {
-            val title = binding?.editTextTitle?.text.toString()
-            val description = binding?.editTextDescription?.text.toString()
-            val date = binding?.tvDate?.text.toString()
-            val time = binding?.tvTime?.text.toString()
-            val status = 0
-            if(NetworkUtil.isNetworkAvailable(requireContext())){
-                if(title.isNotEmpty() && description.isNotEmpty() && date.isNotEmpty() && time.isNotEmpty()){
-                    viewModel.addTodo(title,description,date,time,status)
-                    goBackToTodoMain()
-                } else{
-                    DialogUtils.showAutoDismissAlertDialog(requireContext(), "requires fields are empty")}
-            }else{
-                Toast.makeText(requireContext(),getString(R.string.no_internet_connection),Toast.LENGTH_SHORT).show()
-            }
-        }
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,14 +49,48 @@ class NewTask : Fragment() {
     ): View? {
         binding = FragmentNewTaskBinding.inflate(layoutInflater, container, false)
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
+
         val viewModel = ViewModelProvider(this)[TodoViewModel::class.java]
+
+        binding?.btnSave?.setOnClickListener {
+            val title = binding?.editTextTitle?.text.toString()
+            val description = binding?.editTextDescription?.text.toString()
+            val date = binding?.tvDate?.text.toString()
+            val time = binding?.tvTime?.text.toString()
+            val status = 0
+            when{
+            !NetworkUtil.isNetworkAvailable(requireContext()) -> {
+                DialogUtils.showAutoDismissAlertDialog(
+                    requireContext(),
+                    getString(R.string.no_internet_connection)
+                )
+            }else ->
+                viewModel.addTodo(title,description,date,time,status)
+
+            }
+                  }
         viewModel.addTodoStatus.observe(viewLifecycleOwner){ status ->
-            if(status == "200"){
-                goBackToTodoMain()
-            }else{
-                Log.e("error","error")
+            when (status) {
+                "201" -> {
+                    goBackToTodoMain()
+
+                }
+                "422" -> {
+                    viewModel.todoMessage.observe(viewLifecycleOwner){ msg ->
+                        val errorMsg = msg.toString()
+                        DialogUtils.showAutoDismissAlertDialog(requireContext(), errorMsg)
+                    }
+                }
+                else -> {
+                    viewModel.todoMessage.observe(viewLifecycleOwner) { msg ->
+                        val errorMsg = msg.toString()
+                        DialogUtils.showAutoDismissAlertDialog(requireContext(), errorMsg)
+                    }
+                }
             }
         }
+
+
         return binding?.root
     }
 

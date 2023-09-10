@@ -32,8 +32,6 @@ class Login : Fragment() {
             findNavController().navigate(R.id.back_to_intro)
         }
 
-        setupTextChangeListeners()
-
         binding?.forgotPassword?.setOnClickListener {
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
                 findNavController().navigate(R.id.navigate_from_login_to_forgotPassword)
@@ -48,6 +46,57 @@ class Login : Fragment() {
 
     }
 
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentLoginBinding.inflate(layoutInflater, container, false)
+        setupTextChangeListeners()
+        val viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
+        viewModel.getAuthTokens().observe(viewLifecycleOwner){ authTokens ->
+            val accessToken = authTokens.accessToken
+            Constants.accessToken = accessToken
+            val refreshToken = authTokens.refreshToken
+            Constants.refreshToken = refreshToken
+        }
+        binding?.buttonLogin?.setOnClickListener {
+            val email = binding?.etEmail?.text.toString()
+            val password = binding?.etPassword?.text.toString()
+            val encodedPassword = Base64.encodeToBase64(password)
+            when{
+                !NetworkUtil.isNetworkAvailable(requireContext()) -> DialogUtils.showAutoDismissAlertDialog(requireContext(), getString(R.string.no_internet_connection))
+                !ValidPatterns.isValidEmail(email) -> DialogUtils.showAutoDismissAlertDialog(requireContext(),"Invalid email Id." )
+                !ValidPatterns.isValidPassword(password) -> DialogUtils.showAutoDismissAlertDialog(requireContext(),"Invalid Password")
+                else -> viewModel.login(email,encodedPassword)
+            }
+        }
+        binding?.signup?.setOnClickListener {
+            if (NetworkUtil.isNetworkAvailable(requireContext())) {
+                binding?.progressBar?.visibility = View.GONE
+                findNavController().navigate(R.id.navigate_from_login_to_register)
+            } else {
+                binding?.progressBar?.visibility = View.GONE
+
+                val message = getString(R.string.no_internet_connection)
+                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+            }
+        }
+
+        (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
+        viewModel.loginResult.observe(viewLifecycleOwner) { status ->
+            if (status =="200") {
+                findNavController().navigate(R.id.navigate_from_login_to_todoMain)
+                binding?.progressBar?.visibility = View.VISIBLE
+            } else {
+                val message = status.toString()
+                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+                binding?.progressBar?.visibility = View.GONE
+            }
+        }
+        return binding?.root
+    }
     private fun setupTextChangeListeners() {
         binding?.etEmail?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -81,57 +130,6 @@ class Login : Fragment() {
                 // Not needed
             }
         })
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentLoginBinding.inflate(layoutInflater, container, false)
-
-        val viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
-        viewModel.getAuthTokens().observe(viewLifecycleOwner){ authTokens ->
-            val accessToken = authTokens.accessToken
-            Constants.accessToken = accessToken
-            val refreshToken = authTokens.refreshToken
-            Constants.refreshToken = refreshToken
-        }
-        binding?.buttonLogin?.setOnClickListener {
-            val email = binding?.etEmail?.text.toString()
-            val password = binding?.etPassword?.text.toString()
-            val encodedPassword = Base64.encodeToBase64(password)
-            when{
-                !NetworkUtil.isNetworkAvailable(requireContext()) -> DialogUtils.showAutoDismissAlertDialog(requireContext(), getString(R.string.no_internet_connection))
-                !ValidPatterns.isValidEmail(email) -> DialogUtils.showAutoDismissAlertDialog(requireContext(),"Invalid email Id." )
-                !ValidPatterns.isValidPassword(password) -> DialogUtils.showAutoDismissAlertDialog(requireContext(),"Invalid Password")
-                else -> viewModel.login(email,encodedPassword)
-
-            }
-        }
-        binding?.signup?.setOnClickListener {
-            if (NetworkUtil.isNetworkAvailable(requireContext())) {
-                binding?.progressBar?.visibility = View.GONE
-                findNavController().navigate(R.id.navigate_from_login_to_register)
-            } else {
-                binding?.progressBar?.visibility = View.GONE
-
-                val message = getString(R.string.no_internet_connection)
-                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
-            }
-        }
-
-        (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
-        viewModel.loginResult.observe(viewLifecycleOwner) { status ->
-            if (status =="200") {
-                findNavController().navigate(R.id.navigate_from_login_to_todoMain)
-                binding?.progressBar?.visibility = View.VISIBLE
-            } else {
-                val message = status.toString()
-                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
-                binding?.progressBar?.visibility = View.GONE
-            }
-        }
-        return binding?.root
     }
     override fun onDestroyView() {
         super.onDestroyView()
