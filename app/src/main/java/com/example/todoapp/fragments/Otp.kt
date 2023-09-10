@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -15,8 +16,8 @@ import com.example.todoapp.util.DialogUtils
 import com.example.todoapp.util.NetworkUtil
 import com.example.todoapp.util.TimerUtil
 import com.example.todoapp.viewModels.OtpViewModel
-import com.example.todoapp.viewModels.RegisterViewModel
 
+@Suppress("NAME_SHADOWING")
 class Otp : Fragment() {
 
     private var binding: FragmentOtpBinding? = null
@@ -27,7 +28,6 @@ class Otp : Fragment() {
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.title = null
-
 
         binding?.toolbar?.setNavigationOnClickListener{
             findNavController().navigate(R.id.back_to_register)
@@ -43,15 +43,12 @@ class Otp : Fragment() {
 
         val viewModel = ViewModelProvider(this)[OtpViewModel::class.java]
 
-        val registerViewModel= ViewModelProvider(this)[RegisterViewModel::class.java]
-        val email = registerViewModel.email
+        val email = Constants.userEmail.toString()
+        val otp1 =  Constants.userOtp.toString()
+
         binding?.enteredEmail?.text = email
+        binding?.jsonOtp?.text = otp1
 
-        registerViewModel.otpResult.observe(viewLifecycleOwner) { opt ->
-            binding?.jsonOtp?.text = opt
-        }
-
-        (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
         binding?.timer?.visibility = View.VISIBLE
         binding?.tvOtpExp?.visibility = View.VISIBLE
         binding?.resendCode?.visibility = View.INVISIBLE
@@ -63,6 +60,7 @@ class Otp : Fragment() {
 
                 if(otp.isNotEmpty()) {
                     val otp1 = otp.toLong()
+                    Toast.makeText(requireContext(),"$email, $otp",Toast.LENGTH_SHORT).show()
                     viewModel.signupVerifyOtp(email, otp1)
                 }else{
 
@@ -103,7 +101,9 @@ class Otp : Fragment() {
         }
         viewModel.resendOtpResult.observe(viewLifecycleOwner){ status ->
             if(status == "200"){
-                viewModel.newOtpResult.observe(viewLifecycleOwner){ newOtp ->
+                viewModel.newOtpResult.observe(viewLifecycleOwner){ otp ->
+                    val newOtp = otp.toString()
+
                     binding?.jsonOtp?.text = newOtp
                 }
 
@@ -124,7 +124,6 @@ class Otp : Fragment() {
         return binding?.root
     }
 
-
     private fun startOtpTimer(){
         val timerDuration: Long = getString(R.string.timer_duration).toLongOrNull() ?: 0L
         TimerUtil.startTimer(
@@ -143,7 +142,6 @@ class Otp : Fragment() {
             }
         )
     }
-
     override fun onDestroy() {
         TimerUtil.cancelTimer()
         super.onDestroy()

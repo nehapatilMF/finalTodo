@@ -6,4 +6,8 @@ object Constants {
     fun clearAccessToken() {
         accessToken = null
     }
+
+    var userEmail : String? = null
+    var userOtp : String? = null
+    var resenOtp : String? = null
 }

@@ -22,7 +22,6 @@ import com.example.todoapp.viewModels.LoginViewModel
 class Login : Fragment() {
     private var binding: FragmentLoginBinding? = null
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
@@ -93,7 +92,6 @@ class Login : Fragment() {
         val viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
         viewModel.getAuthTokens().observe(viewLifecycleOwner){ authTokens ->
             val accessToken = authTokens.accessToken
-
             Constants.accessToken = accessToken
             val refreshToken = authTokens.refreshToken
             Constants.refreshToken = refreshToken

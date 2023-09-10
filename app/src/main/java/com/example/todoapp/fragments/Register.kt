@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.todoapp.Constants
 import com.example.todoapp.R
 import com.example.todoapp.base64.Base64
 import com.example.todoapp.databinding.FragmentRegisterBinding
@@ -42,14 +43,13 @@ class Register : Fragment() {
     ): View? {
         binding = FragmentRegisterBinding.inflate(layoutInflater, container, false)
         val viewModel = ViewModelProvider(this)[RegisterViewModel::class.java]
-
         binding?.buttonNext?.setOnClickListener {
             val userName = binding?.editTextUserName?.text.toString()
             val mobileNumber = binding?.editTextMobileNumber?.text.toString()
             val email = binding?.editTextEmail?.text.toString()
+            Constants.userEmail = email
             val password  = binding?.editTextPassword?.text.toString()
             val confirmPassword = binding?.editTextConfirmPassword?.text.toString()
-            viewModel.email = email
             when {
                 !NetworkUtil.isNetworkAvailable(requireContext()) -> showErrorDialog(getString(R.string.no_internet_connection))
                 !ValidPatterns.isValidEmail(email) -> showErrorDialog("Invalid email id.")
@@ -63,10 +63,8 @@ class Register : Fragment() {
                     viewModel.signup(userName, mobile, email, encodedPassword)
                 }
             }
-
         }
-              //  val viewModel = ViewModelProvider(this)[RegisterViewModel::class.java]
-        viewModel.signupResult.observe(viewLifecycleOwner){ status ->
+                     viewModel.signupResult.observe(viewLifecycleOwner){ status ->
             if(status == "200") {
 
                 findNavController().navigate(R.id.navigate_from_register_to_otp )
@@ -75,6 +73,10 @@ class Register : Fragment() {
                 DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
             }
         }
+         viewModel.otpResult.observe(viewLifecycleOwner){ otp ->
+             val otp1  =otp.toString()
+             Constants.userOtp = otp1
+         }
         return binding?.root
     }
 

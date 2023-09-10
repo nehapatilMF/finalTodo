@@ -10,8 +10,6 @@ import com.example.todoapp.interfaces.ApiInterface
 import kotlinx.coroutines.launch
 
 class RegisterViewModel : ViewModel() {
-    lateinit var email: String
-
     private val apiInterface = RetrofitClient.getInstance()?.create(ApiInterface::class.java)
     private val _signupResult =MutableLiveData<String>()
     val signupResult : LiveData<String> get() =  _signupResult
@@ -33,7 +31,7 @@ class RegisterViewModel : ViewModel() {
                     if(response?.success == true) {
                         val status = response.status.toString()
                         _signupResult.postValue(status)
-                         _otpResult.value = response.data.otp.toString()
+                         _otpResult.postValue(response.data.otp.toString())
 
                     }else{
                         _signupResult.postValue(response?.message)
