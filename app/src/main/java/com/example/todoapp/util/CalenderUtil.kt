@@ -27,13 +27,28 @@ object CalenderUtil{
         datePickerDialog.show()
     }
     private fun getFormattedDate(date: String): String {
-       val myFormat = "yyyy-MM-dd" // Define the date pattern you want
+       val myFormat = "dd-MMM-yyyy" // Define the date pattern you want
         val simpleDateFormat = SimpleDateFormat(myFormat, Locale.getDefault())
-        val parsedDate = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).parse(date)
-
+        val parsedDate = SimpleDateFormat(myFormat, Locale.getDefault()).parse(date)
         return parsedDate?.let { simpleDateFormat.format(it).toString() } ?: ""
     }
 
+    fun convertDateFormat(inputDate : String):String{
+        val inputFormat = SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
+        val date = inputFormat.parse(inputDate)
+        return outputFormat.format(date)
+
+    }
+    fun reConvertDateFormat(inputDate : String):String{
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("dd-MMM-yyyy", Locale.getDefault())
+
+        val date = inputFormat.parse(inputDate)
+        return outputFormat.format(date)
+
+    }
 
 }
 

@@ -22,13 +22,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal">
             <TextView
                 android:id="@+id/Title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="3"
-
+                android:layout_weight="3.8"
+                android:textStyle="bold"
                 android:text="Title : "
                 android:textSize="16sp"
                 />
@@ -39,7 +40,7 @@
             android:text="To-Do Title"
             android:layout_weight="2"
 
-            android:textSize="16sp"
+            android:textSize="22sp"
             android:textStyle="bold"
            />
 
@@ -49,22 +50,25 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_weight="3"
-            android:gravity="center"
+            android:gravity="end"
             android:textStyle="bold"
             android:text="Status"
-            android:textSize="16sp"/>
+            android:textSize="18sp"/>
         </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
         android:orientation="horizontal">
         <TextView
             android:id="@+id/Des"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
+            android:layout_weight="2.9"
             android:gravity="center"
             android:text="Description : "
+            android:textStyle="bold"
+
             android:textSize="16sp"
             />
     <TextView
@@ -85,9 +89,10 @@
             android:id="@+id/Date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="1.35"
+            android:text="Date :"
 
-            android:text="Date : "
+            android:textStyle="bold"
             android:textSize="16sp"
             />
         <TextView
@@ -95,15 +100,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Date: 01/01/2023"
-            android:textSize="16sp"
+            android:text="01-Sep-2023"
+
+            android:textSize="18sp"
             android:textStyle="bold" />
         <TextView
             android:id="@+id/Time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="1.3"
             android:gravity="center"
+            android:textStyle="bold"
+
             android:text="Time : "
             android:textSize="16sp"
             />
@@ -111,9 +119,9 @@
             android:id="@+id/textViewTime"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Time: 12:00 PM"
+            android:text="12:00 PM"
             android:layout_weight="1"
-            android:textSize="16sp"
+            android:textSize="18sp"
             android:textStyle="bold"
            />
 

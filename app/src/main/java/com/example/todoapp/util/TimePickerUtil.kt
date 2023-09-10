@@ -24,20 +24,37 @@ object TimePickerUtil {
             },
             hourOfDay,
             minute,
-             true// 12-hour format
+             false// 12-hour format
         )
 
         timePickerDialog.show()
     }
 
     private fun formatTime(hourOfDay: Int, minute: Int, second: Int): String {
-        val timeFormat = SimpleDateFormat("hh:mm:ss", Locale.getDefault())
+        val timeFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
         calendar.set(Calendar.MINUTE, minute)
         calendar.set(Calendar.SECOND, second)
         return timeFormat.format(calendar.time)
     }
+
+    fun convertTime(inputTime: String): String {
+        val inputFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+
+        val formattedTime = inputFormat.parse(inputTime)
+        return outputFormat.format(formattedTime)
+    }
+
+   fun reConvertTime(inputTime: String):String{
+       val inputFormat = SimpleDateFormat("HH:mm:ss", Locale.getDefault())
+       val outputFormat = SimpleDateFormat("hh:mm a", Locale.getDefault())
+
+       val reformatTime = inputFormat.parse(inputTime)
+       return outputFormat.format(reformatTime)
+   }
+
 }
 
 

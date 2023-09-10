@@ -65,8 +65,13 @@ class EditTask : Fragment() {
             val id1 = id.toString()
             val title1 = binding?.editTextTitle?.text.toString()
             val description1 = binding?.editTextDescription?.text.toString()
+
             val date1 = binding?.tvDate?.text.toString()
+            val fDate = CalenderUtil.convertDateFormat(date1).toString()
+
             val time1 = binding?.tvTime?.text?.toString()
+            val fTime = time1?.let { it1 -> TimePickerUtil.convertTime(it1) }.toString()
+
             val status1 = getStatusInt(binding?.spinnerStatus?.selectedItem.toString())
             if (id != null && time1 != null) {
                 when {
@@ -77,7 +82,7 @@ class EditTask : Fragment() {
                         )
                     }
                     else -> {
-                        viewModel.updateTodo(id1, title1, description1, status1, date1, time1)
+                        viewModel.updateTodo(id1, title1, description1, status1, fDate, fTime)
                     }
                 }
             }

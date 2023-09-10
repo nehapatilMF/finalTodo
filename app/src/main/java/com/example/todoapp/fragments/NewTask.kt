@@ -56,7 +56,9 @@ class NewTask : Fragment() {
             val title = binding?.editTextTitle?.text.toString()
             val description = binding?.editTextDescription?.text.toString()
             val date = binding?.tvDate?.text.toString()
+            val date1 = CalenderUtil.convertDateFormat(date)
             val time = binding?.tvTime?.text.toString()
+            val time1 = TimePickerUtil.convertTime(time)
             val status = 0
             when{
             !NetworkUtil.isNetworkAvailable(requireContext()) -> {
@@ -65,7 +67,7 @@ class NewTask : Fragment() {
                     getString(R.string.no_internet_connection)
                 )
             }else ->
-                viewModel.addTodo(title,description,date,time,status)
+                viewModel.addTodo(title,description,date1,time1,status)
             }
                   }
         viewModel.addTodoStatus.observe(viewLifecycleOwner){ status ->

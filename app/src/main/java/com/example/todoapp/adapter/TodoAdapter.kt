@@ -10,6 +10,8 @@ import com.example.todoapp.R
 import com.example.todoapp.databinding.TodoItemBinding
 import com.example.todoapp.fragments.EditTask
 import com.example.todoapp.responses.TodoItem
+import com.example.todoapp.util.CalenderUtil
+import com.example.todoapp.util.TimePickerUtil
 
 class TodoAdapter(private var listView : List<TodoItem>) :
     RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
@@ -27,16 +29,19 @@ class TodoAdapter(private var listView : List<TodoItem>) :
             val title: TextView = binding.textViewTitle
             val description: TextView = binding.textViewDescription
             val status: TextView = binding.textViewStatus
-
             val date: TextView = binding.textViewDate
             val time: TextView = binding.textViewTime
 
             title.text = list.title
             description.text = list.description
-            date.text = list.todo_date
-            time.text = list.todo_time
+
+            val date1 = list.todo_date
+            date.text  = CalenderUtil.reConvertDateFormat(date1)
+
+            val time1 = list.todo_time
+            time.text = TimePickerUtil.reConvertTime(time1)
+
             val id = list.id
-            //status.text = list.status.toString()
             status.text = getStatusText(list.status)
         }
     }
@@ -64,8 +69,13 @@ class TodoAdapter(private var listView : List<TodoItem>) :
             bundle.putString("title", currentItem.title)
             bundle.putString("description", currentItem.description)
             bundle.putString("status", currentItem.status.toString())
-            bundle.putString("date", currentItem.todo_date)
-            bundle.putString("time", currentItem.todo_time)
+
+            val cDate = CalenderUtil.reConvertDateFormat(currentItem.todo_date)
+            bundle.putString("date", cDate)
+
+            val cTime = TimePickerUtil.reConvertTime(currentItem.todo_time)
+            bundle.putString("time", cTime)
+
             bundle.putString("id", currentItem.id.toString())
             val editTaskFragment = EditTask()
             editTaskFragment.arguments = bundle
