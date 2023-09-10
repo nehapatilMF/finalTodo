@@ -66,14 +66,16 @@ class NewTask : Fragment() {
                 )
             }else ->
                 viewModel.addTodo(title,description,date,time,status)
-
             }
                   }
         viewModel.addTodoStatus.observe(viewLifecycleOwner){ status ->
             when (status) {
                 "201" -> {
                     goBackToTodoMain()
-
+viewModel.todoMessage.observe(viewLifecycleOwner){ msg ->
+    val tMsg = msg.toString()
+    DialogUtils.showAutoDismissAlertDialog(requireContext(),tMsg)
+}
                 }
                 "422" -> {
                     viewModel.todoMessage.observe(viewLifecycleOwner){ msg ->

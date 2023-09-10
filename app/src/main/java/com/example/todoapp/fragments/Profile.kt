@@ -57,7 +57,6 @@ class Profile : Fragment() {
                 customDialog.setCanceledOnTouchOutside(false)
                 dialogBinding.tvYes.setOnClickListener {
                     viewModel.deleteUser()
-
                     customDialog.dismiss()
                 }
                 dialogBinding.tvNo.setOnClickListener {
@@ -68,7 +67,10 @@ class Profile : Fragment() {
         }
         viewModel.logoutResult.observe(viewLifecycleOwner){ status ->
             if(status == "200"){
-
+                viewModel.msg.observe(viewLifecycleOwner){ msg ->
+                    val tMsg = msg.toString()
+                    DialogUtils.showAutoDismissAlertDialog(requireContext(), tMsg)
+                }
               findNavController().navigate(R.id.navigate_to_intro)
 
             }else{
@@ -79,7 +81,6 @@ class Profile : Fragment() {
 
         viewModel.deleteUserResult.observe(viewLifecycleOwner){ status ->
             if(status == "200"){
-
                 findNavController().navigate(R.id.navigate_to_intro)
                 viewModel.msg.observe(viewLifecycleOwner){ msg ->
                     val tMsg = msg.toString()

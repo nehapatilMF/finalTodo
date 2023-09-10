@@ -33,6 +33,7 @@ class ProfileViewModel : ViewModel() {
                     val status = response?.status.toString()
                     _logoutResult.postValue(status)
                     Constants.clearAccessToken()
+                    _msg.postValue(response?.message.toString())
                 } else{
                     _logoutResult.value = response?.message
                 }
