@@ -103,7 +103,6 @@ class Otp : Fragment() {
             if(status == "200"){
                 viewModel.newOtpResult.observe(viewLifecycleOwner){ otp ->
                     val newOtp = otp.toString()
-
                     binding?.jsonOtp?.text = newOtp
                 }
 

@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.todoapp.Constants
 import com.example.todoapp.R
 import com.example.todoapp.databinding.FragmentForgotPasswordBinding
 import com.example.todoapp.util.DialogUtils
@@ -34,9 +35,10 @@ class ForgotPassword : Fragment() {
         }
         binding?.btnSubmit?.setOnClickListener{
             val email =binding?.enterEmail?.text.toString()
+            Constants.userEmail = email
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
                 if( ValidPatterns.isValidEmail(email)&& email.isNotEmpty()) {
-                    viewModel.email = email
+
                     viewModel.forgotPasswordRequestOtp(email)
                 }else{
                     val message =getString(R.string.required_fields_are_empty)
@@ -74,17 +76,19 @@ class ForgotPassword : Fragment() {
 
         val viewModel = ViewModelProvider(this)[ForgotPasswordViewModel::class.java]
 
-
         viewModel.forgotPasswordResult.observe(viewLifecycleOwner){ status ->
             if(status == "200") {
                 findNavController().navigate(R.id.navigate_to_forgotPasswordOtp)
             }else{
-
                 val message = getString(R.string.invalid_or_empty_email_id)
                 DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
             }
         }
 
+        viewModel.otpResult.observe(viewLifecycleOwner){ otp ->
+            val newOtp = otp.toString()
+            Constants.userOtp = newOtp
+        }
         return binding?.root
     }
     override fun onDestroyView() {

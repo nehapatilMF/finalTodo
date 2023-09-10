@@ -10,8 +10,6 @@ import kotlinx.coroutines.launch
 
 class ForgotPasswordViewModel : ViewModel(){
 
-    lateinit var email: String
-
     private val apiInterface = RetrofitClient.getInstance()?.create(ApiInterface::class.java)
 
     private val  _forgotPasswordResult = MutableLiveData<String>()
@@ -28,7 +26,7 @@ class ForgotPasswordViewModel : ViewModel(){
                 if(signupResponse?.isSuccessful == true) {
                     val status = response?.status.toString()
                     _forgotPasswordResult.postValue(status)
-                    _otpResult.value = response?.data?.otp.toString()
+                    _otpResult.postValue(response?.data?.otp.toString())
 
                 }else{
                     _forgotPasswordResult.postValue(response?.message)

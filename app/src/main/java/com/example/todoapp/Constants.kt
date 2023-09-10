@@ -9,5 +9,7 @@ object Constants {
 
     var userEmail : String? = null
     var userOtp : String? = null
-    var resenOtp : String? = null
+
+    var newOtp : String? = null
+
 }

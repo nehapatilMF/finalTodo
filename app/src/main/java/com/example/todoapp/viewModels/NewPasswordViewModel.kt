@@ -9,7 +9,6 @@ import com.example.todoapp.interfaces.ApiInterface
 import kotlinx.coroutines.launch
 
 class NewPasswordViewModel : ViewModel() {
-    lateinit var email: String
 
     private val apiInterface = RetrofitClient.getInstance()?.create(ApiInterface::class.java)
     private val _resetPasswordResult = MutableLiveData<String>()
