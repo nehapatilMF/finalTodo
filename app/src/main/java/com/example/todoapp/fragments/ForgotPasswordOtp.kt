@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -29,6 +31,13 @@ class ForgotPasswordOtp : Fragment() {
         binding?.toolbar?.setNavigationOnClickListener {
             findNavController().navigate(R.id.navigate_From_forgotPasswordOtp_to_login)
         }
+
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigate(R.id.navigate_From_forgotPasswordOtp_to_login)
+                            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
     }
 
     override fun onCreateView(
@@ -47,8 +56,13 @@ class ForgotPasswordOtp : Fragment() {
 
         viewModel.otpResult.observe(viewLifecycleOwner) { status ->
             if (status == "200") {
+
                 findNavController().navigate(R.id.navigate_to_newPassword)
-                        }
+                        }else{
+                val message = "Invalid or empty otp."
+                Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
+
+            }
         }
         viewModel.resendOtpResult.observe(viewLifecycleOwner) { status ->
             if (status == "200") {
@@ -57,7 +71,8 @@ class ForgotPasswordOtp : Fragment() {
                 }
             }else{
                 val message = getString(R.string.invalid_or_empty_email_id)
-                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+                Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
+
             }
         }
         val email = Constants.userEmail.toString()
@@ -73,9 +88,9 @@ class ForgotPasswordOtp : Fragment() {
                     val otp1 = otp.toLong()
                     viewModel.forgotPasswordVerifyOtp(email, otp1)
                 }else{
-
                     val message = "Please enter Otp"
-                    DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+                    Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
+
                 }
 
             } else {

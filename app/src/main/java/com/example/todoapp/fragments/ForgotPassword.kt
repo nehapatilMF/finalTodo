@@ -6,6 +6,8 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -31,18 +33,24 @@ class ForgotPassword : Fragment() {
         actionBar?.title = getString(R.string.forgot_password_title)
         binding?.toolbar?.setNavigationOnClickListener{
             findNavController().navigate(R.id.navigate_from_forgot_password_to_login)
-
         }
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigate(R.id.navigate_from_forgot_password_to_login)
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+
         binding?.btnSubmit?.setOnClickListener{
             val email =binding?.enterEmail?.text.toString()
             Constants.userEmail = email
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
                 if( ValidPatterns.isValidEmail(email)&& email.isNotEmpty()) {
-
                     viewModel.forgotPasswordRequestOtp(email)
                 }else{
                     val message =getString(R.string.required_fields_are_empty)
-                    DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+                    Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
+
                 }
             }    else {
 
@@ -83,7 +91,8 @@ class ForgotPassword : Fragment() {
                 findNavController().navigate(R.id.navigate_to_forgotPasswordOtp)
             }else{
                 val message = getString(R.string.invalid_or_empty_email_id)
-                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+                Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
+
             }
         }
 

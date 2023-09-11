@@ -6,6 +6,8 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -31,19 +33,21 @@ class Login : Fragment() {
         binding?.toolbar?.setNavigationOnClickListener{
             findNavController().navigate(R.id.back_to_intro)
         }
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigate(R.id.back_to_intro)
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
         binding?.forgotPassword?.setOnClickListener {
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
                 findNavController().navigate(R.id.navigate_from_login_to_forgotPassword)
             }    else {
-
                 val message = getString(R.string.no_internet_connection)
                 DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
-
             }
         }
-
-
     }
 
 
@@ -67,8 +71,14 @@ class Login : Fragment() {
             val encodedPassword = Base64.encodeToBase64(password)
             when{
                 !NetworkUtil.isNetworkAvailable(requireContext()) -> DialogUtils.showAutoDismissAlertDialog(requireContext(), getString(R.string.no_internet_connection))
-                !ValidPatterns.isValidEmail(email) -> DialogUtils.showAutoDismissAlertDialog(requireContext(),"Invalid email Id." )
-                !ValidPatterns.isValidPassword(password) -> DialogUtils.showAutoDismissAlertDialog(requireContext(),"Invalid Password")
+                !ValidPatterns.isValidEmail(email) ->  {
+                    val message = "Invalid or empty email id. "
+                    Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
+                }
+                !ValidPatterns.isValidPassword(password) ->  {
+                    val message = "Invalid or empty password. "
+                    Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
+                }
                 else -> viewModel.login(email,encodedPassword)
             }
         }
@@ -91,7 +101,7 @@ class Login : Fragment() {
                 binding?.progressBar?.visibility = View.VISIBLE
             } else {
                 val message = status.toString()
-                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+                Toast.makeText(requireContext(),message,Toast.LENGTH_SHORT).show()
                 binding?.progressBar?.visibility = View.GONE
             }
         }

@@ -88,4 +88,5 @@
     <string name="are_you_sure_you_want_to_delete_account">Are you sure you want to delete account</string>
     <string name="delete_todo">Are you sure,\nyou want to delete todo</string>
     <string name="delete_user">Are you sure,\nyou want to delete your account?</string>
+    <string name="logout_confirmation">Are you sure,\nyou want to logout?</string>
 </resources>

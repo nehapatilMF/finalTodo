@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -25,7 +26,12 @@ class Home : Fragment() {
             findNavController().navigate(R.id.action_todoMain_to_newTask)
         }
 
-
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                activity?.finishAffinity()
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
         viewModel.fetchTodoListStatus.observe(viewLifecycleOwner) { status ->
             if (status == "200") {
                 viewModel.todoList.observe(requireActivity()) { todoList ->

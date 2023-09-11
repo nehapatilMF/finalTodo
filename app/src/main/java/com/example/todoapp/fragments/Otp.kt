@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -30,9 +31,19 @@ class Otp : Fragment() {
         actionBar?.title = null
 
         binding?.toolbar?.setNavigationOnClickListener{
-            findNavController().navigate(R.id.back_to_register)
-            activity?.finishAffinity()
+            findNavController().navigate(R.id.navigate_to_register)
         }
+
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigate(R.id.navigate_to_register)
+
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+
+
+
     }
 
     override fun onCreateView(
@@ -60,12 +71,11 @@ class Otp : Fragment() {
 
                 if(otp.isNotEmpty()) {
                     val otp1 = otp.toLong()
-                    Toast.makeText(requireContext(),"$email, $otp",Toast.LENGTH_SHORT).show()
                     viewModel.signupVerifyOtp(email, otp1)
                 }else{
-
                     val message = "Please enter Otp"
-                    DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+                    Toast.makeText(requireContext(),message,Toast.LENGTH_SHORT).show()
+
                 }
             }else{
                 val message = getString(R.string.no_internet_connection)
@@ -91,11 +101,12 @@ class Otp : Fragment() {
         viewModel.otpResult.observe(viewLifecycleOwner){ status ->
             if(status == "200"){
                 findNavController().navigate(R.id.navigate_from_otp_to_todoMain)
+                Toast.makeText(requireContext(),"You are successfully logged in",Toast.LENGTH_SHORT).show()
+
             }else{
-                viewModel.otpResult.observe(viewLifecycleOwner){msg ->
-                    val message = msg.toString()
-                    DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
-                }
+                val message = "Invalid otp."
+                Toast.makeText(requireContext(),message,Toast.LENGTH_SHORT).show()
+
             }
 
         }
@@ -108,7 +119,8 @@ class Otp : Fragment() {
 
             }else{
                 val message = getString(R.string.invalid_or_empty_email_id)
-                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+                Toast.makeText(requireContext(),message,Toast.LENGTH_SHORT).show()
+
             }
         }
 

@@ -5,14 +5,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
 import com.example.todoapp.databinding.FragmentProfileBinding
+import com.example.todoapp.databinding.LogoutConfirmationBinding
 import com.example.todoapp.databinding.UserDeleteConfirmationBinding
-import com.example.todoapp.util.DialogUtils
 import com.example.todoapp.util.NetworkUtil
 import com.example.todoapp.viewModels.ProfileViewModel
 
@@ -20,19 +22,28 @@ class Profile : Fragment() {
     private var binding : FragmentProfileBinding? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
-        actionBar?.setDisplayHomeAsUpEnabled(true)
+       val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
+       // actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.title = "Profile"
         binding?.toolbar?.setNavigationOnClickListener{
             findNavController().navigate(R.id.navigate_to_todoMain)
         }
 
         binding?.personalInformation?.setOnClickListener {
-            findNavController().navigate(R.id.navigate_to_personalInformation)
+            //findNavController().navigate(R.id.navigate_to_personalInformation)
         }
         binding?.ChangePassword?.setOnClickListener {
-            findNavController().navigate(R.id.navigate_to_changePassword)
+           //findNavController().navigate(R.id.navigate_to_changePassword)
         }
+
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigate(R.id.navigate_to_todoMain)
+
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+
 
     }
     override fun onCreateView(
@@ -46,7 +57,18 @@ class Profile : Fragment() {
 
         binding?.Logout?.setOnClickListener {
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
-                viewModel.logout()
+                val customDialog = Dialog(requireContext())
+                val dialogBinding = LogoutConfirmationBinding.inflate(layoutInflater)
+                customDialog.setContentView(dialogBinding.root)
+                customDialog.setCanceledOnTouchOutside(false)
+                dialogBinding.tvYes.setOnClickListener {
+                    viewModel.logout()
+                    customDialog.dismiss()
+                }
+                dialogBinding.tvNo.setOnClickListener {
+                    customDialog.dismiss()
+                }
+                customDialog.show()
             }
         }
         binding?.deleteAccount?.setOnClickListener {
@@ -69,13 +91,14 @@ class Profile : Fragment() {
             if(status == "200"){
                 viewModel.msg.observe(viewLifecycleOwner){ msg ->
                     val tMsg = msg.toString()
-                    DialogUtils.showAutoDismissAlertDialog(requireContext(), tMsg)
+                    Toast.makeText(requireContext(),tMsg,Toast.LENGTH_SHORT).show()
+
                 }
               findNavController().navigate(R.id.navigate_to_intro)
 
             }else{
                 val message = status.toString()
-                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+                Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -84,12 +107,13 @@ class Profile : Fragment() {
                 findNavController().navigate(R.id.navigate_to_intro)
                 viewModel.msg.observe(viewLifecycleOwner){ msg ->
                     val tMsg = msg.toString()
-                    DialogUtils.showAutoDismissAlertDialog(requireContext(),tMsg)
+                    Toast.makeText(requireContext(),tMsg,Toast.LENGTH_SHORT).show()
                 }
 
             }else{
                 val message = "user not deleted."
-                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+                Toast.makeText(requireContext(),message,Toast.LENGTH_SHORT).show()
+
             }
         }
         return binding?.root

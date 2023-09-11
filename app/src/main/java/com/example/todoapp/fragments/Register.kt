@@ -6,6 +6,8 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -32,6 +34,15 @@ class Register : Fragment() {
         binding?.toolbar?.setNavigationOnClickListener{
             findNavController().navigate(R.id.back_to_intro)
         }
+
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigate(R.id.back_to_intro)
+
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+
         setupTextChangeListeners()
         binding?.login?.setOnClickListener {
             handleLogin()
@@ -54,9 +65,18 @@ class Register : Fragment() {
             val confirmPassword = binding?.editTextConfirmPassword?.text.toString()
             when {
                 !NetworkUtil.isNetworkAvailable(requireContext()) -> showErrorDialog(getString(R.string.no_internet_connection))
-                !ValidPatterns.isValidEmail(email) -> showErrorDialog("Invalid email id.")
-                !ValidPatterns.isValidNumber(mobileNumber) -> showErrorDialog(getString(R.string.invalid_mobile_number))
-                !ValidPatterns.isValidPassword(password) ->showErrorDialog( "Invalid password.")
+                !ValidPatterns.isValidEmail(email) ->  {
+                    val message = "Invalid or empty email id. "
+                    Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
+                }
+                !ValidPatterns.isValidNumber(mobileNumber) -> {
+                    val message = "Invalid or mobile. "
+                    Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
+                }
+                !ValidPatterns.isValidPassword(password) -> {
+                    val message = "Invalid or empty password. "
+                    Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
+                }
                 password != confirmPassword -> binding?.editTextPassword?.error = getString(R.string.no_match)
                 else -> {
 
@@ -68,11 +88,12 @@ class Register : Fragment() {
         }
                      viewModel.signupResult.observe(viewLifecycleOwner){ status ->
             if(status == "200") {
+                Toast.makeText(requireContext(),"Please check email for OTP.", Toast.LENGTH_SHORT).show()
 
                 findNavController().navigate(R.id.navigate_from_register_to_otp )
             }else{
                 val message = status.toString()
-                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+                Toast.makeText(requireContext(),message,Toast.LENGTH_SHORT).show()
             }
         }
          viewModel.otpResult.observe(viewLifecycleOwner){ otp ->

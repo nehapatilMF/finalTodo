@@ -6,6 +6,8 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -29,8 +31,15 @@ class NewPassword : Fragment() {
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.title = getString(R.string.forgot_password)
         binding?.toolbar?.setNavigationOnClickListener {
-            findNavController().navigate(R.id.navigate_from_newPassword_to_forgotPasswordOtp)
+            findNavController().navigate(R.id.navigate_to_login)
+                    }
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigate(R.id.navigate_to_login)
+                           }
         }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+
     }
     private fun setupTextChangeListeners() {
         binding?.etNewPassword?.addTextChangedListener(object : TextWatcher {
@@ -78,12 +87,14 @@ class NewPassword : Fragment() {
                     } else {
 
                         val message =  getString(R.string.required_fields_are_empty)
-                        DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+                        Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
+
                     }
                 }else{
 
                     val message =  getString(R.string.required_fields_are_empty)
-                    DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+                    Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
+
 
                 }
             }else{
@@ -103,7 +114,7 @@ class NewPassword : Fragment() {
             }else{
 
                 val message = "Invalid otp"
-                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+                Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
             }
         }
 

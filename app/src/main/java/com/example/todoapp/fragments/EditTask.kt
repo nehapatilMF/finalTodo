@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -39,7 +41,16 @@ class EditTask : Fragment() {
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.title = null
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigate(R.id.action_editTask_to_todoMain)
+            }
+        }
+        binding?.toolbar?.setNavigationOnClickListener {
+            customDialogForBackButton()
+        }
 
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
         val title = arguments?.getString("title")
         val description = arguments?.getString("description")
         val status = arguments?.getString("status")
@@ -52,9 +63,7 @@ class EditTask : Fragment() {
         binding?.tvTime?.text = time
         binding?.tvDate?.text = date
 
-        binding?.toolbar?.setNavigationOnClickListener {
-            customDialogForBackButton()
-        }
+
         binding?.tvTime?.setOnClickListener {
             TimePickerUtil.showTimePickerDialog(requireContext()) { selectedTime ->
                 binding?.tvTime?.text = selectedTime
@@ -85,6 +94,10 @@ class EditTask : Fragment() {
                         }
                     }
                 }
+            }else{
+
+                Toast.makeText(requireContext(), "Please enter required fields", Toast.LENGTH_SHORT).show()
+
             }
         }
 
@@ -98,10 +111,8 @@ class EditTask : Fragment() {
                 dialogBinding.tvYes.setOnClickListener {
                     viewModel.deleteTodo(id)
                     goBack()
-                    DialogUtils.showAutoDismissAlertDialog(
-                        requireContext(),
-                        "Todo details has been deleted Successfully"
-                    )
+                    Toast.makeText(requireContext(), "Todo details has been deleted Successfully", Toast.LENGTH_SHORT).show()
+
                     customDialog.dismiss()
                 }
                 dialogBinding.tvNo.setOnClickListener {
@@ -133,7 +144,7 @@ class EditTask : Fragment() {
             } else {
                 viewModel.todoMessage.observe(viewLifecycleOwner) { msg ->
                     val errorMsg = msg.toString()
-                    DialogUtils.showAutoDismissAlertDialog(requireContext(), errorMsg)
+                    Toast.makeText(requireContext(),errorMsg, Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -142,13 +153,13 @@ class EditTask : Fragment() {
             if (status == "200") {
                 viewModel.todoMessage.observe(viewLifecycleOwner) { msg ->
                     val toastMsg = msg.toString()
-                    DialogUtils.showAutoDismissAlertDialog(requireContext(), toastMsg)
-                    goBack()
+                        Toast.makeText(requireContext(),toastMsg, Toast.LENGTH_SHORT).show()
+                                        goBack()
                 }
             } else {
                 viewModel.todoMessage.observe(viewLifecycleOwner) { msg ->
-                    val errorMsg = msg.toString()
-                    DialogUtils.showAutoDismissAlertDialog(requireContext(), errorMsg)
+                    val errorMsg = msg.toString().toString()
+                    Toast.makeText(requireContext(),errorMsg, Toast.LENGTH_SHORT).show()
                 }
             }
         }

@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -30,6 +32,16 @@ class NewTask : Fragment() {
         binding?.toolbar?.setNavigationOnClickListener{
             customDialogForBackButton()
         }
+
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                customDialogForBackButton()
+
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+
+
         binding?.tvDate?.setOnClickListener {
             CalenderUtil.showDatePickerDialog (requireContext()){ selectedDate ->
                 binding?.tvDate?.text = selectedDate
@@ -68,10 +80,12 @@ class NewTask : Fragment() {
                         getString(R.string.no_internet_connection)
                     )
                 }
-
                 else ->
                     viewModel.addTodo(title, description, date1, time1, status)
             }
+        }else{
+            val message = "Please enter required fields"
+                Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
         }
     }
         viewModel.addTodoStatus.observe(viewLifecycleOwner){ status ->
@@ -80,19 +94,22 @@ class NewTask : Fragment() {
                     goBackToTodoMain()
 viewModel.todoMessage.observe(viewLifecycleOwner){ msg ->
     val tMsg = msg.toString()
-    DialogUtils.showAutoDismissAlertDialog(requireContext(),tMsg)
+    Toast.makeText(requireContext(),tMsg, Toast.LENGTH_SHORT).show()
+
 }
                 }
                 "422" -> {
                     viewModel.todoMessage.observe(viewLifecycleOwner){ msg ->
                         val errorMsg = msg.toString()
-                        DialogUtils.showAutoDismissAlertDialog(requireContext(), errorMsg)
+                        Toast.makeText(requireContext(),errorMsg, Toast.LENGTH_SHORT).show()
+
                     }
                 }
                 else -> {
                     viewModel.todoMessage.observe(viewLifecycleOwner) { msg ->
                         val errorMsg = msg.toString()
-                        DialogUtils.showAutoDismissAlertDialog(requireContext(), errorMsg)
+                        Toast.makeText(requireContext(),errorMsg, Toast.LENGTH_SHORT).show()
+
                     }
                 }
             }
