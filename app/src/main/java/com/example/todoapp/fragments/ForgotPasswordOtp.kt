@@ -48,7 +48,7 @@ class ForgotPasswordOtp : Fragment() {
 
         binding?.timer?.visibility = View.VISIBLE
         binding?.tvOtpExp?.visibility = View.VISIBLE
-        binding?.tvMin?.visibility = View.VISIBLE
+
         binding?.resendCode?.visibility = View.INVISIBLE
         startOtpTimer()
 
@@ -56,10 +56,13 @@ class ForgotPasswordOtp : Fragment() {
 
         viewModel.otpResult.observe(viewLifecycleOwner) { status ->
             if (status == "200") {
-
                 findNavController().navigate(R.id.navigate_to_newPassword)
-                        }else{
-                val message = "Invalid or empty otp."
+                viewModel.msg.observe(viewLifecycleOwner){msg ->
+                    val message = msg.toString()
+                    Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
+                }
+            }else{
+                val message = status.toString()
                 Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
 
             }
@@ -69,8 +72,12 @@ class ForgotPasswordOtp : Fragment() {
                 viewModel.newOtpResult.observe(viewLifecycleOwner) { newOtp ->
                 binding?.jsonOtp?.text = newOtp
                 }
+               viewModel.msg.observe(viewLifecycleOwner){msg ->
+                   val message = msg.toString()
+                   Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
+               }
             }else{
-                val message = getString(R.string.invalid_or_empty_email_id)
+                val message = status.toString()
                 Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
 
             }
@@ -80,21 +87,10 @@ class ForgotPasswordOtp : Fragment() {
             binding?.jsonOtp?.text = otp1
 
         binding?.btnNext?.setOnClickListener {
+            val otp = binding?.etOtp?.text.toString()
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
-
-                val otp = binding?.etOtp?.text.toString()
-
-                if(otp.isNotEmpty()){
-                    val otp1 = otp.toLong()
-                    viewModel.forgotPasswordVerifyOtp(email, otp1)
-                }else{
-                    val message = "Please enter Otp"
-                    Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
-
-                }
-
+                    viewModel.forgotPasswordVerifyOtp(email, otp)
             } else {
-
                 val message = getString(R.string.no_internet_connection)
                 DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
             }
@@ -103,7 +99,7 @@ class ForgotPasswordOtp : Fragment() {
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
                 binding?.timer?.visibility = View.VISIBLE
                 binding?.tvOtpExp?.visibility = View.VISIBLE
-                binding?.tvMin?.visibility = View.VISIBLE
+
                 binding?.resendCode?.visibility = View.INVISIBLE
                 startOtpTimer()
                 viewModel.forgotPasswordResendOtp(email)
@@ -135,7 +131,6 @@ class ForgotPasswordOtp : Fragment() {
                 binding?.timer?.text = getString(R.string.timer_placeholder)
                 binding?.timer?.visibility = View.INVISIBLE
                 binding?.tvOtpExp?.visibility = View.INVISIBLE
-                binding?.tvMin?.visibility = View.INVISIBLE
                 binding?.resendCode?.visibility = View.VISIBLE
 
             }

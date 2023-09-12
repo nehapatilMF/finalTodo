@@ -79,45 +79,36 @@ class NewPassword : Fragment() {
                         if(result == 0 ){
 
                             val encodedPassword = Base64.encodeToBase64(password)
-                            val otp= newOtp.toLong()
-                            viewModel.resetPassword(otp,email,encodedPassword)
+
+                            viewModel.resetPassword(newOtp,email,encodedPassword)
                         }else{
                             binding?.etNewPassword?.error = getString(R.string.no_match)
                         }
                     } else {
-
                         val message =  getString(R.string.required_fields_are_empty)
                         Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
-
                     }
                 }else{
-
                     val message =  getString(R.string.required_fields_are_empty)
                     Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
-
-
                 }
             }else{
 
                 val message = getString(R.string.no_internet_connection)
                 DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
             }
-
         }
-        val newPassword = binding?.etNewPassword?.text.toString()
-        val confirmNewPassword = binding?.etConfirmPassword?.text.toString()
+      //  val newPassword = binding?.etNewPassword?.text.toString()
+     //   val confirmNewPassword = binding?.etConfirmPassword?.text.toString()
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
         viewModel.resetPasswordResult.observe(viewLifecycleOwner){ status ->
-
             if(status == "200"){
                 findNavController().navigate(R.id.navigate_from_newPassword_to_login)
             }else{
-
-                val message = "Invalid otp"
+                val message = status.toString()
                 Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
             }
         }
-
         return binding?.root
     }
     override fun onDestroyView() {

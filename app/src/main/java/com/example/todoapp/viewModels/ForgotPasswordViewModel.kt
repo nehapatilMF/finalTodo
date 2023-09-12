@@ -15,6 +15,8 @@ class ForgotPasswordViewModel : ViewModel(){
     private val  _forgotPasswordResult = MutableLiveData<String>()
     val  forgotPasswordResult : LiveData<String> get() =   _forgotPasswordResult
 
+    private val  _msg = MutableLiveData<String>()
+    val  msg : LiveData<String> get() =   _msg
     private val _otpResult = MutableLiveData<String>()
     val otpResult : LiveData<String> get() =  _otpResult
 
@@ -23,11 +25,11 @@ class ForgotPasswordViewModel : ViewModel(){
             try {
                 val signupResponse = apiInterface?.forgotPasswordRequestOtp(email)
                 val response = signupResponse?.body()
-                if(signupResponse?.isSuccessful == true) {
-                    val status = response?.status.toString()
+                if(response?.success == true) {
+                    val status = response.status.toString()
                     _forgotPasswordResult.postValue(status)
-                    _otpResult.postValue(response?.data?.otp.toString())
-
+                    _otpResult.postValue(response.data.otp.toString())
+                    _msg.postValue(response.message)
                 }else{
                     _forgotPasswordResult.postValue(response?.message)
                 }

@@ -1,148 +1,205 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".fragments.EditTask">
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
+        android:layout_marginBottom="@dimen/bottom_margin"
         android:icon="@drawable/ic_delete"
-        />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="15dp">
+        app:layout_constraintBottom_toTopOf="@+id/tv_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10sp"
-        android:text="Title"
+        android:layout_marginStart="@dimen/start_margin"
+        android:layout_marginTop="@dimen/bottom_margin"
+        android:layout_marginEnd="@dimen/start_margin"
+        android:layout_marginBottom="@dimen/bottom_margin"
+        android:text="@string/title1"
         android:textColor="@color/black"
-        android:textSize="18sp" />
+        android:textSize="@dimen/tv_text_size"
+        app:layout_constraintBottom_toTopOf="@+id/editTextTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editTextTitle"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginBottom="10dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/start_margin"
+        android:layout_marginEnd="@dimen/start_margin"
+        android:layout_marginBottom="@dimen/bottom_margin"
         android:background="@drawable/edittext_no_underline"
         android:importantForAutofill="no"
-        android:inputType="text" />
+        android:inputType="text"
+        android:textSize="@dimen/text_size"
+
+        app:layout_constraintBottom_toTopOf="@+id/tv_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title"
+        tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,TouchTargetSizeCheck" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10sp"
-        android:text="Description"
+        android:layout_marginStart="@dimen/start_margin"
+        android:layout_marginEnd="@dimen/start_margin"
+        android:layout_marginBottom="@dimen/bottom_margin"
+        android:text="@string/description1"
         android:textColor="@color/black"
-        android:textSize="18sp" />
+        android:textSize="@dimen/tv_text_size"
+        app:layout_constraintBottom_toTopOf="@+id/editTextDescription"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTitle" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editTextDescription"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginBottom="10dp"
-        android:layout_gravity="start"
-        android:gravity="start"
+        android:layout_height="@dimen/desc_width"
+        android:layout_marginStart="@dimen/start_margin"
+        android:layout_marginEnd="@dimen/start_margin"
+        android:layout_marginBottom="@dimen/bottom_margin"
         android:background="@drawable/edittext_no_underline"
+        android:gravity="start"
         android:importantForAutofill="no"
-        android:inputType="textMultiLine" />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="10dp"
-        android:orientation="horizontal">
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_status"
-            android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:text="Status"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
-        <Spinner
-            android:id="@+id/spinner_status"
-            android:layout_width="0dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center"
-            android:layout_weight="1" />
-    </LinearLayout>
+        android:inputType="textMultiLine"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintBottom_toTopOf="@+id/tv_status"
+        app:layout_constraintEnd_toEndOf="@+id/tv_status"
+        app:layout_constraintStart_toEndOf="@+id/tv_status"
+        app:layout_constraintTop_toBottomOf="@+id/tv_description"
+        tools:ignore="SpeakableTextPresentCheck" />
 
     <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/start_margin"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="@dimen/bottom_margin"
+        android:text="@string/status1"
+        android:textColor="@color/black"
+        android:textSize="@dimen/tv_text_size"
+        app:layout_constraintBottom_toTopOf="@+id/date"
+        app:layout_constraintEnd_toStartOf="@+id/spinner_status"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextDescription" />
+
+    <Spinner
+        android:id="@+id/spinner_status"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="@dimen/start_margin"
+        android:layout_marginBottom="@dimen/bottom_margin"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_status"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tv_status"
+        app:layout_constraintTop_toTopOf="@+id/tv_status"
+        tools:ignore="TouchTargetSizeCheck" />
+
+   <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10sp"
-        android:text="Date"
+       android:layout_marginStart="@dimen/start_margin"
+       android:layout_marginEnd="@dimen/start_margin"
+       android:layout_marginBottom="@dimen/bottom_margin"
+        android:text="@string/date1"
         android:textColor="@color/black"
-        android:textSize="18sp" />
+        android:textSize="@dimen/tv_text_size"
+        app:layout_constraintBottom_toTopOf="@+id/tv_date"
+        app:layout_constraintEnd_toEndOf="@+id/tv_status"
+        app:layout_constraintStart_toEndOf="@+id/tv_status"
+        app:layout_constraintTop_toBottomOf="@+id/tv_status" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_date"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginBottom="10dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/start_margin"
+        android:layout_marginEnd="@dimen/start_margin"
+        android:layout_marginBottom="@dimen/bottom_margin"
         android:background="@drawable/edittext_no_underline"
-        android:textSize="18sp"
-        android:textStyle="normal" />
+        android:textSize="@dimen/text_size"
+        android:textStyle="normal"
+
+        app:layout_constraintBottom_toTopOf="@+id/time"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/date" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10sp"
-        android:text="Time"
+        android:layout_marginStart="@dimen/start_margin"
+        android:layout_marginEnd="@dimen/start_margin"
+        android:layout_marginBottom="@dimen/bottom_margin"
+        android:text="@string/time1"
         android:textColor="@color/black"
-        android:textSize="18sp" />
+        android:textSize="@dimen/tv_text_size"
+        app:layout_constraintBottom_toTopOf="@+id/tv_time"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_date" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_time"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/start_margin"
+        android:layout_marginEnd="@dimen/start_margin"
+        android:layout_marginBottom="@dimen/bottom_margin"
         android:background="@drawable/edittext_no_underline"
-        android:textSize="18sp"
-        android:layout_marginBottom="40dp"
-        android:textStyle="normal"/>
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
+        android:textSize="@dimen/text_size"
+        android:textStyle="normal"
+
+        app:layout_constraintBottom_toTopOf="@+id/btnDelete"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/time" />
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnSave"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="20dp"
-        android:layout_weight="1"
         android:background="@drawable/button"
-        android:text="Save"
+        android:layout_marginTop="@dimen/bottom_margin"
+        android:text="@string/save1"
         android:textAllCaps="false"
-        android:textSize="16sp" />
+        android:textSize="@dimen/button_text_size"
+        app:layout_constraintBaseline_toBaselineOf="@+id/btnDelete"
+        app:layout_constraintEnd_toStartOf="@+id/btnDelete"
+        app:layout_constraintStart_toStartOf="parent" />
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnDelete"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_weight="1"
         android:background="@drawable/button"
-        android:text="Delete"
+        android:layout_marginTop="@dimen/bottom_margin"
+        android:text="@string/delete"
         android:textAllCaps="false"
-        android:textSize="16sp" />
-</LinearLayout>
-
-
-</LinearLayout>
-
-</LinearLayout>
+        android:textSize="@dimen/button_text_size"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnSave"
+        app:layout_constraintTop_toBottomOf="@+id/tv_time" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -33,7 +33,7 @@ class Profile : Fragment() {
             //findNavController().navigate(R.id.navigate_to_personalInformation)
         }
         binding?.ChangePassword?.setOnClickListener {
-           //findNavController().navigate(R.id.navigate_to_changePassword)
+           findNavController().navigate(R.id.navigate_to_changePassword)
         }
 
         val callback = object : OnBackPressedCallback(true) {

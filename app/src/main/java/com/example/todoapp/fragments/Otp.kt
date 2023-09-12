@@ -18,7 +18,6 @@ import com.example.todoapp.util.NetworkUtil
 import com.example.todoapp.util.TimerUtil
 import com.example.todoapp.viewModels.OtpViewModel
 
-@Suppress("NAME_SHADOWING")
 class Otp : Fragment() {
 
     private var binding: FragmentOtpBinding? = null
@@ -33,17 +32,12 @@ class Otp : Fragment() {
         binding?.toolbar?.setNavigationOnClickListener{
             findNavController().navigate(R.id.navigate_to_register)
         }
-
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 findNavController().navigate(R.id.navigate_to_register)
-
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
-
-
-
     }
 
     override fun onCreateView(
@@ -53,35 +47,25 @@ class Otp : Fragment() {
         binding = FragmentOtpBinding.inflate(layoutInflater, container, false)
 
         val viewModel = ViewModelProvider(this)[OtpViewModel::class.java]
-
         val email = Constants.userEmail.toString()
         val otp1 =  Constants.userOtp.toString()
 
         binding?.enteredEmail?.text = email
         binding?.jsonOtp?.text = otp1
-
         binding?.timer?.visibility = View.VISIBLE
         binding?.tvOtpExp?.visibility = View.VISIBLE
         binding?.resendCode?.visibility = View.INVISIBLE
         startOtpTimer()
 
-        binding?.buttonAuthorise?.setOnClickListener {
-            if(NetworkUtil.isNetworkAvailable(requireContext())) {
-                val otp = binding?.etOtp?.text.toString()
-
-                if(otp.isNotEmpty()) {
-                    val otp1 = otp.toLong()
-                    viewModel.signupVerifyOtp(email, otp1)
-                }else{
-                    val message = "Please enter Otp"
-                    Toast.makeText(requireContext(),message,Toast.LENGTH_SHORT).show()
-
+        binding?.btnNext?.setOnClickListener {
+            val otp = binding?.etOtp?.text.toString()
+            when{
+                !NetworkUtil.isNetworkAvailable(requireContext()) -> DialogUtils.showAutoDismissAlertDialog(requireContext(), getString(R.string.no_internet_connection))
+                else -> {
+                        viewModel.signupVerifyOtp(email, otp)
+                    }
                 }
-            }else{
-                val message = getString(R.string.no_internet_connection)
-                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
             }
-        }
 
         binding?.resendCode?.setOnClickListener {
             if(NetworkUtil.isNetworkAvailable(requireContext())) {
@@ -92,7 +76,6 @@ class Otp : Fragment() {
                 viewModel.resendUserOtp(email)
 
             }else{
-
                 val message = getString(R.string.no_internet_connection)
                 DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
             }
@@ -101,12 +84,9 @@ class Otp : Fragment() {
         viewModel.otpResult.observe(viewLifecycleOwner){ status ->
             if(status == "200"){
                 findNavController().navigate(R.id.navigate_from_otp_to_todoMain)
-                Toast.makeText(requireContext(),"You are successfully logged in",Toast.LENGTH_SHORT).show()
-
             }else{
-                val message = "Invalid otp."
+                val message = status.toString()
                 Toast.makeText(requireContext(),message,Toast.LENGTH_SHORT).show()
-
             }
 
         }
@@ -116,11 +96,9 @@ class Otp : Fragment() {
                     val newOtp = otp.toString()
                     binding?.jsonOtp?.text = newOtp
                 }
-
             }else{
-                val message = getString(R.string.invalid_or_empty_email_id)
+                val message = status.toString()
                 Toast.makeText(requireContext(),message,Toast.LENGTH_SHORT).show()
-
             }
         }
 

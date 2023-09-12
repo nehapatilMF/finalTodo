@@ -1,38 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:layout_height="wrap_content"
     tools:context=".fragments.Register">
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize" />
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="15dp">
+        android:layout_height="?android:attr/actionBarSize"
+        android:layout_marginBottom="@dimen/bottom_margin"
+        android:icon="@drawable/ic_delete"
+        app:layout_constraintBottom_toTopOf="@+id/signup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/signup"
-        android:text="@string/signup"
-        android:textStyle="bold"
-        android:layout_marginBottom="15dp"
-        android:textColor="@color/red"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="30sp"/>
+        android:layout_marginStart="@dimen/start_margin"
+        android:layout_marginEnd="@dimen/start_margin"
+        android:layout_marginBottom="@dimen/bottom_margin"
+        android:text="@string/signup"
+        android:textColor="@color/red"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/tv_username"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv_username"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_username"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
+android:layout_marginStart="@dimen/start_margin"
+        android:layout_marginEnd="@dimen/start_margin"
+        android:importantForAutofill="no"
+        android:text="@string/enter_username"
         android:textColor="@color/light_gray"
-        android:text="Enter Username"
-        android:textSize="18sp" />
+        android:textSize="@dimen/tv_text_size"
+        app:layout_constraintBottom_toTopOf="@+id/editTextUserName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/editTextUserName"
+        app:layout_constraintTop_toBottomOf="@+id/signup" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editTextUserName"
@@ -40,140 +56,221 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:autofillHints="email"
-        android:textSize="@dimen/text_size"
+        android:layout_marginStart="@dimen/start_margin"
+        android:layout_marginEnd="@dimen/start_margin"
         android:background="@drawable/edittext_no_underline"
         android:importantForAccessibility="yes"
         android:inputType="textEmailAddress"
-        tools:ignore="VisualLintTextFieldSize"/>
+        android:textSize="@dimen/text_size"
+        app:layout_constraintBottom_toTopOf="@+id/tv_mobile_no"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv_mobile_no"
+        app:layout_constraintTop_toBottomOf="@+id/tv_username"
+        tools:ignore="VisualLintTextFieldSize,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_mobile_no"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:text="Enter Mobile Number"
-
+        android:layout_marginStart="@dimen/start_margin"
+        android:layout_marginEnd="@dimen/start_margin"
+        android:text="@string/enter_mobile_number"
         android:textColor="@color/light_gray"
-        android:textSize="18sp"/>
+        android:textSize="@dimen/tv_text_size"
+
+        app:layout_constraintBottom_toTopOf="@+id/editTextMobileNumber"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/editTextMobileNumber"
+        app:layout_constraintTop_toBottomOf="@+id/editTextUserName" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editTextMobileNumber"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-         android:layout_marginBottom="10dp"
-        android:textSize="@dimen/text_size"
-        android:inputType="number"
+        android:layout_marginStart="@dimen/start_margin"
+        android:layout_marginEnd="@dimen/start_margin"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/edittext_no_underline"
         android:importantForAccessibility="yes"
+        android:importantForAutofill="no"
+        android:inputType="number"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintBottom_toTopOf="@+id/tv_enter_email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv_enter_email"
+        app:layout_constraintTop_toBottomOf="@+id/tv_mobile_no"
+        tools:ignore="VisualLintTextFieldSize,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
-        tools:ignore="VisualLintTextFieldSize"/>
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_enter_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/light_gray"
         android:text="@string/email"
-        android:textSize="18sp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginStart="@dimen/start_margin"
+        android:layout_marginEnd="@dimen/start_margin"
+        android:textColor="@color/light_gray"
+        android:textSize="@dimen/tv_text_size"
+        app:layout_constraintBottom_toTopOf="@+id/editTextEmail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/editTextEmail"
+        app:layout_constraintTop_toBottomOf="@+id/editTextMobileNumber" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editTextEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textEmailAddress"
+        android:layout_marginStart="@dimen/start_margin"
         android:autofillHints="email"
-        android:layout_marginBottom="10dp"
-        android:textSize="@dimen/text_size"
         android:background="@drawable/edittext_no_underline"
         android:importantForAccessibility="yes"
-        tools:ignore="VisualLintTextFieldSize"/>
+        android:layout_marginEnd="@dimen/start_margin"
+        android:layout_marginBottom="@dimen/bottom_margin"
+        android:importantForAutofill="no"
+        android:inputType="textEmailAddress"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintBottom_toTopOf="@+id/tv_enter_password"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv_enter_password"
+        app:layout_constraintTop_toBottomOf="@+id/tv_enter_email"
+        tools:ignore="VisualLintTextFieldSize,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_enter_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/light_gray"
         android:text="@string/password"
-        android:textSize="18sp"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginStart="@dimen/start_margin"
+        android:layout_marginEnd="@dimen/start_margin"
+        android:textColor="@color/light_gray"
+        android:textSize="@dimen/tv_text_size"
+        app:layout_constraintBottom_toTopOf="@+id/editTextPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/editTextPassword"
+        app:layout_constraintTop_toBottomOf="@+id/editTextEmail" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editTextPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textVisiblePassword"
-        android:textSize="@dimen/text_size"
+
+        android:layout_marginStart="@dimen/start_margin"
+        android:layout_marginEnd="@dimen/start_margin"
         android:importantForAccessibility="yes"
         android:importantForAutofill="no"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="@dimen/bottom_margin"
         android:background="@drawable/edittext_no_underline"
-        tools:ignore="VisualLintTextFieldSize"/>
+        android:inputType="textVisiblePassword"
+        android:textSize="@dimen/text_size"
+        app:layout_constraintBottom_toTopOf="@+id/tv_confirm_password"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv_confirm_password"
+        app:layout_constraintTop_toBottomOf="@+id/tv_enter_password"
+        tools:ignore="VisualLintTextFieldSize,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
-   <androidx.appcompat.widget.AppCompatTextView
-    android:id="@+id/tv_confirm_password"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="10dp"
-    android:text="@string/confirm_password"
-    android:textColor="@color/light_gray"
-    android:textSize="18sp"/>
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_confirm_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/start_margin"
+        android:layout_marginEnd="@dimen/start_margin"
+        android:text="@string/confirm_password"
+        android:textColor="@color/light_gray"
+        android:textSize="@dimen/tv_text_size"
+        app:layout_constraintBottom_toTopOf="@+id/editTextConfirmPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/editTextConfirmPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
+        android:layout_marginStart="@dimen/start_margin"
         android:background="@drawable/edittext_no_underline"
         android:importantForAccessibility="yes"
         android:importantForAutofill="no"
         android:inputType="textVisiblePassword"
         android:textSize="@dimen/text_size"
-        tools:ignore="VisualLintTextFieldSize"/>
+        android:layout_marginEnd="@dimen/start_margin"
+        android:layout_marginBottom="@dimen/bottom_margin"
+        app:layout_constraintBottom_toTopOf="@+id/txt4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/txt3"
+        app:layout_constraintTop_toBottomOf="@+id/tv_confirm_password"
+        tools:ignore="VisualLintTextFieldSize,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txt3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/start_margin"
+        android:layout_marginTop="10dp"
         android:textColor="@color/black"
+        android:layout_marginEnd="@dimen/start_margin"
         android:text="@string/otp_txt"
-        android:textSize="16sp"/>
+        android:textSize="@dimen/tv_text_size"
+        app:layout_constraintBottom_toTopOf="@+id/txt4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextConfirmPassword" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txt4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/start_margin"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="@dimen/start_margin"
         android:textColor="@color/black"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="15dp"
         android:text="@string/edit_email_txt"
-        android:textSize="16sp"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/txt5"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:text="@string/already_have_account"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/login"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/log_in"
-            android:textColor="@color/red"
-            android:textSize="18sp"/>
-    </LinearLayout>
+        android:textSize="@dimen/tv_text_size"
+        app:layout_constraintBottom_toTopOf="@+id/login"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextConfirmPassword" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/txt5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:text="@string/already_have_account"
+        android:textColor="@color/black"
+        android:textSize="@dimen/tv_text_size"
+
+        app:layout_constraintBaseline_toBaselineOf="@+id/login"
+        app:layout_constraintEnd_toStartOf="@+id/login"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/login"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="@string/log_in"
+        android:textColor="@color/red"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonNext"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txt5"
+        app:layout_constraintTop_toBottomOf="@+id/txt4"
+        tools:ignore="TextContrastCheck" />
+
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonNext"
-        android:layout_width="130dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/button"
         android:importantForAccessibility="yes"
         android:text="@string/Next"
-        android:textSize="16sp"
-        android:layout_marginTop="16dp"
         android:textAllCaps="false"
-        android:layout_gravity="center"
-        tools:ignore="RedundantDescriptionCheck"/>
-</LinearLayout>
-</LinearLayout>
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/txt4"
+        app:layout_constraintStart_toStartOf="@+id/txt5"
+        app:layout_constraintTop_toBottomOf="@+id/login"
+        tools:ignore="RedundantDescriptionCheck" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+

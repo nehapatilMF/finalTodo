@@ -31,7 +31,7 @@ interface ApiInterface {
     @POST("sign-up")
     suspend fun signup(
         @Field("name") name: String,
-        @Field("mobile") mobile: Long,
+        @Field("mobile") mobile: String,
         @Field("email") email: String,
         @Field("password") password: String): Response<SignupResponse>
 
@@ -39,8 +39,8 @@ interface ApiInterface {
     @FormUrlEncoded
     @POST("signup-verify-otp")
     suspend fun signupVerifyOtp(
-        @Field("email") email : String,
-        @Field("otp") otp :Long
+        @Field("email") email: String,
+        @Field("otp") otp: String
     ):Response<SignupVerifyOtpResponse>
 
     ////Resend User Otp
@@ -76,16 +76,16 @@ interface ApiInterface {
     @FormUrlEncoded
     @POST("forgot-password-verify-otp")
     suspend fun forgotPasswordVerifyOtp(
-        @Field("email") email :String,
-        @Field("otp") otp :Long
+        @Field("email") email:String,
+        @Field("otp") otp: String
     ) : Response<ForgotPasswordVerifyOtpResponse>
 
     ////Reset Password
     @FormUrlEncoded
     @POST("reset-password")
     suspend fun resetPassword(
-        @Field("otp") otp : Long,
-        @Field("email") email : String,
+        @Field("otp") otp: String,
+        @Field("email") email: String,
         @Field("password") password: String
     ):Response<ResetPasswordResponse>
 

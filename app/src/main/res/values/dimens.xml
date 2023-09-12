@@ -2,5 +2,10 @@
 <resources>
     <dimen name="text_size">22sp</dimen>
     <dimen name="tv_text_size">18sp</dimen>
+    <dimen name="start_margin">15dp</dimen>
+    <dimen name="bottom_margin">10dp</dimen>
+    <dimen name="button_text_size">16sp</dimen>
+    <dimen name="desc_width">150dp</dimen>
+    <dimen name="titleTextSize">25sp</dimen>
 
 </resources>

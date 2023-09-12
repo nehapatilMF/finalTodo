@@ -3,7 +3,7 @@ package com.example.todoapp.responses
 data class SignupResponse(
     val data: Data,
     val message: String,
-    val status: Int,
+    val status: String,
     val success: Boolean
 )
 

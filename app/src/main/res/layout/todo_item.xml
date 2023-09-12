@@ -11,6 +11,7 @@
     android:padding="10dp"
     android:clickable="true"
     android:foreground="?android:attr/selectableItemBackground"
+    android:focusable="true"
     app:cardCornerRadius="10dp">
 
     <LinearLayout
@@ -30,102 +31,98 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3.8"
                 android:textStyle="bold"
-                android:text="Title : "
+                android:text="@string/title4"
+                android:textSize="@dimen/tv_text_size"/>
+            <TextView
+                android:id="@+id/textViewTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="@string/to_do_title"
+                android:textSize="@dimen/tv_text_size"
+                android:textStyle="bold"
+                />
+
+            <TextView
+                android:id="@+id/textViewStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_weight="3"
+                android:gravity="end"
+                android:text="@string/status3"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/Des"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="2.5"
+                android:text="@string/description5"
+                android:textSize="@dimen/tv_text_size"
+                android:textStyle="bold"
+                />
+            <TextView
+                android:id="@+id/textViewDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/to_do_description"
                 android:textSize="16sp"
                 />
-        <TextView
-            android:id="@+id/textViewTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="To-Do Title"
-            android:layout_weight="2"
-
-            android:textSize="22sp"
-            android:textStyle="bold"
-           />
-
-        <TextView
-            android:id="@+id/textViewStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_weight="3"
-            android:gravity="end"
-            android:textStyle="bold"
-            android:text="Status"
-            android:textSize="18sp"/>
         </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:orientation="horizontal">
-        <TextView
-            android:id="@+id/Des"
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2.5"
-            android:text="Description : "
-            android:textStyle="bold"
-            android:textSize="16sp"
-            />
-    <TextView
-        android:id="@+id/textViewDescription"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="To-Do Description"
-        android:layout_weight="1"
-        android:textSize="16sp"
-     />
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/Date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.35"
+                android:text="@string/date5"
+
+                android:textSize="@dimen/tv_text_size"
+                android:textStyle="bold"
+                />
+            <TextView
+                android:id="@+id/textViewDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/_01_sep_2023"
+                android:textSize="@dimen/tv_text_size"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/Time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.3"
+                android:gravity="center"
+                android:text="@string/time2"
+
+                android:textSize="@dimen/tv_text_size"
+                android:textStyle="bold"
+                />
+            <TextView
+                android:id="@+id/textViewTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/_12_00_pm"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                />
+
+        </LinearLayout>
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
-            android:id="@+id/Date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.35"
-            android:text="Date :"
-
-            android:textStyle="bold"
-            android:textSize="16sp"
-            />
-        <TextView
-            android:id="@+id/textViewDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="01-Sep-2023"
-
-            android:textSize="18sp"
-            android:textStyle="bold" />
-        <TextView
-            android:id="@+id/Time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.3"
-            android:gravity="center"
-            android:textStyle="bold"
-
-            android:text="Time : "
-            android:textSize="16sp"
-            />
-        <TextView
-            android:id="@+id/textViewTime"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="12:00 PM"
-            android:layout_weight="1"
-            android:textSize="18sp"
-            android:textStyle="bold"
-           />
-
-    </LinearLayout>
-    </LinearLayout>
-
 
 
 </androidx.cardview.widget.CardView>

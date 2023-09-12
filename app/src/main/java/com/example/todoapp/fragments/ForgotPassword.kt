@@ -45,15 +45,8 @@ class ForgotPassword : Fragment() {
             val email =binding?.enterEmail?.text.toString()
             Constants.userEmail = email
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
-                if( ValidPatterns.isValidEmail(email)&& email.isNotEmpty()) {
                     viewModel.forgotPasswordRequestOtp(email)
-                }else{
-                    val message =getString(R.string.required_fields_are_empty)
-                    Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
-
-                }
             }    else {
-
                 val message = getString(R.string.no_internet_connection)
                 DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
             }
@@ -79,20 +72,21 @@ class ForgotPassword : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        binding = FragmentForgotPasswordBinding.inflate(layoutInflater,container,false)
+          binding = FragmentForgotPasswordBinding.inflate(layoutInflater,container,false)
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
-
 
         val viewModel = ViewModelProvider(this)[ForgotPasswordViewModel::class.java]
 
         viewModel.forgotPasswordResult.observe(viewLifecycleOwner){ status ->
             if(status == "200") {
                 findNavController().navigate(R.id.navigate_to_forgotPasswordOtp)
+                viewModel.msg.observe(viewLifecycleOwner){msg ->
+                    val message = msg.toString()
+                    Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
+                }
             }else{
-                val message = getString(R.string.invalid_or_empty_email_id)
+                val message = status.toString()
                 Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
-
             }
         }
 

@@ -31,18 +31,17 @@ class OtpViewModel : ViewModel()  {
     }
 
 
-    fun signupVerifyOtp(email: String, otp: Long){
+    fun signupVerifyOtp(email: String, otp: String){
         viewModelScope.launch {
             try {
                 val signupVerifyOtpResponse = apiInterface?.signupVerifyOtp( email, otp)
                 val response = signupVerifyOtpResponse?.body()
-                if(signupVerifyOtpResponse?.isSuccessful == true) {
-                    val status = response?.status.toString()
+                if(response?.success == true) {
+                    val status = response.status.toString()
                     _otpResult.postValue(status)
-                    val accessToken = response?.data?.token?.access_token.toString()
-                    val refreshToken = response?.data?.token?.refresh_token.toString()
+                    val accessToken = response.data.token.access_token
+                    val refreshToken = response.data.token.refresh_token
                     saveTokens(accessToken, refreshToken)
-
                 }else{
                     _otpResult.postValue(response?.message)
                 }
@@ -58,10 +57,10 @@ class OtpViewModel : ViewModel()  {
             try{
                 val resendOtp = apiInterface?.resendUserOtp(email)
                 val response = resendOtp?.body()
-                if(resendOtp?.isSuccessful == true){
-                    val status = response?.status.toString()
+                if(response?.success == true){
+                    val status = response.status.toString()
                     _resendOtpResult.postValue(status)
-                    _newOtpResult.value = response?.data?.otp.toString()
+                    _newOtpResult.value = response.data.otp.toString()
                     }else{
                     _resendOtpResult.postValue(response?.message)
                 }

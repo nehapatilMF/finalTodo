@@ -22,19 +22,21 @@ class ForgotPasswordOtpViewModel : ViewModel() {
     val resendOtpResult : LiveData<String> get() = _resendOtpResult
     private val _newOtpResult = MutableLiveData<String>()
     val newOtpResult : LiveData<String> get() = _newOtpResult
+    private val  _msg = MutableLiveData<String>()
+    val  msg : LiveData<String> get() =   _msg
 
 
-
-    fun forgotPasswordVerifyOtp(email: String, otp: Long){
+    fun forgotPasswordVerifyOtp(email: String, otp: String){
         viewModelScope.launch {
             try {
                 val signupVerifyOtpResponse = apiInterface?.forgotPasswordVerifyOtp( email, otp)
                 val response = signupVerifyOtpResponse?.body()
-                if(signupVerifyOtpResponse?.isSuccessful == true) {
-                    val status = response?.status.toString()
+                if(response?.success == true) {
+                    val status = response.status.toString()
                     _otpResult.postValue(status)
-                    _otp.postValue(response?.data?.user?.otp.toString())
-                    _email.postValue(response?.data?.user?.email.toString())
+                    _otp.postValue(response.data.user.otp.toString())
+                    _email.postValue(response.data.user.email)
+                    _msg.postValue(response.message)
 
                 }else{
                     _otpResult.postValue(response?.message)
@@ -50,10 +52,11 @@ class ForgotPasswordOtpViewModel : ViewModel() {
             try{
                 val resendOtp = apiInterface?.forgotPasswordResendOtp(email)
                 val response = resendOtp?.body()
-                if(resendOtp?.isSuccessful == true){
-                    val status = response?.status.toString()
+                if(response?.success == true){
+                    val status = response.status.toString()
                     _resendOtpResult.postValue(status)
-                    _newOtpResult.postValue(response?.data?.otp.toString())
+                    _newOtpResult.postValue(response.data.otp.toString())
+                    _msg.postValue(response.message)
 
                 }else{
                     _resendOtpResult.postValue(response?.message)

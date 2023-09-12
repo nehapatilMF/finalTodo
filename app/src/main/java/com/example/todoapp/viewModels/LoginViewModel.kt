@@ -41,7 +41,6 @@ class LoginViewModel : ViewModel() {
                     val status = response.status.toString()
                     _loginResult.postValue(status)
                     val accessToken = response.data.token.access_token
-
                     val refreshToken = response.data.token.refresh_token
                     saveTokens(accessToken, refreshToken)
 

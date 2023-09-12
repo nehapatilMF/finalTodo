@@ -25,39 +25,20 @@ class ChangePassword : Fragment() {
     private var binding : FragmentChangePasswordBinding? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val viewModel = ViewModelProvider(this)[ChangePasswordViewModel::class.java]
 
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.title = "Change Password"
+
         binding?.toolbar?.setNavigationOnClickListener{
-            findNavController().navigate(R.id.action_changePassword_to_profile)
+            findNavController().navigate(R.id.navigate_to_todoMain)
         }
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                findNavController().navigate(R.id.action_changePassword_to_profile)
-
+                findNavController().navigate(R.id.navigate_to_todoMain)
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
-
-        val oldPassword = binding?.etOldPassword?.text.toString()
-        val newPassword  = binding?.etNewPassword?.text.toString()
-        val confirmPassword = binding?.etConfirmPassword?.text.toString()
-        binding?.btnNext?.setOnClickListener {
-            if(NetworkUtil.isNetworkAvailable(requireContext())) {
-                if (newPassword == confirmPassword) {
-                    val encodedOldPassword = Base64.encodeToBase64(oldPassword)
-                    val encodedNewPassword = Base64.encodeToBase64(newPassword)
-                    viewModel.changePassword(encodedOldPassword,encodedNewPassword)
-                } else {
-                    binding?.etNewPassword?.error =
-                        getString(R.string.no_match)
-                }
-            }else{
-                showErrorDialog(getString(R.string.no_internet_connection))
-            }
-        }
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,17 +50,34 @@ class ChangePassword : Fragment() {
         setupTextChangeListeners()
 
         val viewModel = ViewModelProvider(this)[ChangePasswordViewModel::class.java]
+      binding?.btnNext?.setOnClickListener {
+          val oldPassword = binding?.etOldPassword?.text.toString()
+          val newPassword = binding?.etNewPassword?.text.toString()
+          val confirmPassword = binding?.etConfirmPassword?.text.toString()
+          val encodedOldPassword = Base64.encodeToBase64(oldPassword)
+          val encodedNewPassword = Base64.encodeToBase64(newPassword)
+          when
+          {
+              !NetworkUtil.isNetworkAvailable(requireContext()) -> showErrorDialog(getString(R.string.no_internet_connection))
+              oldPassword.isEmpty() -> Toast.makeText(requireContext(),"empty old password.",Toast.LENGTH_SHORT).show()
+              newPassword.isBlank() -> Toast.makeText(requireContext(),"empty old password.",Toast.LENGTH_SHORT).show()
+              newPassword != confirmPassword -> binding?.etNewPassword?.error = "Password don't match"
+              else ->  viewModel.changePassword(encodedOldPassword,encodedNewPassword)
+          }
+            }
 
-
-
-        viewModel.changePasswordResult.observe(viewLifecycleOwner){ status ->
-            if(status == "200"){
-                val sta = status.toString()
-                Toast.makeText(requireContext(),sta,Toast.LENGTH_SHORT).show()
-                findNavController().navigate(R.id.action_changePassword_to_login)
+        viewModel.result.observe(viewLifecycleOwner){ status ->
+             if(status == "true"){
+                           findNavController().navigate(R.id.action_changePassword_to_login)
+                 viewModel.msg.observe(viewLifecycleOwner) {msg->
+                     val message =msg.toString()
+                     Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                 }
             }else{
-                val message = "Invalid password."
-                Toast.makeText(requireContext(),message,Toast.LENGTH_SHORT).show()
+                viewModel.msg.observe(viewLifecycleOwner) {msg->
+                    val message =msg.toString()
+                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
@@ -131,3 +129,5 @@ class ChangePassword : Fragment() {
     }
 
 }
+
+

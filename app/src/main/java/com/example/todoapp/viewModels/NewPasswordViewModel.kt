@@ -14,9 +14,10 @@ class NewPasswordViewModel : ViewModel() {
     private val _resetPasswordResult = MutableLiveData<String>()
     val resetPasswordResult : LiveData<String> get() =  _resetPasswordResult
 
-    fun resetPassword(otp : Long,
-                      email : String,
-                      password : String){
+    fun resetPassword(
+        otp: String,
+        email: String,
+        password: String){
         viewModelScope.launch {
            try{
                 val apiResponse = apiInterface?.resetPassword(otp,email,password)

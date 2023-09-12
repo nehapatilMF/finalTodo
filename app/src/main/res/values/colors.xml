@@ -4,7 +4,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="red">#F81919</color>
     <color name="light_red">#F14744</color>
-    <color name="light_gray">#68605E5E</color>
+    <color name="light_gray">#5A524F</color>
     <color name="otp_box_bg_color">#F0F0F0</color>
     <color name="otp_box_border_color">#615F5F</color>
     <color name="otp_box_text_color">#000000</color>

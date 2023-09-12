@@ -49,9 +49,6 @@ class Login : Fragment() {
             }
         }
     }
-
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -71,15 +68,10 @@ class Login : Fragment() {
             val encodedPassword = Base64.encodeToBase64(password)
             when{
                 !NetworkUtil.isNetworkAvailable(requireContext()) -> DialogUtils.showAutoDismissAlertDialog(requireContext(), getString(R.string.no_internet_connection))
-                !ValidPatterns.isValidEmail(email) ->  {
-                    val message = "Invalid or empty email id. "
-                    Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
+                else -> {
+                    viewModel.login(email,encodedPassword)
+                    binding?.progressBar?.visibility = View.VISIBLE
                 }
-                !ValidPatterns.isValidPassword(password) ->  {
-                    val message = "Invalid or empty password. "
-                    Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
-                }
-                else -> viewModel.login(email,encodedPassword)
             }
         }
         binding?.signup?.setOnClickListener {
@@ -88,7 +80,6 @@ class Login : Fragment() {
                 findNavController().navigate(R.id.navigate_from_login_to_register)
             } else {
                 binding?.progressBar?.visibility = View.GONE
-
                 val message = getString(R.string.no_internet_connection)
                 DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
             }
@@ -96,7 +87,7 @@ class Login : Fragment() {
 
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
         viewModel.loginResult.observe(viewLifecycleOwner) { status ->
-            if (status =="200") {
+            if (status == "200") {
                 findNavController().navigate(R.id.navigate_from_login_to_todoMain)
                 binding?.progressBar?.visibility = View.VISIBLE
             } else {
