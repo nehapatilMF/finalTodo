@@ -10,6 +10,7 @@ import com.example.todoapp.responses.GetTodoListResponse
 import com.example.todoapp.responses.LoginResponse
 import com.example.todoapp.responses.LogoutResponse
 import com.example.todoapp.responses.ProfileInfoResponse
+import com.example.todoapp.responses.RefreshTokenResponse
 import com.example.todoapp.responses.ResendForgotPasswordResponse
 import com.example.todoapp.responses.ResendUserOtpResponse
 import com.example.todoapp.responses.ResetPasswordResponse
@@ -150,6 +151,12 @@ interface ApiInterface {
         @Field("password") password : String
     ) : Response<ChangePasswordResponse>
 
+    ///RefreshToken
+    @FormUrlEncoded
+    @POST("refresh-token")
+    suspend fun refreshToken(
+    @Field("refresh_token") refresh_token : String
+    ) : Response<RefreshTokenResponse>
 }
 
 

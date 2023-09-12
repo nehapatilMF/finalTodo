@@ -12,6 +12,9 @@
         <action
             android:id="@+id/navigate_to_intro"
             app:destination="@+id/intro" />
+        <action
+            android:id="@+id/navigate_to_todoMain"
+            app:destination="@+id/todoMain" />
     </fragment>
     <fragment
         android:id="@+id/intro"

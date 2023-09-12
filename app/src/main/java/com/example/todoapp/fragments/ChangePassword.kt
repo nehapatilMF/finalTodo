@@ -21,7 +21,6 @@ import com.example.todoapp.util.ValidPatterns
 import com.example.todoapp.viewModels.ChangePasswordViewModel
 
 class ChangePassword : Fragment() {
-
     private var binding : FragmentChangePasswordBinding? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -47,6 +46,8 @@ class ChangePassword : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentChangePasswordBinding.inflate(layoutInflater,container,false)
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
+
+
         setupTextChangeListeners()
 
         val viewModel = ViewModelProvider(this)[ChangePasswordViewModel::class.java]

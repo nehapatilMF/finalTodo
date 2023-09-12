@@ -1,9 +1,9 @@
 package com.example.todoapp.client
 
+import android.content.Context
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-
 object RetrofitClient {
 
     private const val baseUrl = "http://13.127.90.201/api/v1/"

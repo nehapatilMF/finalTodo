@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.Constants
 import com.example.todoapp.R
+import com.example.todoapp.client.SessionManager
 import com.example.todoapp.databinding.FragmentOtpBinding
 import com.example.todoapp.util.DialogUtils
 import com.example.todoapp.util.NetworkUtil
@@ -101,6 +102,9 @@ class Otp : Fragment() {
                 Toast.makeText(requireContext(),message,Toast.LENGTH_SHORT).show()
             }
         }
+        val sessionManager = SessionManager(requireContext())
+        Constants.accessToken = sessionManager.getAccessToken()
+        Constants.refreshToken = sessionManager.getRefreshToken()
 
         viewModel.getAuthTokens().observe(viewLifecycleOwner){ authTokens ->
             Constants.clearAccessToken()
@@ -108,6 +112,8 @@ class Otp : Fragment() {
             Constants.accessToken = accessToken
             val refreshToken = authTokens.refreshToken
             Constants.refreshToken = refreshToken
+            sessionManager.saveTokens(accessToken,refreshToken)
+
         }
 
         return binding?.root

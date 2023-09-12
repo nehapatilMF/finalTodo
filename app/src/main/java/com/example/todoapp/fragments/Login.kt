@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.todoapp.Constants
 import com.example.todoapp.R
 import com.example.todoapp.base64.Base64
+import com.example.todoapp.client.SessionManager
 import com.example.todoapp.databinding.FragmentLoginBinding
 import com.example.todoapp.util.DialogUtils
 import com.example.todoapp.util.NetworkUtil
@@ -26,6 +27,7 @@ class Login : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.title = null
@@ -56,12 +58,18 @@ class Login : Fragment() {
         binding = FragmentLoginBinding.inflate(layoutInflater, container, false)
         setupTextChangeListeners()
         val viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
+
+        val sessionManager = SessionManager(requireContext())
+        Constants.accessToken = sessionManager.getAccessToken()
+        Constants.refreshToken = sessionManager.getRefreshToken()
+
         viewModel.getAuthTokens().observe(viewLifecycleOwner){ authTokens ->
             val accessToken = authTokens.accessToken
             Constants.accessToken = accessToken
             val refreshToken = authTokens.refreshToken
             Constants.refreshToken = refreshToken
-        }
+        sessionManager.saveTokens(accessToken,refreshToken)
+                   }
         binding?.buttonLogin?.setOnClickListener {
             val email = binding?.etEmail?.text.toString()
             val password = binding?.etPassword?.text.toString()
@@ -136,4 +144,6 @@ class Login : Fragment() {
         super.onDestroyView()
         binding = null
     }
+
+
 }

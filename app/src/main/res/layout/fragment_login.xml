@@ -97,7 +97,7 @@
         android:background="@drawable/edittext_no_underline"
         android:importantForAccessibility="yes"
         android:importantForAutofill="no"
-        android:inputType="textVisiblePassword"
+        android:inputType="textPassword"
         app:layout_constraintBottom_toTopOf="@+id/forgotPassword"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"

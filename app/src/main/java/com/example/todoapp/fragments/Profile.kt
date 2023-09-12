@@ -11,7 +11,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.todoapp.Constants
 import com.example.todoapp.R
+import com.example.todoapp.client.SessionManager
 import com.example.todoapp.databinding.FragmentProfileBinding
 import com.example.todoapp.databinding.LogoutConfirmationBinding
 import com.example.todoapp.databinding.UserDeleteConfirmationBinding
@@ -95,6 +97,8 @@ class Profile : Fragment() {
 
                 }
               findNavController().navigate(R.id.navigate_to_intro)
+                SessionManager(requireContext()).clearTokens()
+                Constants.clearAccessToken()
 
             }else{
                 val message = status.toString()
