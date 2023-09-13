@@ -21,7 +21,7 @@ class ForgotPasswordViewModel : ViewModel(){
     val otpResult : LiveData<String> get() =  _otpResult
 
     fun forgotPasswordRequestOtp(email : String){
-        viewModelScope.launch {
+        viewModelScope.launch{
             try {
                 val signupResponse = apiInterface?.forgotPasswordRequestOtp(email)
                 val response = signupResponse?.body()

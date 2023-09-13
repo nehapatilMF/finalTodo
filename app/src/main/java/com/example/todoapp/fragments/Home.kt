@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.todoapp.R
 import com.example.todoapp.adapter.TodoAdapter
 import com.example.todoapp.databinding.FragmentHomeBinding
+import com.example.todoapp.util.DialogUtils
+import com.example.todoapp.util.NetworkUtil
 import com.example.todoapp.viewModels.HomeViewModel
 
 class Home : Fragment() {
@@ -21,41 +23,50 @@ class Home : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
-        viewModel.fetchTodoList()
+         viewModel.fetchTodoList()
         binding?.addTask?.setOnClickListener {
             findNavController().navigate(R.id.action_todoMain_to_newTask)
         }
-
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 activity?.finishAffinity()
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
-        viewModel.fetchTodoListStatus.observe(viewLifecycleOwner) { status ->
-            if (status == "200") {
-                viewModel.todoList.observe(requireActivity()) { todoList ->
-                    if (todoList != null) {
-
-                        todoAdapter = TodoAdapter(todoList)
-                        binding?.recyclerView?.layoutManager = LinearLayoutManager(
-                            requireContext(),
-                            LinearLayoutManager.VERTICAL,
-                            false
-                        )
-                        binding?.recyclerView?.adapter = todoAdapter
-
-                    }
-                }
-            }
-            }
+        if (NetworkUtil.isNetworkAvailable(requireContext())) {
+            viewModel.fetchTodoList()
+            binding?.progressBar?.visibility = View.VISIBLE
+        }else{
+            val message = getString(R.string.no_internet_connection)
+            DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+        }
     }
         override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
-        return binding?.root
+            val viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+
+            viewModel.fetchTodoListStatus.observe(viewLifecycleOwner) { status ->
+                if (status == "200") {
+                    viewModel.todoList.observe(requireActivity()) { todoList ->
+                        if (todoList != null) {
+
+                            todoAdapter = TodoAdapter(todoList)
+                            binding?.recyclerView?.layoutManager = LinearLayoutManager(
+                                requireContext(),
+                                LinearLayoutManager.VERTICAL,
+                                false
+                            )
+                            binding?.recyclerView?.adapter = todoAdapter
+                            binding?.progressBar?.visibility = View.GONE
+
+                        }
+                    }
+                }
+            }
+            return binding?.root
     }
     override fun onDestroyView() {
         super.onDestroyView()

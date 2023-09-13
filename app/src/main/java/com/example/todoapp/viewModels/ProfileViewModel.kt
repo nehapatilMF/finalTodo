@@ -29,7 +29,7 @@ class ProfileViewModel : ViewModel() {
             try {
                 val apiResponse: Response<LogoutResponse>? = apiInterface?.logout()
                 val response = apiResponse?.body()
-                if(apiResponse?.isSuccessful == true ){
+                if(response?.success == true ){
                     val status = response?.status.toString()
                     _logoutResult.postValue(status)
                     Constants.clearAccessToken()
@@ -49,14 +49,13 @@ class ProfileViewModel : ViewModel() {
             try {
                 val apiResponse: Response<DeleteUserResponse>? = apiInterface?.deleteUser()
                 val response = apiResponse?.body()
-                if(apiResponse?.isSuccessful == true ){
-                    val status = response?.status.toString()
+                if(response?.success == true ){
+                    val status = response.status.toString()
                     _deleteUserResult.postValue(status)
                     Constants.clearAccessToken()
-                    _msg.postValue(response?.message.toString())
+                    _msg.postValue(response.message)
 
                 } else{
-                    _msg.postValue(response?.message.toString())
                     _deleteUserResult.postValue(response?.message)
                 }
             } catch (e : Exception){
@@ -64,4 +63,5 @@ class ProfileViewModel : ViewModel() {
             }
         }
     }
+
 }

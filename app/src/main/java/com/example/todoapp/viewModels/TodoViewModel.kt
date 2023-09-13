@@ -36,10 +36,10 @@ class TodoViewModel : ViewModel() {
             try{
                 val apiResponse: Response<AddTodoResponse>? = apiInterface?.addTodo(title,description,todo_date,todo_time,status)
                 val response = apiResponse?.body()
-                if(apiResponse?.isSuccessful == true){
-                    val addTodoStatus = response?.status.toString()
+                if(response?.success == true){
+                    val addTodoStatus = response.status.toString()
                     _addTodoStatus.postValue(addTodoStatus)
-                    _todoMessage.postValue(response?.message)
+                    _todoMessage.postValue(response.message)
                 }else{
                     _addTodoStatus.value = response?.message
                 }
@@ -54,10 +54,10 @@ class TodoViewModel : ViewModel() {
             try{
                 val apiResponse: Response<DeleteTodoResponse>? = apiInterface?.deleteTodo(id)
                 val response = apiResponse?.body()
-                if(apiResponse?.isSuccessful == true){
-                    val deleteTodoStatus = response?.status.toString()
+                if(response?.success == true){
+                    val deleteTodoStatus = response.status.toString()
                     _deleteTodoStatus.postValue(deleteTodoStatus)
-                    _todoMessage.postValue(response?.message)
+                    _todoMessage.postValue(response.message)
 
                 }else{
                     _deleteTodoStatus.value = response?.message
@@ -83,10 +83,10 @@ class TodoViewModel : ViewModel() {
                     date,
                     time)
                 val response = apiResponse?.body()
-                if(apiResponse?.isSuccessful == true){
-                    val updateTodoStatus = response?.status.toString()
+                if(response?.success == true){
+                    val updateTodoStatus = response.status.toString()
                     _updateTodoStatus.postValue(updateTodoStatus)
-                    _todoMessage.postValue(response?.message)
+                    _todoMessage.postValue(response.message)
 
                 }else{
                     _updateTodoStatus.value = response?.message

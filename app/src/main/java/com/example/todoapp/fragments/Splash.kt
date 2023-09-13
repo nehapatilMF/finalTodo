@@ -22,7 +22,6 @@ import com.example.todoapp.viewModels.RefreshTokenViewModel
 class Splash : Fragment() {
     private var binding : FragmentSplashBinding? = null
 
-
      override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

@@ -1,19 +1,19 @@
 package com.example.todoapp.responses
 
 data class ProfileInfoResponse(
-    val data: PIData,
+    val data : DataModel,
     val message: String,
-    val status: Int,
+    val status: String,
     val success: Boolean
 )
 
-data class PIData(
-    val user: PIUser
+data class DataModel(
+    val user: UserModel
 )
 
-data class PIUser(
-    val id : Int,
-    val name : String,
-    val email : String,
-    val mobile : Long
+data class UserModel(
+    val name: String,
+    val email: String,
+    val mobile_no : Long,
+    val id : Int
 )

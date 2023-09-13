@@ -23,7 +23,8 @@ import com.example.todoapp.util.TimePickerUtil
 import com.example.todoapp.viewModels.TodoViewModel
 
 class EditTask : Fragment() {
-
+    private lateinit var date1 : String
+    private lateinit var time1 : String
     private var binding: FragmentEditTaskBinding? = null
     private fun getStatusInt(statusText: String): Int {
         return when (statusText) {
@@ -48,6 +49,7 @@ class EditTask : Fragment() {
         }
         binding?.toolbar?.setNavigationOnClickListener {
             customDialogForBackButton()
+
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
@@ -74,32 +76,25 @@ class EditTask : Fragment() {
             val id1 = id.toString()
             val title1 = binding?.editTextTitle?.text.toString()
             val description1 = binding?.editTextDescription?.text.toString()
-            val time1 = binding?.tvTime?.text?.toString()
-            val date1 = binding?.tvDate?.text.toString()
-            if (date1.isNotBlank() && time1?.isNotBlank() == true) {
-                val fDate = CalenderUtil.convertDateFormat(date1).toString()
-                val fTime = time1.let { it1 -> TimePickerUtil.convertTime(it1) }.toString()
-                val status1 = getStatusInt(binding?.spinnerStatus?.selectedItem.toString())
-                if (id != null ) {
-                    when {
-                        !NetworkUtil.isNetworkAvailable(requireContext()) -> {
-                            DialogUtils.showAutoDismissAlertDialog(
-                                requireContext(),
-                                getString(R.string.no_internet_connection)
-                            )
-                        }
+            val status1 = getStatusInt(binding?.spinnerStatus?.selectedItem.toString())
+            convertDateTime()
+            if (id != null) {
+                when {
+                    !NetworkUtil.isNetworkAvailable(requireContext()) -> {
+                        DialogUtils.showAutoDismissAlertDialog(
+                            requireContext(),
+                            getString(R.string.no_internet_connection)
+                        )
+                    }
 
-                        else -> {
-                            viewModel.updateTodo(id1, title1, description1, status1, fDate, fTime)
-                        }
+                    else -> {
+                        viewModel.updateTodo(id1, title1, description1, status1, date1, time1)
+                        binding?.progressBar?.visibility = View.VISIBLE
                     }
                 }
-            }else{
-
-                Toast.makeText(requireContext(), "Please enter required fields", Toast.LENGTH_SHORT).show()
-
             }
         }
+
 
 
         binding?.btnDelete?.setOnClickListener {
@@ -110,9 +105,8 @@ class EditTask : Fragment() {
                 customDialog.setCanceledOnTouchOutside(false)
                 dialogBinding.tvYes.setOnClickListener {
                     viewModel.deleteTodo(id)
+                    binding?.progressBar?.visibility = View.VISIBLE
                     goBack()
-                    Toast.makeText(requireContext(), "Todo details has been deleted Successfully", Toast.LENGTH_SHORT).show()
-
                     customDialog.dismiss()
                 }
                 dialogBinding.tvNo.setOnClickListener {
@@ -141,28 +135,32 @@ class EditTask : Fragment() {
         viewModel.deleteTodoStatus.observe(viewLifecycleOwner) { status ->
             if (status == "204") {
                 goBack()
-            } else {
+                binding?.progressBar?.visibility = View.INVISIBLE
                 viewModel.todoMessage.observe(viewLifecycleOwner) { msg ->
                     val errorMsg = msg.toString()
                     Toast.makeText(requireContext(),errorMsg, Toast.LENGTH_SHORT).show()
                 }
+            } else {
+                    val errorMsg = status.toString()
+                    Toast.makeText(requireContext(),errorMsg, Toast.LENGTH_SHORT).show()
+
             }
         }
 
         viewModel.updateTodoStatus.observe(viewLifecycleOwner) { status ->
             if (status == "200") {
+                binding?.progressBar?.visibility = View.INVISIBLE
                 viewModel.todoMessage.observe(viewLifecycleOwner) { msg ->
                     val toastMsg = msg.toString()
                         Toast.makeText(requireContext(),toastMsg, Toast.LENGTH_SHORT).show()
                                         goBack()
                 }
             } else {
-                viewModel.todoMessage.observe(viewLifecycleOwner) { msg ->
-                    val errorMsg = msg.toString().toString()
+                    val errorMsg = status.toString()
                     Toast.makeText(requireContext(),errorMsg, Toast.LENGTH_SHORT).show()
                 }
             }
-        }
+
 
 
 
@@ -193,7 +191,21 @@ class EditTask : Fragment() {
         }
         customDialog.show()
     }
+    private fun convertDateTime(){
+        val date = binding?.tvDate?.text.toString()
 
+        date1 = if(date.isNotBlank()){
+            CalenderUtil.convertDateFormat(date)
+        } else{
+            date
+        }
+        val time = binding?.tvTime?.text.toString()
+        time1 = if(time.isNotBlank()){
+            time.let { it1 -> TimePickerUtil.convertTime(it1) }.toString()
+        }else{
+            time
+        }
+    }
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null

@@ -22,6 +22,8 @@ import com.example.todoapp.viewModels.TodoViewModel
 
 class NewTask : Fragment() {
     private var binding: FragmentNewTaskBinding? = null
+    private lateinit var date1 : String
+    private lateinit var time1 : String
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -67,54 +69,36 @@ class NewTask : Fragment() {
         binding?.btnSave?.setOnClickListener {
             val title = binding?.editTextTitle?.text.toString()
             val description = binding?.editTextDescription?.text.toString()
-            val date = binding?.tvDate?.text.toString()
-            val time = binding?.tvTime?.text.toString()
-            if (date.isNotBlank() && time.isNotEmpty()) {
-                val date1 = CalenderUtil.convertDateFormat(date)
-                val time1 = TimePickerUtil.convertTime(time)
-            val status = 0
-            when {
-                !NetworkUtil.isNetworkAvailable(requireContext()) -> {
-                    DialogUtils.showAutoDismissAlertDialog(
-                        requireContext(),
-                        getString(R.string.no_internet_connection)
-                    )
+            convertDateTime()
+                val status = 0
+                when {
+                    !NetworkUtil.isNetworkAvailable(requireContext()) -> {
+                        DialogUtils.showAutoDismissAlertDialog(
+                            requireContext(),
+                            getString(R.string.no_internet_connection)
+                        )
+                    }
+
+                    else ->
+                    {viewModel.addTodo(title, description, date1, time1, status)
+                        binding?.progressBar?.visibility = View.VISIBLE}
                 }
-                else ->
-                    viewModel.addTodo(title, description, date1, time1, status)
             }
-        }else{
-            val message = "Please enter required fields"
-                Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
-        }
-    }
+
         viewModel.addTodoStatus.observe(viewLifecycleOwner){ status ->
-            when (status) {
-                "201" -> {
-                    goBackToTodoMain()
-viewModel.todoMessage.observe(viewLifecycleOwner){ msg ->
-    val tMsg = msg.toString()
-    Toast.makeText(requireContext(),tMsg, Toast.LENGTH_SHORT).show()
-
-}
+            if(status == "201"){
+                binding?.progressBar?.visibility = View.INVISIBLE
+                goBackToTodoMain()
+                viewModel.todoMessage.observe(viewLifecycleOwner){ msg ->
+                    val tMsg = msg.toString()
+                    Toast.makeText(requireContext(),tMsg, Toast.LENGTH_SHORT).show()
                 }
-                "422" -> {
-                    viewModel.todoMessage.observe(viewLifecycleOwner){ msg ->
-                        val errorMsg = msg.toString()
-                        Toast.makeText(requireContext(),errorMsg, Toast.LENGTH_SHORT).show()
-
-                    }
-                }
-                else -> {
-                    viewModel.todoMessage.observe(viewLifecycleOwner) { msg ->
-                        val errorMsg = msg.toString()
-                        Toast.makeText(requireContext(),errorMsg, Toast.LENGTH_SHORT).show()
-
-                    }
-                }
+            }else{
+                val tMsg = status.toString()
+                Toast.makeText(requireContext(),tMsg, Toast.LENGTH_SHORT).show()
             }
-        }
 
+        }
 
         return binding?.root
     }
@@ -136,6 +120,20 @@ viewModel.todoMessage.observe(viewLifecycleOwner){ msg ->
             customDialog.dismiss()
         }
         customDialog.show()
+    }
+    private fun convertDateTime(){
+        val date = binding?.tvDate?.text.toString()
+        date1 = if(date.isNotBlank()){
+            CalenderUtil.convertDateFormat(date)
+        } else{
+            date
+        }
+        val time = binding?.tvTime?.text.toString()
+        time1 = if(time.isNotBlank()){
+            TimePickerUtil.convertTime(time)
+        }else{
+            time
+        }
     }
     override fun onDestroyView() {
         super.onDestroyView()

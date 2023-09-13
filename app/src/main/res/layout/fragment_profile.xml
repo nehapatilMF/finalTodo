@@ -4,38 +4,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/start_margin"
+    android:layout_marginTop="@dimen/start_margin"
+    android:layout_marginEnd="@dimen/start_margin"
     tools:context=".fragments.Profile">
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?android:attr/actionBarSize"
-        android:layout_marginTop="@dimen/bottom_margin"
-        app:layout_constraintBottom_toTopOf="@+id/personalInformation"
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
-
-    <TextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/personalInformation"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:gravity="center_vertical"
-        android:paddingStart="20dp"
         android:text="@string/personal_information"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/ChangePassword"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        tools:ignore="RtlSymmetry" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/ChangePassword"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:gravity="center_vertical"
-        android:paddingStart="20dp"
         android:text="@string/change_password"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -43,14 +42,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/personalInformation"
-        tools:ignore="RtlSymmetry" />
+         />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/Logout"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:gravity="center_vertical"
-        android:paddingStart="20dp"
         android:text="@string/logout"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -58,15 +56,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ChangePassword"
-        tools:ignore="RtlSymmetry" />
+         />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/deleteAccount"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_marginBottom="400dp"
         android:gravity="center_vertical"
-        android:paddingStart="20dp"
         android:text="@string/delete_account"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -74,7 +70,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/Logout"
-        tools:ignore="RtlSymmetry" />
+         />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

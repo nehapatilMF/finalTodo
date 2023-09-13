@@ -73,36 +73,24 @@ class NewPassword : Fragment() {
             val password  = binding?.etNewPassword?.text.toString()
             val confirmPassword = binding?.etConfirmPassword?.text.toString()
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
-                if(password.isNotEmpty() && ValidPatterns.isValidPassword(password)){
-                    if(confirmPassword.isNotEmpty() && ValidPatterns.isValidPassword(confirmPassword)){
                         val result = password.compareTo(confirmPassword)
                         if(result == 0 ){
-
                             val encodedPassword = Base64.encodeToBase64(password)
-
                             viewModel.resetPassword(newOtp,email,encodedPassword)
+                            binding?.progressBar?.visibility = View.VISIBLE
                         }else{
                             binding?.etNewPassword?.error = getString(R.string.no_match)
-                        }
-                    } else {
-                        val message =  getString(R.string.required_fields_are_empty)
-                        Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
-                    }
-                }else{
-                    val message =  getString(R.string.required_fields_are_empty)
-                    Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
-                }
+                       }
             }else{
-
                 val message = getString(R.string.no_internet_connection)
                 DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
             }
         }
-      //  val newPassword = binding?.etNewPassword?.text.toString()
-     //   val confirmNewPassword = binding?.etConfirmPassword?.text.toString()
+
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
         viewModel.resetPasswordResult.observe(viewLifecycleOwner){ status ->
             if(status == "200"){
+                binding?.progressBar?.visibility = View.INVISIBLE
                 findNavController().navigate(R.id.navigate_from_newPassword_to_login)
             }else{
                 val message = status.toString()
@@ -111,6 +99,7 @@ class NewPassword : Fragment() {
         }
         return binding?.root
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         binding = null

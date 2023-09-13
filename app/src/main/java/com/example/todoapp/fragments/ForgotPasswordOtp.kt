@@ -56,6 +56,7 @@ class ForgotPasswordOtp : Fragment() {
 
         viewModel.otpResult.observe(viewLifecycleOwner) { status ->
             if (status == "200") {
+                binding?.progressBar?.visibility = View.INVISIBLE
                 findNavController().navigate(R.id.navigate_to_newPassword)
                 viewModel.msg.observe(viewLifecycleOwner){msg ->
                     val message = msg.toString()
@@ -69,6 +70,7 @@ class ForgotPasswordOtp : Fragment() {
         }
         viewModel.resendOtpResult.observe(viewLifecycleOwner) { status ->
             if (status == "200") {
+                binding?.progressBar?.visibility = View.INVISIBLE
                 viewModel.newOtpResult.observe(viewLifecycleOwner) { newOtp ->
                 binding?.jsonOtp?.text = newOtp
                 }
@@ -90,6 +92,7 @@ class ForgotPasswordOtp : Fragment() {
             val otp = binding?.etOtp?.text.toString()
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
                     viewModel.forgotPasswordVerifyOtp(email, otp)
+                binding?.progressBar?.visibility = View.VISIBLE
             } else {
                 val message = getString(R.string.no_internet_connection)
                 DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
@@ -103,6 +106,7 @@ class ForgotPasswordOtp : Fragment() {
                 binding?.resendCode?.visibility = View.INVISIBLE
                 startOtpTimer()
                 viewModel.forgotPasswordResendOtp(email)
+                binding?.progressBar?.visibility = View.VISIBLE
             } else {
 
                 val message = getString(R.string.no_internet_connection)

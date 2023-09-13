@@ -23,8 +23,8 @@ class NewPasswordViewModel : ViewModel() {
                 val apiResponse = apiInterface?.resetPassword(otp,email,password)
                 val response = apiResponse?.body()
 
-                if( apiResponse?.isSuccessful == true){
-                    val status = response?.status.toString()
+                if( response?.success == true){
+                    val status = response.status.toString()
                     _resetPasswordResult.postValue(status)
                 }else{
                    _resetPasswordResult.postValue(response?.message)

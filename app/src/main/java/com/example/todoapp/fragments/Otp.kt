@@ -64,6 +64,7 @@ class Otp : Fragment() {
                 !NetworkUtil.isNetworkAvailable(requireContext()) -> DialogUtils.showAutoDismissAlertDialog(requireContext(), getString(R.string.no_internet_connection))
                 else -> {
                         viewModel.signupVerifyOtp(email, otp)
+                    binding?.progressBar?.visibility = View.VISIBLE
                     }
                 }
             }
@@ -75,6 +76,7 @@ class Otp : Fragment() {
                 binding?.resendCode?.visibility = View.INVISIBLE
                 startOtpTimer()
                 viewModel.resendUserOtp(email)
+                binding?.progressBar?.visibility = View.VISIBLE
 
             }else{
                 val message = getString(R.string.no_internet_connection)
@@ -84,6 +86,7 @@ class Otp : Fragment() {
 
         viewModel.otpResult.observe(viewLifecycleOwner){ status ->
             if(status == "200"){
+                binding?.progressBar?.visibility = View.INVISIBLE
                 findNavController().navigate(R.id.navigate_from_otp_to_todoMain)
             }else{
                 val message = status.toString()
@@ -93,6 +96,7 @@ class Otp : Fragment() {
         }
         viewModel.resendOtpResult.observe(viewLifecycleOwner){ status ->
             if(status == "200"){
+                binding?.progressBar?.visibility = View.INVISIBLE
                 viewModel.newOtpResult.observe(viewLifecycleOwner){ otp ->
                     val newOtp = otp.toString()
                     binding?.jsonOtp?.text = newOtp

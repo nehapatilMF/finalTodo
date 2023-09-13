@@ -139,8 +139,8 @@ interface ApiInterface {
     @FormUrlEncoded
     @POST("profile-update")
     suspend fun updateProfile(
-        @Field("name") name : String,
-        @Field("mobile") mobile : Long
+        @Field("name") name: String,
+        @Field("mobile") mobile: String
     ):Response<UpdateProfileResponse>
 
     ////Profile changes Password

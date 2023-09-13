@@ -5,8 +5,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/start_margin"
+    android:layout_marginEnd="@dimen/start_margin"
     tools:context=".fragments.PersonalInformation">
-
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -32,9 +43,10 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/email"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        app:layout_constraintVertical_bias="0.525" />
+        app:layout_constraintVertical_bias="0.6" />
 
-    <androidx.appcompat.widget.AppCompatEditText
+
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvName"
         android:layout_width="260dp"
         android:layout_height="wrap_content"
@@ -45,26 +57,26 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/tvEmail"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/tvEmail"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/email"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/start_margin"
-        android:layout_marginTop="@dimen/bottom_margin"
-        android:layout_marginBottom="@dimen/bottom_margin"
         android:text="@string/email11"
         android:textSize="@dimen/tv_text_size"
         android:textStyle="bold"
         app:layout_constraintBaseline_toBaselineOf="@+id/tvEmail"
         app:layout_constraintEnd_toEndOf="@+id/mobile"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/mobile" />
 
-    <androidx.appcompat.widget.AppCompatEditText
+
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvEmail"
         android:layout_width="260dp"
         android:layout_height="wrap_content"
@@ -73,20 +85,18 @@
         android:layout_marginBottom="@dimen/bottom_margin"
         android:background="@drawable/edittext_no_underline"
         android:inputType="text"
-
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/tvMobile"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/tvMobile"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/name"
         app:layout_constraintTop_toBottomOf="@+id/tvName"
         tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck" />
-
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/mobile"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/start_margin"
         android:text="@string/mobile"
         android:textSize="@dimen/tv_text_size"
         android:textStyle="bold"
@@ -94,18 +104,16 @@
         app:layout_constraintEnd_toStartOf="@+id/tvMobile"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatEditText
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvMobile"
         android:layout_width="260dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/bottom_margin"
         android:layout_marginEnd="@dimen/start_margin"
         android:layout_marginBottom="@dimen/bottom_margin"
         android:background="@drawable/edittext_no_underline"
         android:inputType="phone"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/mobile"
         app:layout_constraintTop_toBottomOf="@+id/tvEmail"

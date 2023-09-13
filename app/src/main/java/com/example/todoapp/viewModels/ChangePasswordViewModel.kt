@@ -20,15 +20,14 @@ class ChangePasswordViewModel: ViewModel() {
             try{
                 val apiResponse = apiInterface?.changePassword(old_password,password)
                 val response = apiResponse?.body()
-                if( apiResponse?.isSuccessful == true){
-                    val status = response?.success.toString()
+                if( response?.success == true){
+                    val status = response.status
                     _result.postValue(status)
-                    _msg.postValue(response?.message)
+                    _msg.postValue(response.message)
 
                 }else{
                     _result.postValue(response?.message)
-                    _msg.postValue(response?.message)
-                }
+                   }
             } catch (e: Exception) {
                 _result.postValue (e.message)
             }

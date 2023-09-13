@@ -8,7 +8,9 @@ import com.example.todoapp.client.RetrofitClient
 import com.example.todoapp.interfaces.ApiInterface
 import com.example.todoapp.responses.GetTodoListResponse
 import com.example.todoapp.responses.TodoItem
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Response
 class HomeViewModel : ViewModel() {
     private val apiInterface = RetrofitClient.getInstance()?.create(ApiInterface::class.java)
@@ -19,20 +21,21 @@ class HomeViewModel : ViewModel() {
     private val _fetchTodoListStatus = MutableLiveData<String>()
     val fetchTodoListStatus: LiveData<String> get() = _fetchTodoListStatus
 
-
     fun fetchTodoList() {
-        viewModelScope.launch {
+        viewModelScope.launch{
             try {
                 val apiResponse: Response<GetTodoListResponse>? = apiInterface?.getTodoList()
                 val response = apiResponse?.body()
 
-                if (apiResponse?.isSuccessful == true) {
-                    val status = response?.status.toString()
-                    _fetchTodoListStatus.postValue(status)
-                    _todoList.postValue(response?.data?.list)
-
+                if (response?.success == true) {
+                    val status = response.status.toString()
+                    withContext(Dispatchers.Main) {
+                        _fetchTodoListStatus.value = status
+                        _todoList.postValue(response.data.list)
+                    }
                 } else {
                     _fetchTodoListStatus.value = response?.message
+
                 }
             } catch (e: Exception) {
                 _fetchTodoListStatus.value = e.message
@@ -41,4 +44,4 @@ class HomeViewModel : ViewModel() {
     }
 
 
-  }
+}

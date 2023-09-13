@@ -26,13 +26,10 @@ class Profile : Fragment() {
         super.onViewCreated(view, savedInstanceState)
        val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
        // actionBar?.setDisplayHomeAsUpEnabled(true)
-        actionBar?.title = "Profile"
-        binding?.toolbar?.setNavigationOnClickListener{
-            findNavController().navigate(R.id.navigate_to_todoMain)
-        }
+       // actionBar?.title = "Profile"
 
         binding?.personalInformation?.setOnClickListener {
-            //findNavController().navigate(R.id.navigate_to_personalInformation)
+            findNavController().navigate(R.id.navigate_to_personalInformation)
         }
         binding?.ChangePassword?.setOnClickListener {
            findNavController().navigate(R.id.navigate_to_changePassword)
@@ -53,7 +50,7 @@ class Profile : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentProfileBinding.inflate(layoutInflater, container, false)
-        (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
+        //(requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
 
         val viewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
 
@@ -65,6 +62,7 @@ class Profile : Fragment() {
                 customDialog.setCanceledOnTouchOutside(false)
                 dialogBinding.tvYes.setOnClickListener {
                     viewModel.logout()
+                    binding?.progressBar?.visibility = View.VISIBLE
                     customDialog.dismiss()
                 }
                 dialogBinding.tvNo.setOnClickListener {
@@ -81,6 +79,7 @@ class Profile : Fragment() {
                 customDialog.setCanceledOnTouchOutside(false)
                 dialogBinding.tvYes.setOnClickListener {
                     viewModel.deleteUser()
+                    binding?.progressBar?.visibility = View.VISIBLE
                     customDialog.dismiss()
                 }
                 dialogBinding.tvNo.setOnClickListener {
@@ -91,15 +90,14 @@ class Profile : Fragment() {
         }
         viewModel.logoutResult.observe(viewLifecycleOwner){ status ->
             if(status == "200"){
+                binding?.progressBar?.visibility = View.INVISIBLE
                 viewModel.msg.observe(viewLifecycleOwner){ msg ->
                     val tMsg = msg.toString()
                     Toast.makeText(requireContext(),tMsg,Toast.LENGTH_SHORT).show()
-
                 }
               findNavController().navigate(R.id.navigate_to_intro)
                 SessionManager(requireContext()).clearTokens()
                 Constants.clearAccessToken()
-
             }else{
                 val message = status.toString()
                 Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
@@ -108,6 +106,7 @@ class Profile : Fragment() {
 
         viewModel.deleteUserResult.observe(viewLifecycleOwner){ status ->
             if(status == "200"){
+                binding?.progressBar?.visibility = View.INVISIBLE
                 findNavController().navigate(R.id.navigate_to_intro)
                 viewModel.msg.observe(viewLifecycleOwner){ msg ->
                     val tMsg = msg.toString()
@@ -115,7 +114,7 @@ class Profile : Fragment() {
                 }
 
             }else{
-                val message = "user not deleted."
+                val message = status.toString()
                 Toast.makeText(requireContext(),message,Toast.LENGTH_SHORT).show()
 
             }

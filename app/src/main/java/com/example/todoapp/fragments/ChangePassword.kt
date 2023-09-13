@@ -12,8 +12,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.todoapp.Constants
 import com.example.todoapp.R
 import com.example.todoapp.base64.Base64
+import com.example.todoapp.client.SessionManager
 import com.example.todoapp.databinding.FragmentChangePasswordBinding
 import com.example.todoapp.util.DialogUtils
 import com.example.todoapp.util.NetworkUtil
@@ -46,42 +48,39 @@ class ChangePassword : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentChangePasswordBinding.inflate(layoutInflater,container,false)
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
-
-
         setupTextChangeListeners()
 
         val viewModel = ViewModelProvider(this)[ChangePasswordViewModel::class.java]
-      binding?.btnNext?.setOnClickListener {
-          val oldPassword = binding?.etOldPassword?.text.toString()
-          val newPassword = binding?.etNewPassword?.text.toString()
-          val confirmPassword = binding?.etConfirmPassword?.text.toString()
-          val encodedOldPassword = Base64.encodeToBase64(oldPassword)
-          val encodedNewPassword = Base64.encodeToBase64(newPassword)
-          when
-          {
-              !NetworkUtil.isNetworkAvailable(requireContext()) -> showErrorDialog(getString(R.string.no_internet_connection))
-              oldPassword.isEmpty() -> Toast.makeText(requireContext(),"empty old password.",Toast.LENGTH_SHORT).show()
-              newPassword.isBlank() -> Toast.makeText(requireContext(),"empty old password.",Toast.LENGTH_SHORT).show()
-              newPassword != confirmPassword -> binding?.etNewPassword?.error = "Password don't match"
-              else ->  viewModel.changePassword(encodedOldPassword,encodedNewPassword)
-          }
-            }
+        binding?.btnNext?.setOnClickListener {
+            val oldPassword = binding?.etOldPassword?.text.toString()
+            val newPassword = binding?.etNewPassword?.text.toString()
+            val confirmPassword = binding?.etConfirmPassword?.text.toString()
+            val encodedOldPassword = Base64.encodeToBase64(oldPassword)
+            val encodedNewPassword = Base64.encodeToBase64(newPassword)
+            when            {
+                !NetworkUtil.isNetworkAvailable(requireContext()) -> showErrorDialog(getString(R.string.no_internet_connection))
+                newPassword != confirmPassword -> binding?.etNewPassword?.error = "Password don't match"
+                else ->  {viewModel.changePassword(encodedOldPassword,encodedNewPassword)
+                binding?.progressBar?.visibility = View.VISIBLE}
 
-        viewModel.result.observe(viewLifecycleOwner){ status ->
-             if(status == "true"){
-                           findNavController().navigate(R.id.action_changePassword_to_login)
-                 viewModel.msg.observe(viewLifecycleOwner) {msg->
-                     val message =msg.toString()
-                     Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-                 }
-            }else{
-                viewModel.msg.observe(viewLifecycleOwner) {msg->
-                    val message =msg.toString()
-                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
-                }
             }
         }
 
+        viewModel.result.observe(viewLifecycleOwner){ status ->
+            if(status == "200"){
+                findNavController().navigate(R.id.action_changePassword_to_login)
+                viewModel.msg.observe(viewLifecycleOwner) {msg->
+                    val message = msg.toString()
+                    Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                    SessionManager(requireContext()).clearTokens()
+                    Constants.clearAccessToken()
+                    binding?.progressBar?.visibility = View.INVISIBLE
+                }
+            }else{
+                val message = status.toString()
+                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+            }
+        }
         return binding?.root
     }
     private fun setupTextChangeListeners() {
@@ -120,7 +119,6 @@ class ChangePassword : Fragment() {
             }
         })
     }
-
     private fun showErrorDialog(message: String) {
         DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
     }

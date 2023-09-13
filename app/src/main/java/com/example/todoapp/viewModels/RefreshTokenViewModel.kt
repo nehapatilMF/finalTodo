@@ -32,7 +32,7 @@ class RefreshTokenViewModel : ViewModel() {
     @SuppressLint("SuspiciousIndentation")
 
     fun refreshToken(refreshToken: String){
-        viewModelScope.launch {
+        viewModelScope.launch{
 
             try {
                 val loginResponse: Response<RefreshTokenResponse>? = apiInterface?.refreshToken(refreshToken)

@@ -24,7 +24,7 @@
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_todo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="300dp"
         android:src="@drawable/todo"
         app:layout_constraintBottom_toTopOf="@+id/txt1"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,7 +33,7 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txt1"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/txt1"
@@ -46,7 +46,7 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/txt2"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="50dp"
         android:gravity="center"

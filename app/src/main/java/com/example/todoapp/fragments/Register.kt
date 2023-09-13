@@ -62,12 +62,14 @@ class Register : Fragment() {
                 else -> {
                     val encodedPassword = Base64.encodeToBase64(password)
                     viewModel.signup(userName, mobile, email, encodedPassword)
+                    binding?.progressBar?.visibility = View.VISIBLE
                 }
             }
         }
 
         viewModel.signupResult.observe(viewLifecycleOwner){ status ->
             if(status == "200") {
+                binding?.progressBar?.visibility = View.INVISIBLE
                 findNavController().navigate(R.id.navigate_from_register_to_otp )
                 viewModel.msg.observe(viewLifecycleOwner){msg ->
                     val message = msg.toString()

@@ -46,6 +46,7 @@ class ForgotPassword : Fragment() {
             Constants.userEmail = email
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
                     viewModel.forgotPasswordRequestOtp(email)
+                binding?.progressBar?.visibility = View.VISIBLE
             }    else {
                 val message = getString(R.string.no_internet_connection)
                 DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
@@ -79,6 +80,7 @@ class ForgotPassword : Fragment() {
 
         viewModel.forgotPasswordResult.observe(viewLifecycleOwner){ status ->
             if(status == "200") {
+                binding?.progressBar?.visibility = View.INVISIBLE
                 findNavController().navigate(R.id.navigate_to_forgotPasswordOtp)
                 viewModel.msg.observe(viewLifecycleOwner){msg ->
                     val message = msg.toString()
