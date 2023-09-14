@@ -12,8 +12,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.Constants
 import com.example.todoapp.R
+import com.example.todoapp.client.SessionManager
 import com.example.todoapp.databinding.FragmentPersonalInformationBinding
+import com.example.todoapp.util.DialogUtils
 import com.example.todoapp.viewModels.PersonalInformationViewModel
+import com.example.todoapp.viewModels.RefreshTokenViewModel
 
 class PersonalInformation : Fragment() {
     private var binding: FragmentPersonalInformationBinding? = null
@@ -32,11 +35,6 @@ class PersonalInformation : Fragment() {
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
-
-
-
-
-
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,6 +44,8 @@ class PersonalInformation : Fragment() {
         binding = FragmentPersonalInformationBinding.inflate(layoutInflater,container,false)
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
         val viewModel = ViewModelProvider(this)[PersonalInformationViewModel::class.java]
+        val rViewModel = ViewModelProvider(this)[RefreshTokenViewModel::class.java]
+        val sessionManager = SessionManager(requireContext())
         viewModel.get()
         binding?.progressBar?.visibility = View.VISIBLE
         viewModel.getResult.observe(viewLifecycleOwner){status ->
@@ -63,13 +63,36 @@ class PersonalInformation : Fragment() {
                     Constants.mobile = mobile.toString()
                     binding?.tvMobile?.text = mobile.toString()
                 }
+            }else if(status.toString() == "Unauthenticated.") {
+                 val refreshToken1 = SessionManager(requireContext()).getRefreshToken()!!
 
+                    rViewModel.refreshToken(refreshToken1)
 
-            }else{
-                val message = status.toString()
-                Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
+                    rViewModel.result.observe(viewLifecycleOwner) { status1 ->
+                        if (status1 == "200") {
+                            sessionManager.clearTokens()
+                            Constants.clearAccessToken()
+                            rViewModel.getAuthTokens().observe(viewLifecycleOwner) { authTokens ->
+                                val accessToken = authTokens.accessToken
+                                Constants.accessToken = accessToken
+                                val refreshToken = authTokens.refreshToken
+                                Constants.refreshToken = refreshToken
+                                sessionManager.saveTokens(accessToken, refreshToken)
+                            }
+                        }else{
+                            DialogUtils.showAutoDismissAlertDialog(requireContext(),
+                                getString(R.string.your_session_has_expired))
+                            sessionManager.clearTokens()
+                            Constants.clearAccessToken()
+                            Constants.clearRefreshToken()
+                            findNavController().navigate(R.id.navigate_to_intro)
+                        }
+                    }
+                }else {
+                    Toast.makeText(requireContext(),status.toString(), Toast.LENGTH_SHORT).show()
+                }
             }
-        }
+
         return binding?.root
     }
     override fun onDestroyView() {
@@ -77,3 +100,5 @@ class PersonalInformation : Fragment() {
         binding = null
     }
 }
+
+

@@ -6,6 +6,9 @@ object Constants {
     fun clearAccessToken() {
         accessToken = null
     }
+    fun clearRefreshToken() {
+       refreshToken = null
+    }
     var name : String? = null
     var mobile : String? = null
     var emailP :String? = null

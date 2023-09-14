@@ -64,15 +64,15 @@ class Splash : Fragment() {
           viewModel.refreshToken(refreshToken)
         val sessionManager = SessionManager(requireContext())
         viewModel.result.observe(viewLifecycleOwner){ status ->
-            if(status == "true"){
+            if(status == "200"){
                 sessionManager.clearTokens()
                 Constants.clearAccessToken()
                 viewModel.getAuthTokens().observe(viewLifecycleOwner){ authTokens ->
                     val accessToken = authTokens.accessToken
                     Constants.accessToken = accessToken
-                    val refreshToken = authTokens.refreshToken
-                    Constants.refreshToken = refreshToken
-                    sessionManager.saveTokens(accessToken,refreshToken)
+                    val refreshToken2 = authTokens.refreshToken
+                    Constants.refreshToken = refreshToken2
+                    sessionManager.saveTokens(accessToken,refreshToken2)
                 }
             }
             else{

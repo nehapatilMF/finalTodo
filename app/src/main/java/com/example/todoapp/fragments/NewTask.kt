@@ -11,13 +11,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.example.todoapp.Constants
 import com.example.todoapp.R
+import com.example.todoapp.client.SessionManager
 import com.example.todoapp.databinding.DialogCustomBackConfirmationBinding
 import com.example.todoapp.databinding.FragmentNewTaskBinding
 import com.example.todoapp.util.CalenderUtil
 import com.example.todoapp.util.DialogUtils
 import com.example.todoapp.util.NetworkUtil
 import com.example.todoapp.util.TimePickerUtil
+import com.example.todoapp.viewModels.RefreshTokenViewModel
 import com.example.todoapp.viewModels.TodoViewModel
 
 class NewTask : Fragment() {
@@ -65,6 +68,8 @@ class NewTask : Fragment() {
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
 
         val viewModel = ViewModelProvider(this)[TodoViewModel::class.java]
+        val rViewModel = ViewModelProvider(this)[RefreshTokenViewModel::class.java]
+        val sessionManager = SessionManager(requireContext())
 
         binding?.btnSave?.setOnClickListener {
             val title = binding?.editTextTitle?.text.toString()
@@ -93,9 +98,33 @@ class NewTask : Fragment() {
                     val tMsg = msg.toString()
                     Toast.makeText(requireContext(),tMsg, Toast.LENGTH_SHORT).show()
                 }
-            }else{
-                val tMsg = status.toString()
-                Toast.makeText(requireContext(),tMsg, Toast.LENGTH_SHORT).show()
+            }else if(status.toString() == "Unauthenticated.") {
+                val refreshToken1 = SessionManager(requireContext()).getRefreshToken()!!
+
+                    rViewModel.refreshToken(refreshToken1)
+
+                rViewModel.result.observe(viewLifecycleOwner) { status1 ->
+                    if (status1 == "200") {
+                        sessionManager.clearTokens()
+                        Constants.clearAccessToken()
+                        rViewModel.getAuthTokens().observe(viewLifecycleOwner) { authTokens ->
+                            val accessToken = authTokens.accessToken
+                            Constants.accessToken = accessToken
+                            val refreshToken = authTokens.refreshToken
+                            Constants.refreshToken = refreshToken
+                            sessionManager.saveTokens(accessToken, refreshToken)
+                        }
+                    } else{
+                        DialogUtils.showAutoDismissAlertDialog(requireContext(),
+                            getString(R.string.your_session_has_expired))
+                        sessionManager.clearTokens()
+                        Constants.clearAccessToken()
+                        Constants.clearRefreshToken()
+                        findNavController().navigate(R.id.navigate_to_intro)
+                    }
+                }
+            }else {
+                Toast.makeText(requireContext(),status.toString(), Toast.LENGTH_SHORT).show()
             }
 
         }

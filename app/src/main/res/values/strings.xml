@@ -123,4 +123,5 @@
     <string name="date5">Date :</string>
     <string name="status3">Status</string>
     <string name="description5">Description :</string>
+    <string name="your_session_has_expired">Your session has expired.\nPlease login.</string>
 </resources>

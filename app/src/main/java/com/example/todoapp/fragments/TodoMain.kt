@@ -28,7 +28,7 @@ class TodoMain : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
             binding = FragmentTodoMainBinding.inflate(layoutInflater, container, false)
-            binding?.bottomNav?.menu?.findItem(R.id.home)?.isChecked = true
+           // binding?.bottomNav?.menu?.findItem(R.id.home)?.isChecked = true
             fragmentManager = activity?.supportFragmentManager
             loadFragment(Home())
 

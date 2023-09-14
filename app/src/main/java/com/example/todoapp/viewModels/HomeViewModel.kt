@@ -27,11 +27,11 @@ class HomeViewModel : ViewModel() {
                 val apiResponse: Response<GetTodoListResponse>? = apiInterface?.getTodoList()
                 val response = apiResponse?.body()
 
-                if (response?.success == true) {
-                    val status = response.status.toString()
+                if (apiResponse?.isSuccessful == true) {
+                    val status = response?.status.toString()
                     withContext(Dispatchers.Main) {
                         _fetchTodoListStatus.value = status
-                        _todoList.postValue(response.data.list)
+                        _todoList.postValue(response?.data?.list)
                     }
                 } else {
                     _fetchTodoListStatus.value = response?.message

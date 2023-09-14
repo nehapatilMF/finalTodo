@@ -42,10 +42,8 @@ class PersonalInformationViewModel : ViewModel(){
                      _name.value = response.data.user.name
                      _mobile.value = response.data.user.mobile_no.toString()
                      _email.value = response.data.user.email
-
-
                 } else{
-                    _getResult.value = response?.message
+                        _getResult.value = response?.message
                 }
             } catch (e : Exception){
                 _getResult.value = e.message

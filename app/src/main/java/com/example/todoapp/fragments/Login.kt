@@ -60,16 +60,9 @@ class Login : Fragment() {
         val viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
 
         val sessionManager = SessionManager(requireContext())
-        Constants.accessToken = sessionManager.getAccessToken()
-        Constants.refreshToken = sessionManager.getRefreshToken()
+         Constants.accessToken = sessionManager.getAccessToken()
+         Constants.refreshToken = sessionManager.getRefreshToken()
 
-        viewModel.getAuthTokens().observe(viewLifecycleOwner){ authTokens ->
-            val accessToken = authTokens.accessToken
-            Constants.accessToken = accessToken
-            val refreshToken = authTokens.refreshToken
-            Constants.refreshToken = refreshToken
-        sessionManager.saveTokens(accessToken,refreshToken)
-                   }
         binding?.buttonLogin?.setOnClickListener {
             val email = binding?.etEmail?.text.toString()
             val password = binding?.etPassword?.text.toString()
@@ -81,6 +74,14 @@ class Login : Fragment() {
                     binding?.progressBar?.visibility = View.VISIBLE
                 }
             }
+        }
+
+        viewModel.getAuthTokens().observe(viewLifecycleOwner){ authTokens ->
+            val accessToken = authTokens.accessToken
+            Constants.accessToken = accessToken
+            val refreshToken = authTokens.refreshToken
+            Constants.refreshToken = refreshToken
+            sessionManager.saveTokens(accessToken,refreshToken)
         }
         binding?.signup?.setOnClickListener {
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
@@ -98,6 +99,7 @@ class Login : Fragment() {
             if (status == "200") {
                 findNavController().navigate(R.id.navigate_from_login_to_todoMain)
                 binding?.progressBar?.visibility = View.VISIBLE
+
             } else {
                 val message = status.toString()
                 Toast.makeText(requireContext(),message,Toast.LENGTH_SHORT).show()

@@ -31,14 +31,14 @@ class RefreshTokenViewModel : ViewModel() {
 
     @SuppressLint("SuspiciousIndentation")
 
-    fun refreshToken(refreshToken: String){
+    fun refreshToken(refresh_token: String){
         viewModelScope.launch{
 
             try {
-                val loginResponse: Response<RefreshTokenResponse>? = apiInterface?.refreshToken(refreshToken)
+                val loginResponse: Response<RefreshTokenResponse>? = apiInterface?.refreshToken(refresh_token)
                 val response = loginResponse?.body()
                 if(response?.success == true){
-                    val status = response.status.toString()
+                    val status = response.status
                     _result.postValue(status)
                     val accessToken = response.data.token.access_token
                     val refreshToken = response.data.token.refresh_token

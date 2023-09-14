@@ -4,17 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.todoapp.Constants
 import com.example.todoapp.R
 import com.example.todoapp.adapter.TodoAdapter
+import com.example.todoapp.client.SessionManager
 import com.example.todoapp.databinding.FragmentHomeBinding
 import com.example.todoapp.util.DialogUtils
 import com.example.todoapp.util.NetworkUtil
 import com.example.todoapp.viewModels.HomeViewModel
+import com.example.todoapp.viewModels.RefreshTokenViewModel
 
 class Home : Fragment() {
     private var binding : FragmentHomeBinding? = null
@@ -23,7 +27,7 @@ class Home : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
-         viewModel.fetchTodoList()
+        viewModel.fetchTodoList()
         binding?.addTask?.setOnClickListener {
             findNavController().navigate(R.id.action_todoMain_to_newTask)
         }
@@ -41,18 +45,18 @@ class Home : Fragment() {
             DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
         }
     }
-        override fun onCreateView(
+    override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentHomeBinding.inflate(layoutInflater, container, false)
-            val viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
-
-            viewModel.fetchTodoListStatus.observe(viewLifecycleOwner) { status ->
-                if (status == "200") {
+        val viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+        val sessionManager = SessionManager(requireContext())
+        viewModel.fetchTodoListStatus.observe(viewLifecycleOwner) { status ->
+            when (status) {
+                "200" -> {
                     viewModel.todoList.observe(requireActivity()) { todoList ->
                         if (todoList != null) {
-
                             todoAdapter = TodoAdapter(todoList)
                             binding?.recyclerView?.layoutManager = LinearLayoutManager(
                                 requireContext(),
@@ -61,12 +65,46 @@ class Home : Fragment() {
                             )
                             binding?.recyclerView?.adapter = todoAdapter
                             binding?.progressBar?.visibility = View.GONE
-
+                        }
+                    }
+                }
+                "404" -> {
+                    binding?.progressBar?.visibility = View.GONE
+                }
+                "401" -> {
+                    val rViewModel = ViewModelProvider(this)[RefreshTokenViewModel::class.java]
+                    val refreshToken1 = sessionManager.getRefreshToken()!!
+                        rViewModel.refreshToken(refreshToken1)
+                    rViewModel.result.observe(viewLifecycleOwner){status1 ->
+                        Toast.makeText(requireContext(),status1,Toast.LENGTH_SHORT).show()
+                        if(status1 == "200"){
+                            binding?.progressBar?.visibility = View.GONE
+                            rViewModel.getAuthTokens().observe(viewLifecycleOwner){ authTokens ->
+                                sessionManager.clearTokens()
+                                Constants.clearRefreshToken()
+                                Constants.clearRefreshToken()
+                                val accessToken = authTokens.accessToken
+                                Constants.accessToken = accessToken
+                                val refreshToken = authTokens.refreshToken
+                                Constants.refreshToken = refreshToken
+                                sessionManager.saveTokens(accessToken,refreshToken)
+                            }
+                        }else{
+                            binding?.progressBar?.visibility = View.GONE
+                            DialogUtils.showAutoDismissAlertDialog(requireContext(),
+                                getString(R.string.your_session_has_expired))
+                            sessionManager.clearTokens()
+                            Constants.clearAccessToken()
+                            Constants.clearRefreshToken()
+                            findNavController().navigate(R.id.navigate_to_intro)
+                            binding?.progressBar?.visibility = View.GONE
+                            Toast.makeText(requireContext(),status1.toString(),Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
             }
-            return binding?.root
+        }
+        return binding?.root
     }
     override fun onDestroyView() {
         super.onDestroyView()

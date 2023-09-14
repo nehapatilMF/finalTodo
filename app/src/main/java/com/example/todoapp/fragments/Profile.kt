@@ -17,8 +17,10 @@ import com.example.todoapp.client.SessionManager
 import com.example.todoapp.databinding.FragmentProfileBinding
 import com.example.todoapp.databinding.LogoutConfirmationBinding
 import com.example.todoapp.databinding.UserDeleteConfirmationBinding
+import com.example.todoapp.util.DialogUtils
 import com.example.todoapp.util.NetworkUtil
 import com.example.todoapp.viewModels.ProfileViewModel
+import com.example.todoapp.viewModels.RefreshTokenViewModel
 
 class Profile : Fragment() {
     private var binding : FragmentProfileBinding? = null
@@ -53,6 +55,8 @@ class Profile : Fragment() {
         //(requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
 
         val viewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
+        val rViewModel = ViewModelProvider(this)[RefreshTokenViewModel::class.java]
+        val sessionManager = SessionManager(requireContext())
 
         binding?.Logout?.setOnClickListener {
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
@@ -98,9 +102,33 @@ class Profile : Fragment() {
               findNavController().navigate(R.id.navigate_to_intro)
                 SessionManager(requireContext()).clearTokens()
                 Constants.clearAccessToken()
-            }else{
-                val message = status.toString()
-                Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
+            }else if(status.toString() == "Unauthenticated.") {
+                val refreshToken1 = SessionManager(requireContext()).getRefreshToken()!!
+
+                    rViewModel.refreshToken(refreshToken1)
+
+                rViewModel.result.observe(viewLifecycleOwner) { status1 ->
+                    if (status1 == "200") {
+                        sessionManager.clearTokens()
+                        Constants.clearAccessToken()
+                        rViewModel.getAuthTokens().observe(viewLifecycleOwner) { authTokens ->
+                            val accessToken = authTokens.accessToken
+                            Constants.accessToken = accessToken
+                            val refreshToken = authTokens.refreshToken
+                            Constants.refreshToken = refreshToken
+                            sessionManager.saveTokens(accessToken, refreshToken)
+                        }
+                    } else{
+                        DialogUtils.showAutoDismissAlertDialog(requireContext(),
+                            getString(R.string.your_session_has_expired))
+                        sessionManager.clearTokens()
+                        Constants.clearAccessToken()
+                        Constants.clearRefreshToken()
+                        findNavController().navigate(R.id.navigate_to_intro)
+                    }
+                }
+            }else {
+                Toast.makeText(requireContext(),status.toString(), Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -113,10 +141,32 @@ class Profile : Fragment() {
                     Toast.makeText(requireContext(),tMsg,Toast.LENGTH_SHORT).show()
                 }
 
-            }else{
-                val message = status.toString()
-                Toast.makeText(requireContext(),message,Toast.LENGTH_SHORT).show()
+            }else if(status.toString() == "Unauthenticated.") {
+                val refreshToken1 = SessionManager(requireContext()).getRefreshToken()!!
+                        rViewModel.refreshToken(refreshToken1)
 
+                rViewModel.result.observe(viewLifecycleOwner) { status1 ->
+                    if (status1 == "200") {
+                        sessionManager.clearTokens()
+                        Constants.clearAccessToken()
+                        rViewModel.getAuthTokens().observe(viewLifecycleOwner) { authTokens ->
+                            val accessToken = authTokens.accessToken
+                            Constants.accessToken = accessToken
+                            val refreshToken = authTokens.refreshToken
+                            Constants.refreshToken = refreshToken
+                            sessionManager.saveTokens(accessToken, refreshToken)
+                        }
+                    }else{
+                        DialogUtils.showAutoDismissAlertDialog(requireContext(),
+                            getString(R.string.your_session_has_expired))
+                        sessionManager.clearTokens()
+                        Constants.clearAccessToken()
+                        Constants.clearRefreshToken()
+                        findNavController().navigate(R.id.navigate_to_intro)
+                    }
+                }
+            }else {
+                Toast.makeText(requireContext(),status.toString(), Toast.LENGTH_SHORT).show()
             }
         }
         return binding?.root

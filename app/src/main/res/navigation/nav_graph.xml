@@ -69,6 +69,9 @@
         <action
             android:id="@+id/navigate_from_newTask_to_todoMain"
             app:destination="@+id/todoMain" />
+        <action
+            android:id="@+id/navigate_to_intro"
+            app:destination="@+id/intro"/>
     </fragment>
     <fragment
         android:id="@+id/editTask"
@@ -78,6 +81,9 @@
         <action
             android:id="@+id/action_editTask_to_todoMain"
             app:destination="@id/todoMain" />
+        <action
+            android:id="@+id/navigate_to_intro"
+            app:destination="@+id/intro"/>
     </fragment>
 
     <fragment
@@ -192,6 +198,9 @@
         <action
             android:id="@+id/action_personalInformation_to_todoMain"
             app:destination="@id/todoMain" />
+        <action
+            android:id="@+id/navigate_to_intro"
+            app:destination="@+id/intro"/>
     </fragment>
     <fragment
         android:id="@+id/changePassword"
@@ -204,6 +213,9 @@
         <action
             android:id="@+id/navigate_to_todoMain"
             app:destination="@id/todoMain" />
+        <action
+            android:id="@+id/navigate_to_intro"
+            app:destination="@+id/intro"/>
     </fragment>
     <fragment
         android:id="@+id/home"
@@ -213,6 +225,9 @@
         <action
             android:id="@+id/action_home_to_todoMain"
             app:destination="@id/todoMain" />
+        <action
+            android:id="@+id/navigate_to_intro"
+            app:destination="@+id/intro"/>
     </fragment>
 
 </navigation>
