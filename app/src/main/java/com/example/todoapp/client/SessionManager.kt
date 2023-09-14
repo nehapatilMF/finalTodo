@@ -7,6 +7,21 @@ import java.util.Date
 class SessionManager(private val context: Context) {
     private val sharedPref = context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
 
+    private val sharedName = context.getSharedPreferences("name",Context.MODE_PRIVATE)
+    fun saveName(name : String){
+        val editor1 = sharedName.edit()
+        editor1.putString("name",name)
+        editor1.apply()
+    }
+    fun getName(): String? {
+        return sharedName.getString("name", null)
+    }
+    fun clearName(){
+        val editor1 = sharedName.edit()
+        editor1.remove("name")
+        editor1.apply()
+    }
+
     fun saveTokens(accessToken: String, refreshToken: String) {
         val editor = sharedPref.edit()
         editor.putString("access_token", accessToken)

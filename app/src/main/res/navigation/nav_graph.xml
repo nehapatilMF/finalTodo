@@ -13,8 +13,8 @@
             android:id="@+id/navigate_to_intro"
             app:destination="@+id/intro" />
         <action
-            android:id="@+id/navigate_to_todoMain"
-            app:destination="@+id/todoMain" />
+            android:id="@+id/navigate_to_home"
+            app:destination="@+id/home" />
     </fragment>
     <fragment
         android:id="@+id/intro"
@@ -34,8 +34,8 @@
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
-            android:id="@+id/navigate_from_login_to_todoMain"
-            app:destination="@+id/todoMain" />
+            android:id="@+id/navigate_from_login_to_home"
+            app:destination="@+id/home" />
         <action
             android:id="@+id/navigate_from_login_to_register"
             app:destination="@+id/register" />
@@ -67,8 +67,8 @@
         android:label="fragment_new_task"
         tools:layout="@layout/fragment_new_task" >
         <action
-            android:id="@+id/navigate_from_newTask_to_todoMain"
-            app:destination="@+id/todoMain" />
+            android:id="@+id/navigate_from_newTask_to_home"
+            app:destination="@+id/home" />
         <action
             android:id="@+id/navigate_to_intro"
             app:destination="@+id/intro"/>
@@ -79,8 +79,8 @@
         android:label="fragment_edit_task"
         tools:layout="@layout/fragment_edit_task" >
         <action
-            android:id="@+id/action_editTask_to_todoMain"
-            app:destination="@id/todoMain" />
+            android:id="@+id/action_editTask_to_home"
+            app:destination="@id/home" />
         <action
             android:id="@+id/navigate_to_intro"
             app:destination="@+id/intro"/>
@@ -92,8 +92,8 @@
         android:label="fragment_otp"
         tools:layout="@layout/fragment_otp" >
         <action
-            android:id="@+id/navigate_from_otp_to_todoMain"
-            app:destination="@+id/todoMain" />
+            android:id="@+id/navigate_from_otp_to_home"
+            app:destination="@+id/home" />
         <action
             android:id="@+id/navigate_from_otp_to_register"
             app:destination="@+id/register" />
@@ -101,35 +101,7 @@
             android:id="@+id/back_to_register"
             app:destination="@+id/register" />
     </fragment>
-    <fragment
-        android:id="@+id/todoMain"
-        android:name="com.example.todoapp.fragments.TodoMain"
-        android:label="fragment_todo_main"
-        tools:layout="@layout/fragment_todo_main" >
 
-        <action
-            android:id="@+id/action_todoMain_to_profile"
-            app:destination="@+id/profile" />
-        <action
-            android:id="@+id/navigate_to_intro"
-            app:destination="@+id/intro"/>
-        <action
-            android:id="@+id/action_todoMain_to_home"
-            app:destination="@id/home" />
-        <action
-            android:id="@+id/action_todoMain_to_newTask"
-            app:destination="@id/newTask" />
-        <action
-            android:id="@+id/action_todoMain_to_editTask"
-            app:destination="@id/editTask" />
-        <action
-            android:id="@+id/navigate_to_personalInformation"
-            app:destination="@id/personalInformation" />
-        <action
-        android:id="@+id/navigate_to_changePassword"
-        app:destination="@id/changePassword" />
-
-    </fragment>
     <fragment
         android:id="@+id/forgotPassword"
         android:name="com.example.todoapp.fragments.ForgotPassword"
@@ -183,8 +155,9 @@
             android:id="@+id/navigate_to_intro"
             app:destination="@+id/intro"/>
         <action
-            android:id="@+id/navigate_to_todoMain"
-            app:destination="@id/todoMain" />
+            android:id="@+id/navigate_to_home"
+            app:destination="@id/home" />
+
 
     </fragment>
     <fragment
@@ -195,9 +168,7 @@
         <action
             android:id="@+id/action_personalInformation_to_profile"
             app:destination="@+id/profile" />
-        <action
-            android:id="@+id/action_personalInformation_to_todoMain"
-            app:destination="@id/todoMain" />
+
         <action
             android:id="@+id/navigate_to_intro"
             app:destination="@+id/intro"/>
@@ -211,8 +182,8 @@
             android:id="@+id/action_changePassword_to_login"
             app:destination="@id/login" />
         <action
-            android:id="@+id/navigate_to_todoMain"
-            app:destination="@id/todoMain" />
+            android:id="@+id/navigate_to_profile"
+            app:destination="@id/profile" />
         <action
             android:id="@+id/navigate_to_intro"
             app:destination="@+id/intro"/>
@@ -222,12 +193,20 @@
         android:name="com.example.todoapp.fragments.Home"
         android:label="fragment_home"
         tools:layout="@layout/fragment_home">
-        <action
-            android:id="@+id/action_home_to_todoMain"
-            app:destination="@id/todoMain" />
-        <action
+             <action
             android:id="@+id/navigate_to_intro"
             app:destination="@+id/intro"/>
+        <action
+            android:id="@+id/action_todoMain_to_profile"
+            app:destination="@+id/profile" />
+
+        <action
+            android:id="@+id/action_home_to_newTask"
+            app:destination="@id/newTask" />
+        <action
+            android:id="@+id/action_home_to_editTask"
+            app:destination="@id/editTask" />
+
     </fragment>
 
 </navigation>

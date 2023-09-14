@@ -79,7 +79,7 @@ class TodoAdapter(private var listView : List<TodoItem>) :
             bundle.putString("id", currentItem.id.toString())
             val editTaskFragment = EditTask()
             editTaskFragment.arguments = bundle
-            holder.itemView.findNavController().navigate(R.id.action_todoMain_to_editTask,bundle)
+            holder.itemView.findNavController().navigate(R.id.action_home_to_editTask,bundle)
         }
 
     }

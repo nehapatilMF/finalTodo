@@ -19,6 +19,9 @@ class LoginViewModel : ViewModel() {
     private val _loginResult = MutableLiveData<String>()
     val loginResult :  LiveData<String> get() = _loginResult
 
+    private val _name = MutableLiveData<String>()
+    val name :  LiveData<String> get() = _name
+
     private val _authTokens = MutableLiveData<AuthTokens>()
 
     fun getAuthTokens(): LiveData<AuthTokens> {
@@ -40,8 +43,10 @@ class LoginViewModel : ViewModel() {
                 if(response?.success == true){
                     val status = response.status.toString()
                     _loginResult.postValue(status)
+                    _name.postValue(response.data.user.name)
                     val accessToken = response.data.token.access_token
                     val refreshToken = response.data.token.refresh_token
+
                     saveTokens(accessToken, refreshToken)
 
                 } else{

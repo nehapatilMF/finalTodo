@@ -87,7 +87,7 @@ class Otp : Fragment() {
         viewModel.otpResult.observe(viewLifecycleOwner){ status ->
             if(status == "200"){
                 binding?.progressBar?.visibility = View.INVISIBLE
-                findNavController().navigate(R.id.navigate_from_otp_to_todoMain)
+                findNavController().navigate(R.id.navigate_from_otp_to_home)
             }else{
                 binding?.progressBar?.visibility = View.INVISIBLE
                 val message = status.toString()
@@ -119,7 +119,9 @@ class Otp : Fragment() {
             val refreshToken = authTokens.refreshToken
             Constants.refreshToken = refreshToken
             sessionManager.saveTokens(accessToken,refreshToken)
-
+        }
+        viewModel.name.observe(viewLifecycleOwner){name ->
+            sessionManager.saveName(name.toString())
         }
 
         return binding?.root

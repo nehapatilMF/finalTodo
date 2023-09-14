@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -26,10 +25,21 @@ class Profile : Fragment() {
     private var binding : FragmentProfileBinding? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-       val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
+       //val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
        // actionBar?.setDisplayHomeAsUpEnabled(true)
        // actionBar?.title = "Profile"
+        binding?.bottomNav?.setOnItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.home -> {
+                    findNavController().navigate(R.id.home)
+                }
 
+                R.id.profile -> {
+                    findNavController().navigate(R.id.profile)
+                }
+            }
+            true
+        }
         binding?.personalInformation?.setOnClickListener {
             findNavController().navigate(R.id.navigate_to_personalInformation)
         }
@@ -39,7 +49,7 @@ class Profile : Fragment() {
 
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                findNavController().navigate(R.id.navigate_to_todoMain)
+                findNavController().navigate(R.id.navigate_to_home)
 
             }
         }
@@ -53,7 +63,8 @@ class Profile : Fragment() {
     ): View? {
         binding = FragmentProfileBinding.inflate(layoutInflater, container, false)
         //(requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
-
+        binding?.bottomNav?.visibility = View.VISIBLE
+        binding?.bottomNav?.menu?.findItem(R.id.profile)?.isChecked = true
         val viewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
         val rViewModel = ViewModelProvider(this)[RefreshTokenViewModel::class.java]
         val sessionManager = SessionManager(requireContext())

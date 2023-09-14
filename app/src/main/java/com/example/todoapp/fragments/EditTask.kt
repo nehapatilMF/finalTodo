@@ -47,7 +47,7 @@ class EditTask : Fragment() {
         actionBar?.title = null
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                findNavController().navigate(R.id.action_editTask_to_todoMain)
+                findNavController().navigate(R.id.action_editTask_to_home)
             }
         }
         binding?.toolbar?.setNavigationOnClickListener {
@@ -57,7 +57,7 @@ class EditTask : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
         val title = arguments?.getString("title")
         val description = arguments?.getString("description")
-        val status = arguments?.getString("status")
+       // val status = arguments?.getString("status")
         val date = arguments?.getString("date")
         val time = arguments?.getString("time")
         val id = arguments?.getString("id")
@@ -208,7 +208,7 @@ class EditTask : Fragment() {
                         }
                     }else{
                         DialogUtils.showAutoDismissAlertDialog(requireContext(),
-                            getString(R.string.your_session_has_expired))
+                        getString(R.string.your_session_has_expired))
                         sessionManager.clearTokens()
                         Constants.clearAccessToken()
                         Constants.clearRefreshToken()
@@ -236,7 +236,7 @@ class EditTask : Fragment() {
         return binding?.root
     }
     private fun goBack(){
-        findNavController().navigate(R.id.action_editTask_to_todoMain)
+        findNavController().navigate(R.id.action_editTask_to_home)
     }
     private fun customDialogForBackButton() {
         val customDialog = Dialog(requireContext())
@@ -244,7 +244,7 @@ class EditTask : Fragment() {
         customDialog.setContentView(dialogBinding.root)
         customDialog.setCanceledOnTouchOutside(false)
         dialogBinding.tvYes.setOnClickListener {
-            findNavController().navigate(R.id.action_editTask_to_todoMain)
+            findNavController().navigate(R.id.action_editTask_to_home)
             customDialog.dismiss()
         }
         dialogBinding.tvNo.setOnClickListener {

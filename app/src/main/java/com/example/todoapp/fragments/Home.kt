@@ -26,10 +26,29 @@ class Home : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding?.bottomNav?.visibility = View.VISIBLE
+        binding?.bottomNav?.menu?.findItem(R.id.home)?.isChecked = true
+        val sessionManager = SessionManager(requireContext())
+        val name1 = sessionManager.getName().toString()
+        val name = "Welcome, $name1"
+        binding?.welcome?.text = name
+        binding?.bottomNav?.setOnItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.home -> {
+                    findNavController().navigate(R.id.home)
+                }
+
+                R.id.profile -> {
+                    findNavController().navigate(R.id.profile)
+                }
+            }
+            true
+        }
+
         val viewModel = ViewModelProvider(this)[HomeViewModel::class.java]
         viewModel.fetchTodoList()
         binding?.addTask?.setOnClickListener {
-            findNavController().navigate(R.id.action_todoMain_to_newTask)
+            findNavController().navigate(R.id.action_home_to_newTask)
         }
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {

@@ -4,10 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginStart="@dimen/start_margin"
     android:layout_marginTop="@dimen/start_margin"
-    android:layout_marginEnd="@dimen/start_margin"
     tools:context=".fragments.Profile">
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_nav"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        app:itemIconTint="@drawable/bottom_nav_style"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/bottom_navigation_menu" />
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="match_parent"
@@ -21,6 +28,9 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/start_margin"
+        android:layout_marginEnd="@dimen/start_margin"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"    >

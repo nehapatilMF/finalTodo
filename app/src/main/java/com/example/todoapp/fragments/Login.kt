@@ -75,13 +75,16 @@ class Login : Fragment() {
                 }
             }
         }
-
+        viewModel.name.observe(viewLifecycleOwner){name ->
+            sessionManager.saveName(name.toString())
+        }
         viewModel.getAuthTokens().observe(viewLifecycleOwner){ authTokens ->
             val accessToken = authTokens.accessToken
             Constants.accessToken = accessToken
             val refreshToken = authTokens.refreshToken
             Constants.refreshToken = refreshToken
             sessionManager.saveTokens(accessToken,refreshToken)
+
         }
         binding?.signup?.setOnClickListener {
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
@@ -97,7 +100,7 @@ class Login : Fragment() {
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
         viewModel.loginResult.observe(viewLifecycleOwner) { status ->
             if (status == "200") {
-                findNavController().navigate(R.id.navigate_from_login_to_todoMain)
+                findNavController().navigate(R.id.navigate_from_login_to_home)
                 binding?.progressBar?.visibility = View.VISIBLE
 
             } else {

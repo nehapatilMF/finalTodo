@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.todoapp.Constants
 import com.example.todoapp.client.RetrofitClient
 import com.example.todoapp.interfaces.ApiInterface
 import com.example.todoapp.responses.ProfileInfoResponse
@@ -60,8 +59,7 @@ class PersonalInformationViewModel : ViewModel(){
                 if(response?.success == true ){
                     val status = response.status.toString()
                     _updateUserResult.postValue(status)
-                    Constants.clearAccessToken()
-                    _msg.postValue(response.message)
+                    _msg.value = response.message
 
                 } else{
                     _updateUserResult.postValue(response?.message)

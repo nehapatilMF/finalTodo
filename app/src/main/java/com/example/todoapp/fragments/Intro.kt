@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.example.todoapp.R
 import com.example.todoapp.databinding.FragmentIntroBinding
 
+@Suppress("DEPRECATION")
 class Intro : Fragment() {
     private var binding : FragmentIntroBinding? = null
     @SuppressLint("ObsoleteSdkInt")

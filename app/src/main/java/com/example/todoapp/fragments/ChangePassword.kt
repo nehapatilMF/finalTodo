@@ -33,11 +33,11 @@ class ChangePassword : Fragment() {
         actionBar?.title = "Change Password"
 
         binding?.toolbar?.setNavigationOnClickListener{
-            findNavController().navigate(R.id.navigate_to_todoMain)
+            findNavController().navigate(R.id.navigate_to_profile)
         }
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                findNavController().navigate(R.id.navigate_to_todoMain)
+                findNavController().navigate(R.id.navigate_to_profile)
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)

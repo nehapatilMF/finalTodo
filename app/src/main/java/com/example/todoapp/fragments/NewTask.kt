@@ -142,7 +142,7 @@ class NewTask : Fragment() {
 
 
     private fun goBackToTodoMain(){
-        findNavController().navigate(R.id.navigate_from_newTask_to_todoMain)
+        findNavController().navigate(R.id.navigate_from_newTask_to_home)
     }
     private fun customDialogForBackButton() {
         val customDialog = Dialog(requireContext())
@@ -150,7 +150,7 @@ class NewTask : Fragment() {
         customDialog.setContentView(dialogBinding.root)
         customDialog.setCanceledOnTouchOutside(false)
         dialogBinding.tvYes.setOnClickListener {
-            findNavController().navigate(R.id.navigate_from_newTask_to_todoMain)
+            findNavController().navigate(R.id.navigate_from_newTask_to_home)
             customDialog.dismiss()
         }
         dialogBinding.tvNo.setOnClickListener {

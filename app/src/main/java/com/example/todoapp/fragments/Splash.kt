@@ -92,7 +92,7 @@ class Splash : Fragment() {
     }
 
     private fun navigateToMainScreen() {
-        findNavController().navigate(R.id.navigate_to_todoMain)
+        findNavController().navigate(R.id.navigate_to_home)
         Constants.accessToken = SessionManager(requireContext()).getAccessToken()
     }
 

@@ -161,7 +161,7 @@ class Register : Fragment() {
 
     private fun handleLogin() {
         if (NetworkUtil.isNetworkAvailable(requireContext())) {
-            findNavController().navigate(R.id.navigate_from_register_to_login,)
+            findNavController().navigate(R.id.navigate_from_register_to_login)
         } else {
             val message = getString(R.string.no_internet_connection)
             DialogUtils.showAutoDismissAlertDialog(requireContext(), message)

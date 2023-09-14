@@ -21,7 +21,8 @@ class OtpViewModel : ViewModel()  {
     private val _resendOtpResult = MutableLiveData<String>()
     val resendOtpResult : LiveData<String> get() = _resendOtpResult
     private val _authTokens = MutableLiveData<AuthTokens>()
-
+    private val _name = MutableLiveData<String>()
+    val name :  LiveData<String> get() = _name
     fun getAuthTokens(): LiveData<AuthTokens> {
         return _authTokens
     }
@@ -39,6 +40,7 @@ class OtpViewModel : ViewModel()  {
                 if(response?.success == true) {
                     val status = response.status.toString()
                     _otpResult.postValue(status)
+                    _name.postValue(response.data.user.name)
                     val accessToken = response.data.token.access_token
                     val refreshToken = response.data.token.refresh_token
                     saveTokens(accessToken, refreshToken)
