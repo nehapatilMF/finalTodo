@@ -62,10 +62,15 @@ class ChangePassword : Fragment() {
             val encodedOldPassword = Base64.encodeToBase64(oldPassword)
             val encodedNewPassword = Base64.encodeToBase64(newPassword)
             when            {
-                !NetworkUtil.isNetworkAvailable(requireContext()) -> showErrorDialog(getString(R.string.no_internet_connection))
+                !NetworkUtil.isNetworkAvailable(requireContext()) -> {
+                    showErrorDialog(getString(R.string.no_internet_connection))
+                    binding?.progressBar?.visibility = View.INVISIBLE
+                }
                 newPassword != confirmPassword -> binding?.etNewPassword?.error = "Password don't match"
                 else ->  {viewModel.changePassword(encodedOldPassword,encodedNewPassword)
-                binding?.progressBar?.visibility = View.VISIBLE}
+                binding?.progressBar?.visibility = View.VISIBLE
+                    binding?.changePassword?.visibility = View.INVISIBLE
+                }
 
             }
         }
@@ -79,12 +84,14 @@ class ChangePassword : Fragment() {
                     SessionManager(requireContext()).clearTokens()
                     Constants.clearAccessToken()
                     binding?.progressBar?.visibility = View.INVISIBLE
+                    binding?.changePassword?.visibility = View.VISIBLE
+
                 }
             }else if(status.toString() == "Unauthenticated.") {
                 val refreshToken1 = SessionManager(requireContext()).getRefreshToken()!!
 
                     rViewModel.refreshToken(refreshToken1)
-
+                binding?.progressBar?.visibility = View.INVISIBLE
                 rViewModel.result.observe(viewLifecycleOwner) { status1 ->
                     if (status1 == "200") {
                         sessionManager.clearTokens()
@@ -106,6 +113,8 @@ class ChangePassword : Fragment() {
                 }
                 }
             }else {
+                binding?.progressBar?.visibility = View.INVISIBLE
+                binding?.changePassword?.visibility = View.VISIBLE
                 Toast.makeText(requireContext(),status.toString(), Toast.LENGTH_SHORT).show()
             }
 

@@ -67,7 +67,7 @@ class PersonalInformation : Fragment() {
                  val refreshToken1 = SessionManager(requireContext()).getRefreshToken()!!
 
                     rViewModel.refreshToken(refreshToken1)
-
+                binding?.progressBar?.visibility = View.INVISIBLE
                     rViewModel.result.observe(viewLifecycleOwner) { status1 ->
                         if (status1 == "200") {
                             sessionManager.clearTokens()
@@ -89,6 +89,7 @@ class PersonalInformation : Fragment() {
                         }
                     }
                 }else {
+                    binding?.progressBar?.visibility = View.INVISIBLE
                     Toast.makeText(requireContext(),status.toString(), Toast.LENGTH_SHORT).show()
                 }
             }

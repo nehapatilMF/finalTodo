@@ -128,6 +128,7 @@ class Profile : Fragment() {
                     }
                 }
             }else {
+                binding?.progressBar?.visibility = View.INVISIBLE
                 Toast.makeText(requireContext(),status.toString(), Toast.LENGTH_SHORT).show()
             }
         }
@@ -144,7 +145,7 @@ class Profile : Fragment() {
             }else if(status.toString() == "Unauthenticated.") {
                 val refreshToken1 = SessionManager(requireContext()).getRefreshToken()!!
                         rViewModel.refreshToken(refreshToken1)
-
+                binding?.progressBar?.visibility = View.INVISIBLE
                 rViewModel.result.observe(viewLifecycleOwner) { status1 ->
                     if (status1 == "200") {
                         sessionManager.clearTokens()
@@ -157,6 +158,7 @@ class Profile : Fragment() {
                             sessionManager.saveTokens(accessToken, refreshToken)
                         }
                     }else{
+
                         DialogUtils.showAutoDismissAlertDialog(requireContext(),
                             getString(R.string.your_session_has_expired))
                         sessionManager.clearTokens()
@@ -166,6 +168,7 @@ class Profile : Fragment() {
                     }
                 }
             }else {
+                binding?.progressBar?.visibility = View.INVISIBLE
                 Toast.makeText(requireContext(),status.toString(), Toast.LENGTH_SHORT).show()
             }
         }

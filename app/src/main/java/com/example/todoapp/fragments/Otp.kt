@@ -89,6 +89,7 @@ class Otp : Fragment() {
                 binding?.progressBar?.visibility = View.INVISIBLE
                 findNavController().navigate(R.id.navigate_from_otp_to_todoMain)
             }else{
+                binding?.progressBar?.visibility = View.INVISIBLE
                 val message = status.toString()
                 Toast.makeText(requireContext(),message,Toast.LENGTH_SHORT).show()
             }
@@ -102,6 +103,7 @@ class Otp : Fragment() {
                     binding?.jsonOtp?.text = newOtp
                 }
             }else{
+                binding?.progressBar?.visibility = View.INVISIBLE
                 val message = status.toString()
                 Toast.makeText(requireContext(),message,Toast.LENGTH_SHORT).show()
             }

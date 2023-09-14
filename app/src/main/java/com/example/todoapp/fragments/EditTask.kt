@@ -52,7 +52,6 @@ class EditTask : Fragment() {
         }
         binding?.toolbar?.setNavigationOnClickListener {
             customDialogForBackButton()
-
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
@@ -93,6 +92,7 @@ class EditTask : Fragment() {
                     else -> {
                         viewModel.updateTodo(id1, title1, description1, status1, date1, time1)
                         binding?.progressBar?.visibility = View.VISIBLE
+                        binding?.editForm?.visibility = View.INVISIBLE
                     }
                 }
             }
@@ -109,6 +109,8 @@ class EditTask : Fragment() {
                 dialogBinding.tvYes.setOnClickListener {
                     viewModel.deleteTodo(id)
                     binding?.progressBar?.visibility = View.VISIBLE
+                    binding?.editForm?.visibility = View.INVISIBLE
+
                     goBack()
                     customDialog.dismiss()
                 }
@@ -141,6 +143,8 @@ class EditTask : Fragment() {
             if (status == "204") {
                 goBack()
                 binding?.progressBar?.visibility = View.INVISIBLE
+                binding?.editForm?.visibility = View.VISIBLE
+
                 viewModel.todoMessage.observe(viewLifecycleOwner) { msg ->
                     val errorMsg = msg.toString()
                     Toast.makeText(requireContext(),errorMsg, Toast.LENGTH_SHORT).show()
@@ -149,6 +153,7 @@ class EditTask : Fragment() {
                 val refreshToken1 = SessionManager(requireContext()).getRefreshToken()
                 if(refreshToken1?.isNotBlank() == true){
                     rViewModel.refreshToken(refreshToken1.toString())
+                    binding?.progressBar?.visibility = View.INVISIBLE
                 }else{
                     DialogUtils.showAutoDismissAlertDialog(requireContext(),
                         getString(R.string.your_session_has_expired))
@@ -178,6 +183,8 @@ class EditTask : Fragment() {
         viewModel.updateTodoStatus.observe(viewLifecycleOwner) { status ->
             if (status == "200") {
                 binding?.progressBar?.visibility = View.INVISIBLE
+                binding?.editForm?.visibility = View.VISIBLE
+
                 viewModel.todoMessage.observe(viewLifecycleOwner) { msg ->
                     val toastMsg = msg.toString()
                         Toast.makeText(requireContext(),toastMsg, Toast.LENGTH_SHORT).show()
@@ -187,7 +194,7 @@ class EditTask : Fragment() {
                 val refreshToken1 = SessionManager(requireContext()).getRefreshToken()!!
 
                     rViewModel.refreshToken(refreshToken1)
-
+                binding?.progressBar?.visibility = View.INVISIBLE
                 rViewModel.result.observe(viewLifecycleOwner) { status1 ->
                     if (status1 == "200") {
                         sessionManager.clearTokens()
@@ -209,6 +216,8 @@ class EditTask : Fragment() {
                     }
                 }
             }else {
+                binding?.progressBar?.visibility = View.INVISIBLE
+                binding?.editForm?.visibility = View.VISIBLE
                 Toast.makeText(requireContext(),status.toString(), Toast.LENGTH_SHORT).show()
             }
             }

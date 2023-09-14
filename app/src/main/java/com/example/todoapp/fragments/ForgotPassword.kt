@@ -87,6 +87,7 @@ class ForgotPassword : Fragment() {
                     Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
                 }
             }else{
+                binding?.progressBar?.visibility = View.INVISIBLE
                 val message = status.toString()
                 Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
             }

@@ -63,6 +63,7 @@ class ForgotPasswordOtp : Fragment() {
                     Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
                 }
             }else{
+                binding?.progressBar?.visibility = View.INVISIBLE
                 val message = status.toString()
                 Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
 
@@ -79,6 +80,7 @@ class ForgotPasswordOtp : Fragment() {
                    Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
                }
             }else{
+                binding?.progressBar?.visibility = View.INVISIBLE
                 val message = status.toString()
                 Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
 
@@ -94,6 +96,7 @@ class ForgotPasswordOtp : Fragment() {
                     viewModel.forgotPasswordVerifyOtp(email, otp)
                 binding?.progressBar?.visibility = View.VISIBLE
             } else {
+
                 val message = getString(R.string.no_internet_connection)
                 DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
             }
@@ -108,7 +111,7 @@ class ForgotPasswordOtp : Fragment() {
                 viewModel.forgotPasswordResendOtp(email)
                 binding?.progressBar?.visibility = View.VISIBLE
             } else {
-
+                binding?.progressBar?.visibility = View.INVISIBLE
                 val message = getString(R.string.no_internet_connection)
                 DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
             }

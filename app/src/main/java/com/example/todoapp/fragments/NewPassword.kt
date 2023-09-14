@@ -93,6 +93,7 @@ class NewPassword : Fragment() {
                 binding?.progressBar?.visibility = View.INVISIBLE
                 findNavController().navigate(R.id.navigate_from_newPassword_to_login)
             }else{
+                binding?.progressBar?.visibility = View.INVISIBLE
                 val message = status.toString()
                 Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
             }

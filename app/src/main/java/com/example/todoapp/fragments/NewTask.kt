@@ -1,5 +1,6 @@
 package com.example.todoapp.fragments
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -60,6 +61,7 @@ class NewTask : Fragment() {
             }
         }
     }
+    @SuppressLint("SuspiciousIndentation")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -83,16 +85,20 @@ class NewTask : Fragment() {
                             getString(R.string.no_internet_connection)
                         )
                     }
-
                     else ->
                     {viewModel.addTodo(title, description, date1, time1, status)
-                        binding?.progressBar?.visibility = View.VISIBLE}
+                        binding?.progressBar?.visibility = View.VISIBLE
+                        binding?.newForm?.visibility = View.INVISIBLE
+                    }
+
                 }
             }
 
         viewModel.addTodoStatus.observe(viewLifecycleOwner){ status ->
             if(status == "201"){
+
                 binding?.progressBar?.visibility = View.INVISIBLE
+                binding?.newForm?.visibility = View.VISIBLE
                 goBackToTodoMain()
                 viewModel.todoMessage.observe(viewLifecycleOwner){ msg ->
                     val tMsg = msg.toString()
@@ -102,7 +108,7 @@ class NewTask : Fragment() {
                 val refreshToken1 = SessionManager(requireContext()).getRefreshToken()!!
 
                     rViewModel.refreshToken(refreshToken1)
-
+                binding?.progressBar?.visibility = View.INVISIBLE
                 rViewModel.result.observe(viewLifecycleOwner) { status1 ->
                     if (status1 == "200") {
                         sessionManager.clearTokens()
@@ -124,6 +130,8 @@ class NewTask : Fragment() {
                     }
                 }
             }else {
+                binding?.progressBar?.visibility = View.INVISIBLE
+                binding?.newForm?.visibility = View.VISIBLE
                 Toast.makeText(requireContext(),status.toString(), Toast.LENGTH_SHORT).show()
             }
 
