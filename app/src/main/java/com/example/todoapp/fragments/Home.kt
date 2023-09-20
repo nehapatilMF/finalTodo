@@ -107,6 +107,7 @@ class Home : Fragment() {
                                 val refreshToken = authTokens.refreshToken
                                 Constants.refreshToken = refreshToken
                                 sessionManager.saveTokens(accessToken,refreshToken)
+                                viewModel.fetchTodoList()
                             }
                         }else{
                             binding?.progressBar?.visibility = View.GONE
@@ -117,7 +118,7 @@ class Home : Fragment() {
                             Constants.clearRefreshToken()
                             findNavController().navigate(R.id.navigate_to_intro)
                             binding?.progressBar?.visibility = View.GONE
-                            Toast.makeText(requireContext(),status1.toString(),Toast.LENGTH_SHORT).show()
+                          //  Toast.makeText(requireContext(),status1.toString(),Toast.LENGTH_SHORT).show()
                         }
                     }
                 }

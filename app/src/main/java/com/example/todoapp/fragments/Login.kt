@@ -43,12 +43,12 @@ class Login : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
         binding?.forgotPassword?.setOnClickListener {
-            if (NetworkUtil.isNetworkAvailable(requireContext())) {
-                findNavController().navigate(R.id.navigate_from_login_to_forgotPassword)
-            }    else {
-                val message = getString(R.string.no_internet_connection)
-                DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+            when{
+                !NetworkUtil.isNetworkAvailable(requireContext()) -> DialogUtils.showAutoDismissAlertDialog(requireContext(),getString(R.string.no_internet_connection))
+                 else ->  findNavController().navigate(R.id.navigate_from_login_to_forgotPassword)
             }
+
+
         }
     }
     override fun onCreateView(
@@ -58,18 +58,28 @@ class Login : Fragment() {
         binding = FragmentLoginBinding.inflate(layoutInflater, container, false)
         setupTextChangeListeners()
         val viewModel = ViewModelProvider(this)[LoginViewModel::class.java]
+        binding?.buttonLogin1?.visibility = View.VISIBLE
 
         val sessionManager = SessionManager(requireContext())
-         Constants.accessToken = sessionManager.getAccessToken()
-         Constants.refreshToken = sessionManager.getRefreshToken()
+        Constants.clearAccessToken()
 
         binding?.buttonLogin?.setOnClickListener {
             val email = binding?.etEmail?.text.toString()
             val password = binding?.etPassword?.text.toString()
             val encodedPassword = Base64.encodeToBase64(password)
+
             when{
                 !NetworkUtil.isNetworkAvailable(requireContext()) -> DialogUtils.showAutoDismissAlertDialog(requireContext(), getString(R.string.no_internet_connection))
+                !ValidPatterns.isValidEmail(email) -> binding?.etEmail?.error = "Invalid email id."
+                !ValidPatterns.isValidPassword(password) -> {
+                    binding?.etPassword?.error = "invalid password."
+
+
+                                  }
                 else -> {
+
+
+
                     viewModel.login(email,encodedPassword)
                     binding?.progressBar?.visibility = View.VISIBLE
                 }
@@ -80,9 +90,9 @@ class Login : Fragment() {
         }
         viewModel.getAuthTokens().observe(viewLifecycleOwner){ authTokens ->
             val accessToken = authTokens.accessToken
-            Constants.accessToken = accessToken
+           Constants.accessToken = accessToken
             val refreshToken = authTokens.refreshToken
-            Constants.refreshToken = refreshToken
+           Constants.refreshToken = refreshToken
             sessionManager.saveTokens(accessToken,refreshToken)
 
         }
@@ -120,12 +130,16 @@ class Login : Fragment() {
                 val email = s.toString()
                 if (!ValidPatterns.isValidEmail(email)) {
                     binding?.etEmail?.error = getString(R.string.invalid_or_empty_email_id)
+
+
+
                 } else {
                     binding?.etEmail?.error = null // Clear error message
+
                 }
             }
             override fun afterTextChanged(s: Editable?) {
-                // Not needed
+
             }
         })
         binding?.etPassword?.addTextChangedListener(object : TextWatcher {
@@ -135,13 +149,18 @@ class Login : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val password = s.toString()
                 if (!ValidPatterns.isValidPassword(password)) {
-                    binding?.etPassword?.error = getString(R.string.password_pattern_requirement)
+                    binding?.etPassword?.error = "invalid password"
+                    binding?.buttonLogin?.visibility = View.INVISIBLE
+                    binding?.buttonLogin1?.visibility = View.VISIBLE
+
                 } else {
                     binding?.etPassword?.error = null // Clear error message
+                    binding?.buttonLogin?.visibility = View.VISIBLE
+                    binding?.buttonLogin1?.visibility = View.INVISIBLE
                 }
             }
             override fun afterTextChanged(s: Editable?) {
-                // Not needed
+
             }
         })
     }

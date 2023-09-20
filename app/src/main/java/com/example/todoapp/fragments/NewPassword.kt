@@ -27,6 +27,8 @@ class NewPassword : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupTextChangeListeners()
+        binding?.btnNext?.visibility = View.INVISIBLE
+        binding?.btnNext1?.visibility =View.VISIBLE
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.title = getString(R.string.forgot_password)
@@ -49,10 +51,14 @@ class NewPassword : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val password = s.toString()
                 if (!ValidPatterns.isValidPassword(password)) {
-                    binding?.etNewPassword?.error =
-                        getString(R.string.password_pattern_requirement)
+                    binding?.etNewPassword?.error = "invalid password"
+                    binding?.btnNext?.visibility = View.INVISIBLE
+                    binding?.btnNext1?.visibility =View.VISIBLE
+
                 } else {
                     binding?.etNewPassword?.error = null // Clear error message
+                    binding?.btnNext?.visibility = View.VISIBLE
+                    binding?.btnNext1?.visibility =View.INVISIBLE
                 }
             }
             override fun afterTextChanged(s: Editable?) {

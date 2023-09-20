@@ -78,7 +78,7 @@
     <string name="confirm_password_is_required">Confirm password is required.</string>
     <string name="todo1">todo</string>
     <string name="password_pattern"><![CDATA[^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};\':\",./<>?|\\\\]).{8,}$]]></string>
-    <string name="password_pattern_requirement">"At least one uppercase letter.\nAt least one lowercase letter.\nAt least one digit.\nAt least one special character.\nAt least 8 characters in total. "</string>
+    <string name="password_pattern_requirement">"At least one uppercase and lowercase letter, at least one digit and at least one special character.\nAt least 8 characters in total. "</string>
     <string name="sdfvbsrdv">"sdfvbsrdv "</string>
     <string name="delete_account">Delete Account</string>
     <string name="logout">Logout</string>

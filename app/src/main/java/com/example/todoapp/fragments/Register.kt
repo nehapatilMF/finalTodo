@@ -20,6 +20,7 @@ import com.example.todoapp.util.DialogUtils
 import com.example.todoapp.util.NetworkUtil
 import com.example.todoapp.util.ValidPatterns
 import com.example.todoapp.viewModels.RegisterViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class Register : Fragment() {
     private var binding: FragmentRegisterBinding? = null
@@ -36,7 +37,12 @@ class Register : Fragment() {
                 findNavController().navigate(R.id.back_to_intro)
             }
         }
+
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+
+        binding?.buttonNext?.visibility = View.INVISIBLE
+        binding?.buttonNext1?.visibility = View.VISIBLE
+
         binding?.login?.setOnClickListener {
             handleLogin()
         }
@@ -48,6 +54,8 @@ class Register : Fragment() {
         binding = FragmentRegisterBinding.inflate(layoutInflater, container, false)
         (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
         setupTextChangeListeners()
+        binding?.buttonNext?.visibility = View.INVISIBLE
+        binding?.buttonNext1?.visibility = View.VISIBLE
         val viewModel = ViewModelProvider(this)[RegisterViewModel::class.java]
         binding?.buttonNext?.setOnClickListener {
             val userName = binding?.editTextUserName?.text.toString()
@@ -58,6 +66,10 @@ class Register : Fragment() {
             val confirmPassword = binding?.editTextConfirmPassword?.text.toString()
             when {
                 !NetworkUtil.isNetworkAvailable(requireContext()) -> showErrorDialog(getString(R.string.no_internet_connection))
+                !ValidPatterns.isValidPassword(password )-> {
+                    Snackbar.make(requireView(),"invalid password",2000).show()
+                }
+                !ValidPatterns.isValidNumber(mobile) -> {  Snackbar.make(requireView(),"mobile number must be 10 digit",Snackbar.LENGTH_SHORT).show()}
                 password != confirmPassword -> binding?.editTextPassword?.error = getString(R.string.no_match)
                 else -> {
                     val encodedPassword = Base64.encodeToBase64(password)
@@ -112,7 +124,8 @@ class Register : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val mobileNumber = s.toString()
                 if (!ValidPatterns.isValidNumber(mobileNumber)) {
-                    binding?.editTextMobileNumber?.error = getString(R.string.invalid_mobile_number)
+                    binding?.buttonNext?.visibility = View.INVISIBLE
+                    binding?.buttonNext1?.visibility = View.VISIBLE
                 } else {
                     binding?.editTextMobileNumber?.error = null // Clear error message
                 }
@@ -131,7 +144,9 @@ class Register : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val email = s.toString()
                 if (!ValidPatterns.isValidEmail(email)) {
-                    binding?.editTextEmail?.error = getString(R.string.invalid_or_empty_email_id)
+                  //  binding?.editTextEmail?.error = getString(R.string.invalid_or_empty_email_id)
+                    binding?.buttonNext?.visibility = View.INVISIBLE
+                    binding?.buttonNext1?.visibility = View.VISIBLE
                 } else {
                     binding?.editTextEmail?.error = null // Clear error message
                 }
@@ -148,10 +163,13 @@ class Register : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val password = s.toString()
                 if (!ValidPatterns.isValidPassword(password)) {
-                    binding?.editTextPassword?.error =
-                        getString(R.string.password_pattern_requirement)
+                    binding?.editTextPassword?.error ="invalid password"
+                    binding?.buttonNext?.visibility = View.INVISIBLE
+                    binding?.buttonNext1?.visibility = View.VISIBLE
                 } else {
                     binding?.editTextPassword?.error = null // Clear error message
+                    binding?.buttonNext?.visibility = View.VISIBLE
+                    binding?.buttonNext1?.visibility = View.INVISIBLE
                 }
             }
             override fun afterTextChanged(s: Editable?) {

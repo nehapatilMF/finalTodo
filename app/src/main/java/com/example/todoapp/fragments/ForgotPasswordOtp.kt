@@ -1,6 +1,8 @@
 package com.example.todoapp.fragments
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,6 +19,7 @@ import com.example.todoapp.util.DialogUtils
 import com.example.todoapp.util.NetworkUtil
 import com.example.todoapp.util.TimerUtil
 import com.example.todoapp.viewModels.ForgotPasswordOtpViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class ForgotPasswordOtp : Fragment() {
 
@@ -24,6 +27,9 @@ class ForgotPasswordOtp : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setupTextChangeListeners()
+        binding?.btnNext?.visibility = View.INVISIBLE
+        binding?.btnNext1?.visibility = View.VISIBLE
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.title = "Forgot password"
@@ -60,12 +66,12 @@ class ForgotPasswordOtp : Fragment() {
                 findNavController().navigate(R.id.navigate_to_newPassword)
                 viewModel.msg.observe(viewLifecycleOwner){msg ->
                     val message = msg.toString()
-                    Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
+                    Snackbar.make(requireView(),message, Snackbar.LENGTH_SHORT).show()
                 }
             }else{
                 binding?.progressBar?.visibility = View.INVISIBLE
                 val message = status.toString()
-                Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
+                Snackbar.make(requireView(),message, Snackbar.LENGTH_SHORT).show()
 
             }
         }
@@ -92,6 +98,8 @@ class ForgotPasswordOtp : Fragment() {
 
         binding?.btnNext?.setOnClickListener {
             val otp = binding?.etOtp?.text.toString()
+
+
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
                     viewModel.forgotPasswordVerifyOtp(email, otp)
                 binding?.progressBar?.visibility = View.VISIBLE
@@ -123,6 +131,21 @@ class ForgotPasswordOtp : Fragment() {
         }
 
         return binding?.root
+    }
+    private fun setupTextChangeListeners() {
+        binding?.etOtp?.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+           
+
+                    binding?.btnNext?.visibility = View.VISIBLE
+                    binding?.btnNext1?.visibility = View.INVISIBLE
+                }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+        })
     }
     private fun startOtpTimer(){
         val timerDuration: Long = getString(R.string.timer_duration).toLongOrNull() ?: 0L

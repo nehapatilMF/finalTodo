@@ -1,5 +1,6 @@
 package com.example.todoapp.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -22,6 +23,7 @@ import com.example.todoapp.util.NetworkUtil
 import com.example.todoapp.util.ValidPatterns
 import com.example.todoapp.viewModels.ChangePasswordViewModel
 import com.example.todoapp.viewModels.RefreshTokenViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class ChangePassword : Fragment() {
     private var binding : FragmentChangePasswordBinding? = null
@@ -41,7 +43,10 @@ class ChangePassword : Fragment() {
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+        binding?.btnNext?.visibility = View.INVISIBLE
+        binding?.btnNext1?.visibility = View.VISIBLE
     }
+    @SuppressLint("SuspiciousIndentation")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -109,13 +114,15 @@ class ChangePassword : Fragment() {
                     sessionManager.clearTokens()
                     Constants.clearAccessToken()
                     Constants.clearRefreshToken()
-                    findNavController().navigate(R.id.navigate_to_intro)
+                    this.findNavController().navigate(R.id.navigate_to_intro)
                 }
                 }
             }else {
                 binding?.progressBar?.visibility = View.INVISIBLE
                 binding?.changePassword?.visibility = View.VISIBLE
-                Toast.makeText(requireContext(),status.toString(), Toast.LENGTH_SHORT).show()
+                Snackbar.make(requireView(),status.toString(), Snackbar.LENGTH_SHORT).show()
+
+
             }
 
         }
@@ -129,10 +136,14 @@ class ChangePassword : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val password = s.toString()
                 if (!ValidPatterns.isValidPassword(password)) {
-                    binding?.etNewPassword?.error =
-                        getString(R.string.password_pattern_requirement)
+                    binding?.etNewPassword?.error = "invalid password."
+                    binding?.btnNext?.visibility = View.INVISIBLE
+                    binding?.btnNext1?.visibility = View.VISIBLE
+
                 } else {
                     binding?.etNewPassword?.error = null // Clear error message
+                    binding?.btnNext?.visibility = View.VISIBLE
+                    binding?.btnNext1?.visibility = View.INVISIBLE
                 }
             }
             override fun afterTextChanged(s: Editable?) {
@@ -146,8 +157,7 @@ class ChangePassword : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val password = s.toString()
                 if (!ValidPatterns.isValidPassword(password)) {
-                    binding?.etOldPassword?.error =
-                        getString(R.string.password_pattern_requirement)
+                    binding?.etNewPassword?.error = "invalid password."
                 } else {
                     binding?.etOldPassword?.error = null // Clear error message
                 }

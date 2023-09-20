@@ -25,6 +25,8 @@ class ForgotPassword : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupTextChangeListeners()
+        binding?.btnSubmit?.visibility = View.INVISIBLE
+        binding?.btnSubmit1?.visibility = View.VISIBLE
         val viewModel = ViewModelProvider(this)[ForgotPasswordViewModel::class.java]
 
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
@@ -61,8 +63,12 @@ class ForgotPassword : Fragment() {
                 val email = s.toString()
                 if (!ValidPatterns.isValidEmail(email)) {
                     binding?.enterEmail?.error = getString(R.string.invalid_or_empty_email_id)
+                    binding?.btnSubmit?.visibility = View.INVISIBLE
+                    binding?.btnSubmit1?.visibility = View.VISIBLE
                 } else {
                     binding?.enterEmail?.error = null // Clear error message
+                    binding?.btnSubmit?.visibility = View.VISIBLE
+                    binding?.btnSubmit1?.visibility = View.INVISIBLE
                 }
             }
             override fun afterTextChanged(s: Editable?) {

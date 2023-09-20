@@ -8,7 +8,7 @@
     tools:context=".fragments.Login">
     <ProgressBar
         android:id="@+id/progressBar"
-        android:layout_width="80dp"
+        android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_centerInParent="true"
         android:visibility="gone"
@@ -28,18 +28,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="116dp"
         android:layout_marginEnd="15dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="20dp"
         android:text="@string/log_in"
         android:textColor="@color/red"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/tv_enter_email"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/tv_enter_email"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_enter_email"
         android:layout_width="match_parent"
@@ -98,12 +96,27 @@
         android:importantForAccessibility="yes"
         android:importantForAutofill="no"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toTopOf="@+id/forgotPassword"
+        app:layout_constraintBottom_toTopOf="@+id/passwordPattern"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/forgotPassword"
         app:layout_constraintTop_toBottomOf="@+id/tv_enter_password"
         tools:ignore="SpeakableTextPresentCheck,TouchTargetSizeCheck,VisualLintTextFieldSize" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/passwordPattern"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/start_margin"
+        android:layout_marginEnd="@dimen/start_margin"
+        android:layout_marginBottom="@dimen/start_margin"
+        android:text="@string/password_pattern_requirement"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/forgotPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etPassword" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/forgotPassword"
@@ -116,6 +129,7 @@
         android:text="@string/forgot_password"
         android:textColor="@color/red"
         android:textSize="18sp"
+        app:layout_goneMarginBottom="@dimen/bottom_margin"
         app:layout_constraintBottom_toTopOf="@+id/signup"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etPassword" />
@@ -125,7 +139,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
-
+android:layout_marginTop="@dimen/start_margin"
         android:gravity="center"
         android:paddingStart="30dp"
         android:text="@string/new_to_todo"
@@ -134,19 +148,19 @@
         app:layout_constraintBaseline_toBaselineOf="@+id/signup"
         app:layout_constraintBottom_toTopOf="@+id/buttonLogin"
         app:layout_constraintEnd_toStartOf="@+id/signup"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="RtlSymmetry" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/signup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
+        android:layout_marginTop="@dimen/start_margin"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="10dp"
         android:text="@string/signup"
         android:textColor="@color/red"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/buttonLogin"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/txt5"
         app:layout_constraintTop_toBottomOf="@+id/forgotPassword"
@@ -163,10 +177,31 @@
         android:text="@string/log_in"
         android:textAllCaps="false"
         android:textSize="16sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/forgotPassword"
         app:layout_constraintStart_toStartOf="@+id/forgotPassword"
         app:layout_constraintTop_toBottomOf="@+id/signup"
+        tools:ignore="DuplicateSpeakableTextCheck" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonLogin1"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/nonbutton"
+        android:clickable="false"
+        android:importantForAccessibility="yes"
+        android:text="@string/log_in"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/forgotPassword"
+        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintStart_toStartOf="@+id/forgotPassword"
+        app:layout_constraintTop_toBottomOf="@+id/txt5"
+        app:layout_constraintVertical_bias="0.185"
         tools:ignore="DuplicateSpeakableTextCheck" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 
