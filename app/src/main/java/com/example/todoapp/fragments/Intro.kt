@@ -31,10 +31,10 @@ class Intro : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
         binding?.buttonLogIn?.setOnClickListener {
-            findNavController().navigate(R.id.navigate_to_login)
+            findNavController().navigate(R.id.action_intro_to_login)
         }
         binding?.buttonRegister?.setOnClickListener{
-            findNavController().navigate(R.id.navigate_to_register)
+            findNavController().navigate(R.id.action_intro_to_register)
         }
     }
     override fun onCreateView(

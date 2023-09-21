@@ -1,8 +1,6 @@
 package com.example.todoapp.client
 
 import android.content.Context
-import com.auth0.jwt.JWT
-import java.util.Date
 
 class SessionManager(private val context: Context) {
     private val sharedPref = context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
@@ -43,19 +41,4 @@ class SessionManager(private val context: Context) {
         editor.remove("refresh_token")
         editor.apply()
     }
-
-    fun isLoggedIn(): Boolean {
-        return getAccessToken() != null
-    }
-
-    fun isAccessTokenExpired(): Boolean {
-        val accessToken = getAccessToken()
-        if (accessToken != null) {
-            val jwt = JWT.decode(accessToken)
-            val expirationTime = jwt.expiresAt
-            return Date().after(expirationTime)
-        }
-        return true
-    }
-
 }

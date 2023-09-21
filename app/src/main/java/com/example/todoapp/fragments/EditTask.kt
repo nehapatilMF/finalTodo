@@ -6,24 +6,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.example.todoapp.Constants
 import com.example.todoapp.R
+import com.example.todoapp.client.RetrofitClient
 import com.example.todoapp.client.SessionManager
 import com.example.todoapp.databinding.DialogCustomBackConfirmationBinding
 import com.example.todoapp.databinding.DialogDeleteConfirmationBinding
 import com.example.todoapp.databinding.FragmentEditTaskBinding
+import com.example.todoapp.interfaces.TodoAPI
+import com.example.todoapp.repository.TodoRepository
 import com.example.todoapp.util.CalenderUtil
 import com.example.todoapp.util.DialogUtils
 import com.example.todoapp.util.NetworkUtil
 import com.example.todoapp.util.TimePickerUtil
-import com.example.todoapp.viewModels.RefreshTokenViewModel
+import com.example.todoapp.viewModelFactory.TodoViewModelFactory
 import com.example.todoapp.viewModels.TodoViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class EditTask : Fragment() {
     private lateinit var date1 : String
@@ -40,8 +42,8 @@ class EditTask : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
 
-        val viewModel = ViewModelProvider(this)[TodoViewModel::class.java]
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.title = null
@@ -74,6 +76,14 @@ class EditTask : Fragment() {
             }
         }
 
+
+
+        val sessionManager = SessionManager(requireContext())
+        val todoAPI: TodoAPI? = RetrofitClient.getInstance()?.create(TodoAPI::class.java)
+        val todoRepository = todoAPI?.let { TodoRepository(it) }
+        val viewModelFactory = todoRepository?.let { TodoViewModelFactory(it) }
+        val viewModel = viewModelFactory?.let { ViewModelProvider(this, it) }?.get(TodoViewModel::class.java)
+
         binding?.btnSave?.setOnClickListener {
             val id1 = id.toString()
             val title1 = binding?.editTextTitle?.text.toString()
@@ -90,7 +100,7 @@ class EditTask : Fragment() {
                     }
 
                     else -> {
-                        viewModel.updateTodo(id1, title1, description1, status1, date1, time1)
+                        viewModel?.updateTodo(id1, title1, description1, status1, date1, time1)
                         binding?.progressBar?.visibility = View.VISIBLE
                         binding?.editForm?.visibility = View.INVISIBLE
                     }
@@ -107,7 +117,7 @@ class EditTask : Fragment() {
                 customDialog.setContentView(dialogBinding.root)
                 customDialog.setCanceledOnTouchOutside(false)
                 dialogBinding.tvYes.setOnClickListener {
-                    viewModel.deleteTodo(id)
+                    viewModel?.deleteTodo(id)
                     binding?.progressBar?.visibility = View.VISIBLE
                     binding?.editForm?.visibility = View.INVISIBLE
 
@@ -126,20 +136,9 @@ class EditTask : Fragment() {
                 binding?.tvDate?.text = selectedDate
             }
         }
-    }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentEditTaskBinding.inflate(layoutInflater, container, false)
-        (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
 
-        val viewModel = ViewModelProvider(this)[TodoViewModel::class.java]
-        val rViewModel = ViewModelProvider(this)[RefreshTokenViewModel::class.java]
-        val sessionManager = SessionManager(requireContext())
-
-        viewModel.deleteTodoStatus.observe(viewLifecycleOwner) { status ->
+        viewModel?.status?.observe(viewLifecycleOwner) { status ->
             if (status == "204") {
                 goBack()
                 binding?.progressBar?.visibility = View.INVISIBLE
@@ -147,83 +146,31 @@ class EditTask : Fragment() {
 
                 viewModel.todoMessage.observe(viewLifecycleOwner) { msg ->
                     val errorMsg = msg.toString()
-                    Toast.makeText(requireContext(),errorMsg, Toast.LENGTH_SHORT).show()
+                    Snackbar.make(requireView(),errorMsg, Snackbar.LENGTH_SHORT).show()
                 }
-            }else if(status.toString() == "Unauthenticated.") {
-                val refreshToken1 = SessionManager(requireContext()).getRefreshToken()
-                if(refreshToken1?.isNotBlank() == true){
-                    rViewModel.refreshToken(refreshToken1.toString())
-                    binding?.progressBar?.visibility = View.INVISIBLE
-                }else{
-                    DialogUtils.showAutoDismissAlertDialog(requireContext(),
-                        getString(R.string.your_session_has_expired))
-                    sessionManager.clearTokens()
-                    Constants.clearAccessToken()
-                    Constants.clearRefreshToken()
-                    findNavController().navigate(R.id.navigate_to_intro)
-                }
-                rViewModel.result.observe(viewLifecycleOwner) { status1 ->
-                    if (status1 == "true") {
-                        sessionManager.clearTokens()
-                        Constants.clearAccessToken()
-                        rViewModel.getAuthTokens().observe(viewLifecycleOwner) { authTokens ->
-                            val accessToken = authTokens.accessToken
-                            Constants.accessToken = accessToken
-                            val refreshToken = authTokens.refreshToken
-                            Constants.refreshToken = refreshToken
-                            sessionManager.saveTokens(accessToken, refreshToken)
-                        }
-                    }
-                }
+
             }else {
-                Toast.makeText(requireContext(),status.toString(), Toast.LENGTH_SHORT).show()
+                Snackbar.make(requireView(),status.toString(), Snackbar.LENGTH_SHORT).show()
             }
         }
 
-        viewModel.updateTodoStatus.observe(viewLifecycleOwner) { status ->
+        viewModel?.status?.observe(viewLifecycleOwner) { status ->
             if (status == "200") {
                 binding?.progressBar?.visibility = View.INVISIBLE
                 binding?.editForm?.visibility = View.VISIBLE
 
                 viewModel.todoMessage.observe(viewLifecycleOwner) { msg ->
                     val toastMsg = msg.toString()
-                        Toast.makeText(requireContext(),toastMsg, Toast.LENGTH_SHORT).show()
-                                        goBack()
+                    Snackbar.make(requireView(),toastMsg, Snackbar.LENGTH_SHORT).show()
+                    goBack()
                 }
-            }else if(status.toString() == "Unauthenticated.") {
-                val refreshToken1 = SessionManager(requireContext()).getRefreshToken()!!
 
-                    rViewModel.refreshToken(refreshToken1)
-                binding?.progressBar?.visibility = View.INVISIBLE
-                rViewModel.result.observe(viewLifecycleOwner) { status1 ->
-                    if (status1 == "200") {
-                        sessionManager.clearTokens()
-                        Constants.clearAccessToken()
-                        rViewModel.getAuthTokens().observe(viewLifecycleOwner) { authTokens ->
-                            val accessToken = authTokens.accessToken
-                            Constants.accessToken = accessToken
-                            val refreshToken = authTokens.refreshToken
-                            Constants.refreshToken = refreshToken
-                            sessionManager.saveTokens(accessToken, refreshToken)
-                        }
-                    }else{
-                        DialogUtils.showAutoDismissAlertDialog(requireContext(),
-                        getString(R.string.your_session_has_expired))
-                        sessionManager.clearTokens()
-                        Constants.clearAccessToken()
-                        Constants.clearRefreshToken()
-                        findNavController().navigate(R.id.navigate_to_intro)
-                    }
-                }
             }else {
                 binding?.progressBar?.visibility = View.INVISIBLE
                 binding?.editForm?.visibility = View.VISIBLE
-                Toast.makeText(requireContext(),status.toString(), Toast.LENGTH_SHORT).show()
+                Snackbar.make(requireView(),status.toString(), Snackbar.LENGTH_SHORT).show()
             }
-            }
-
-
-
+        }
 
         val adapter: ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(
             requireContext(),
@@ -233,6 +180,15 @@ class EditTask : Fragment() {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
         binding?.spinnerStatus?.adapter = adapter
+
+
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentEditTaskBinding.inflate(layoutInflater, container, false)
         return binding?.root
     }
     private fun goBack(){

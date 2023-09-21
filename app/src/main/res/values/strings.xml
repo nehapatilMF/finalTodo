@@ -125,4 +125,7 @@
     <string name="description5">Description :</string>
     <string name="your_session_has_expired">Your session has expired.\nPlease login.</string>
     <string name="edit">Edit</string>
+    <string name="invalid_password">Invalid password.</string>
+    <string name="mobile_number_must_be_10_digit">mobile number must be 10 digit.</string>
+    <string name="password_don_t_match">Password don\'t match</string>
 </resources>

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -12,12 +11,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.Constants
 import com.example.todoapp.R
+import com.example.todoapp.client.RetrofitClient
 import com.example.todoapp.client.SessionManager
 import com.example.todoapp.databinding.FragmentOtpBinding
+import com.example.todoapp.interfaces.UserAPI
+import com.example.todoapp.repository.UserRepository
 import com.example.todoapp.util.DialogUtils
 import com.example.todoapp.util.NetworkUtil
 import com.example.todoapp.util.TimerUtil
-import com.example.todoapp.viewModels.OtpViewModel
+import com.example.todoapp.viewModelFactory.UserViewModelFactory
+import com.example.todoapp.viewModels.UserViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class Otp : Fragment() {
 
@@ -29,25 +33,24 @@ class Otp : Fragment() {
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.title = null
+        (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
 
         binding?.toolbar?.setNavigationOnClickListener{
-            findNavController().navigate(R.id.navigate_to_register)
+            findNavController().navigate(R.id.action_otp_to_register)
         }
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                findNavController().navigate(R.id.navigate_to_register)
+                findNavController().navigate(R.id.action_otp_to_register)
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
-    }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentOtpBinding.inflate(layoutInflater, container, false)
+        val sessionManager = SessionManager(requireContext())
+        val userAPI: UserAPI? = RetrofitClient.getInstance()?.create(UserAPI::class.java)
+        val userRepository = userAPI?.let { UserRepository(it) }
+        val viewModelFactory = userRepository?.let { UserViewModelFactory(it) }
+        val viewModel = viewModelFactory?.let { ViewModelProvider(this, it) }?.get(UserViewModel::class.java)
 
-        val viewModel = ViewModelProvider(this)[OtpViewModel::class.java]
         val email = Constants.userEmail.toString()
         val otp1 =  Constants.userOtp.toString()
 
@@ -63,11 +66,11 @@ class Otp : Fragment() {
             when{
                 !NetworkUtil.isNetworkAvailable(requireContext()) -> DialogUtils.showAutoDismissAlertDialog(requireContext(), getString(R.string.no_internet_connection))
                 else -> {
-                        viewModel.signupVerifyOtp(email, otp)
+                    viewModel?.signupVerifyOtp(email, otp)
                     binding?.progressBar?.visibility = View.VISIBLE
-                    }
                 }
             }
+        }
 
         binding?.resendCode?.setOnClickListener {
             if(NetworkUtil.isNetworkAvailable(requireContext())) {
@@ -75,7 +78,7 @@ class Otp : Fragment() {
                 binding?.tvOtpExp?.visibility = View.VISIBLE
                 binding?.resendCode?.visibility = View.INVISIBLE
                 startOtpTimer()
-                viewModel.resendUserOtp(email)
+                viewModel?.resendUserOtp(email)
                 binding?.progressBar?.visibility = View.VISIBLE
 
             }else{
@@ -84,46 +87,47 @@ class Otp : Fragment() {
             }
         }
 
-        viewModel.otpResult.observe(viewLifecycleOwner){ status ->
+        viewModel?.otpResult?.observe(viewLifecycleOwner){ status ->
             if(status == "200"){
                 binding?.progressBar?.visibility = View.INVISIBLE
-                findNavController().navigate(R.id.navigate_from_otp_to_home)
+                findNavController().navigate(R.id.action_otp_to_home)
             }else{
                 binding?.progressBar?.visibility = View.INVISIBLE
                 val message = status.toString()
-                Toast.makeText(requireContext(),message,Toast.LENGTH_SHORT).show()
+                Snackbar.make(requireView(),message,Snackbar.LENGTH_SHORT).show()
             }
 
         }
-        viewModel.resendOtpResult.observe(viewLifecycleOwner){ status ->
+        viewModel?.status?.observe(viewLifecycleOwner){ status ->
             if(status == "200"){
                 binding?.progressBar?.visibility = View.INVISIBLE
-                viewModel.newOtpResult.observe(viewLifecycleOwner){ otp ->
+                viewModel.otpResult.observe(viewLifecycleOwner){ otp ->
                     val newOtp = otp.toString()
                     binding?.jsonOtp?.text = newOtp
                 }
             }else{
                 binding?.progressBar?.visibility = View.INVISIBLE
                 val message = status.toString()
-                Toast.makeText(requireContext(),message,Toast.LENGTH_SHORT).show()
+                Snackbar.make(requireView(),message,Snackbar.LENGTH_SHORT).show()
             }
         }
-        val sessionManager = SessionManager(requireContext())
-        Constants.accessToken = sessionManager.getAccessToken()
-        Constants.refreshToken = sessionManager.getRefreshToken()
-
-        viewModel.getAuthTokens().observe(viewLifecycleOwner){ authTokens ->
-            Constants.clearAccessToken()
+        viewModel?.getAuthTokens()?.observe(viewLifecycleOwner){ authTokens ->
             val accessToken = authTokens.accessToken
-            Constants.accessToken = accessToken
             val refreshToken = authTokens.refreshToken
-            Constants.refreshToken = refreshToken
+            sessionManager.clearTokens()
             sessionManager.saveTokens(accessToken,refreshToken)
         }
-        viewModel.name.observe(viewLifecycleOwner){name ->
+        viewModel?.name?.observe(viewLifecycleOwner){name ->
             sessionManager.saveName(name.toString())
         }
 
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentOtpBinding.inflate(layoutInflater, container, false)
         return binding?.root
     }
 

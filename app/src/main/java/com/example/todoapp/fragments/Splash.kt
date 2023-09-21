@@ -1,5 +1,6 @@
 package com.example.todoapp.fragments
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +10,6 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.todoapp.Constants
 import com.example.todoapp.R
 import com.example.todoapp.client.SessionManager
 import com.example.todoapp.databinding.FragmentSplashBinding
@@ -18,6 +18,7 @@ import com.example.todoapp.databinding.FragmentSplashBinding
 class Splash : Fragment() {
     private var binding : FragmentSplashBinding? = null
 
+     @SuppressLint("ObsoleteSdkInt")
      override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -39,13 +40,10 @@ class Splash : Fragment() {
             override fun onAnimationEnd(animation: Animation?) {
                 val sessionManager = SessionManager(requireContext())
                 if (sessionManager.getAccessToken()?.isNotBlank() == true) {
-                    findNavController().navigate(R.id.navigate_to_home)
-
-                    Constants.accessToken = sessionManager.getAccessToken().toString()
+                    findNavController().navigate(R.id.action_splash_to_home)
                 } else {
-                    findNavController().navigate(R.id.navigate_to_intro)
-                    Constants.clearAccessToken()
                     sessionManager.clearTokens()
+                    findNavController().navigate(R.id.action_splash_to_intro)
                 }
             }
             override fun onAnimationRepeat(animation: Animation?) {
@@ -54,7 +52,4 @@ class Splash : Fragment() {
         })
         return binding?.root
     }
-
-
-
-    }
+}

@@ -1,6 +1,5 @@
 package com.example.todoapp.fragments
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -15,19 +14,23 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.Constants
 import com.example.todoapp.R
+import com.example.todoapp.client.RetrofitClient
 import com.example.todoapp.client.SessionManager
 import com.example.todoapp.databinding.FragmentPersonalInformationBinding
+import com.example.todoapp.interfaces.TodoAPI
+import com.example.todoapp.repository.TodoRepository
 import com.example.todoapp.util.DialogUtils
 import com.example.todoapp.util.NetworkUtil
 import com.example.todoapp.util.ValidPatterns
-import com.example.todoapp.viewModels.PersonalInformationViewModel
-import com.example.todoapp.viewModels.RefreshTokenViewModel
+import com.example.todoapp.viewModelFactory.TodoViewModelFactory
+import com.example.todoapp.viewModels.TodoViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class PersonalInformation : Fragment() {
     private var binding: FragmentPersonalInformationBinding? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val viewModel = ViewModelProvider(this)[PersonalInformationViewModel::class.java]
+        (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
 
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
@@ -44,80 +47,61 @@ class PersonalInformation : Fragment() {
 
         binding?.PI?.visibility = View.VISIBLE
         binding?.PIEdit?.visibility = View.INVISIBLE
+        binding?.progressBar?.visibility = View.VISIBLE
 
         binding?.buttonEdit?.setOnClickListener {
             binding?.PI?.visibility = View.INVISIBLE
             binding?.PIEdit?.visibility = View.VISIBLE
         }
+
+    }
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        binding = FragmentPersonalInformationBinding.inflate(layoutInflater,container,false)
+
+
+        val sessionManager = SessionManager(requireContext())
+        val todoAPI: TodoAPI? = RetrofitClient.getInstance()?.create(TodoAPI::class.java)
+        val todoRepository = todoAPI?.let { TodoRepository(it) }
+        val viewModelFactory = todoRepository?.let { TodoViewModelFactory(it) }
+        val viewModel = viewModelFactory?.let { ViewModelProvider(this, it) }?.get(TodoViewModel::class.java)
+        setupTextChangeListeners()
+        if (NetworkUtil.isNetworkAvailable(requireContext())) {
+            viewModel?.get()
+        } else {
+            val message = getString(R.string.no_internet_connection)
+            DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
+        }
         binding?.button?.setOnClickListener {
             val name = binding?.tvName1?.text.toString()
             val mobile = binding?.tvMobile1?.text.toString()
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
-
-                viewModel.updateUser(name,mobile)
+                viewModel?.updateUser(name,mobile)
                 binding?.progressBar?.visibility = View.VISIBLE
             } else {
                 val message = getString(R.string.no_internet_connection)
                 DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
             }
         }
-    }
-    @SuppressLint("SuspiciousIndentation")
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
 
-        binding = FragmentPersonalInformationBinding.inflate(layoutInflater,container,false)
-        setupTextChangeListeners()
-        (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
-        val viewModel = ViewModelProvider(this)[PersonalInformationViewModel::class.java]
-        val rViewModel = ViewModelProvider(this)[RefreshTokenViewModel::class.java]
-        val sessionManager = SessionManager(requireContext())
-        viewModel.get()
-
-        binding?.progressBar?.visibility = View.VISIBLE
-        viewModel.updateUserResult.observe(viewLifecycleOwner){ status ->
+        viewModel?.status?.observe(viewLifecycleOwner){ status ->
             if(status == "200") {
                 binding?.progressBar?.visibility = View.INVISIBLE
-                findNavController().navigate(R.id.profile)
                 val name = binding?.tvName1?.text.toString()
 
                 sessionManager.saveName(name)
 
-                viewModel.msg.observe(viewLifecycleOwner) { msg ->
+                viewModel.todoMessage.observe(viewLifecycleOwner) { msg ->
                     Toast.makeText(requireContext(), msg.toString(), Toast.LENGTH_SHORT).show()
                     binding?.progressBar?.visibility = View.GONE
                 }
-            }else if(status.toString() == "Unauthenticated.") {
-                    val refreshToken1 = SessionManager(requireContext()).getRefreshToken()!!
 
-                    rViewModel.refreshToken(refreshToken1)
-                    binding?.progressBar?.visibility = View.INVISIBLE
-                    rViewModel.result.observe(viewLifecycleOwner) { status1 ->
-                        if (status1 == "200") {
-                            sessionManager.clearTokens()
-                            Constants.clearAccessToken()
-                            rViewModel.getAuthTokens().observe(viewLifecycleOwner) { authTokens ->
-                                val accessToken = authTokens.accessToken
-                                Constants.accessToken = accessToken
-                                val refreshToken = authTokens.refreshToken
-                                Constants.refreshToken = refreshToken
-                                sessionManager.saveTokens(accessToken, refreshToken)
-                            }
-                        }else{
-                            DialogUtils.showAutoDismissAlertDialog(requireContext(),
-                                getString(R.string.your_session_has_expired))
-                            sessionManager.clearTokens()
-                            Constants.clearAccessToken()
-                            Constants.clearRefreshToken()
-                            findNavController().navigate(R.id.navigate_to_intro)
-                        }
-                    }
             }
         }
 
-        viewModel.getResult.observe(viewLifecycleOwner){status ->
+        viewModel?.status?.observe(viewLifecycleOwner){status ->
             if(status == "200"){
                 sessionManager.clearName()
                 binding?.progressBar?.visibility = View.INVISIBLE
@@ -138,36 +122,13 @@ class PersonalInformation : Fragment() {
                     binding?.tvMobile?.text = mobile.toString()
                     binding?.tvMobile1?.setText( binding?.tvMobile?.text.toString())
                 }
-            }else if(status.toString() == "Unauthenticated.") {
-                 val refreshToken1 = SessionManager(requireContext()).getRefreshToken()!!
 
-                    rViewModel.refreshToken(refreshToken1)
+            }else {
                 binding?.progressBar?.visibility = View.INVISIBLE
-                    rViewModel.result.observe(viewLifecycleOwner) { status1 ->
-                        if (status1 == "200") {
-                            sessionManager.clearTokens()
-                            Constants.clearAccessToken()
-                            rViewModel.getAuthTokens().observe(viewLifecycleOwner) { authTokens ->
-                                val accessToken = authTokens.accessToken
-                                Constants.accessToken = accessToken
-                                val refreshToken = authTokens.refreshToken
-                                Constants.refreshToken = refreshToken
-                                sessionManager.saveTokens(accessToken, refreshToken)
-                            }
-                        }else{
-                            DialogUtils.showAutoDismissAlertDialog(requireContext(),
-                                getString(R.string.your_session_has_expired))
-                            sessionManager.clearTokens()
-                            Constants.clearAccessToken()
-                            Constants.clearRefreshToken()
-                            findNavController().navigate(R.id.navigate_to_intro)
-                        }
-                    }
-                }else {
-                    binding?.progressBar?.visibility = View.INVISIBLE
-                    Toast.makeText(requireContext(),status.toString(), Toast.LENGTH_SHORT).show()
-                }
+                Snackbar.make(requireView(),status.toString(), Snackbar.LENGTH_SHORT).show()
             }
+        }
+
 
         return binding?.root
     }

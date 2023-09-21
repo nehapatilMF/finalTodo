@@ -14,45 +14,72 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.todoapp.Constants
 import com.example.todoapp.R
+import com.example.todoapp.client.RetrofitClient
 import com.example.todoapp.databinding.FragmentForgotPasswordBinding
+import com.example.todoapp.interfaces.UserAPI
+import com.example.todoapp.repository.UserRepository
 import com.example.todoapp.util.DialogUtils
 import com.example.todoapp.util.NetworkUtil
 import com.example.todoapp.util.ValidPatterns
-import com.example.todoapp.viewModels.ForgotPasswordViewModel
+import com.example.todoapp.viewModelFactory.UserViewModelFactory
+import com.example.todoapp.viewModels.UserViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class ForgotPassword : Fragment() {
     private var binding:FragmentForgotPasswordBinding? = null
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupTextChangeListeners()
-        binding?.btnSubmit?.visibility = View.INVISIBLE
-        binding?.btnSubmit1?.visibility = View.VISIBLE
-        val viewModel = ViewModelProvider(this)[ForgotPasswordViewModel::class.java]
-
+        (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
-
         actionBar?.setDisplayHomeAsUpEnabled(true)
         actionBar?.title = getString(R.string.forgot_password_title)
         binding?.toolbar?.setNavigationOnClickListener{
-            findNavController().navigate(R.id.navigate_from_forgot_password_to_login)
+            findNavController().navigate(R.id.action_forgot_password_to_login)
         }
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                findNavController().navigate(R.id.navigate_from_forgot_password_to_login)
+                findNavController().navigate(R.id.action_forgot_password_to_login)
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
+        setupTextChangeListeners()
+        binding?.btnSubmit?.visibility = View.INVISIBLE
+        binding?.btnSubmit1?.visibility = View.VISIBLE
+
+        val userAPI: UserAPI? = RetrofitClient.getInstance()?.create(UserAPI::class.java)
+        val userRepository = userAPI?.let { UserRepository(it) }
+        val viewModelFactory = userRepository?.let { UserViewModelFactory(it) }
+        val viewModel = viewModelFactory?.let { ViewModelProvider(this, it) }?.get(UserViewModel::class.java)
         binding?.btnSubmit?.setOnClickListener{
             val email =binding?.enterEmail?.text.toString()
             Constants.userEmail = email
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
-                    viewModel.forgotPasswordRequestOtp(email)
+                    viewModel?.forgotPasswordRequestOtp(email)
                 binding?.progressBar?.visibility = View.VISIBLE
             }    else {
                 val message = getString(R.string.no_internet_connection)
                 DialogUtils.showAutoDismissAlertDialog(requireContext(), message)
             }
+        }
+        viewModel?.status?.observe(viewLifecycleOwner){ status ->
+            if(status == "200") {
+                binding?.progressBar?.visibility = View.INVISIBLE
+                findNavController().navigate(R.id.action_forgotPassword_to_forgotPasswordOtp)
+                viewModel.msg.observe(viewLifecycleOwner){msg ->
+                    val message = msg.toString()
+                    Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
+                }
+            }else{
+                binding?.progressBar?.visibility = View.INVISIBLE
+                val message = status.toString()
+                Snackbar.make(requireView(),message, Snackbar.LENGTH_SHORT).show()
+            }
+        }
+
+        viewModel?.otpResult?.observe(viewLifecycleOwner){ otp ->
+            val newOtp = otp.toString()
+            Constants.userOtp = newOtp
         }
     }
     private fun setupTextChangeListeners() {
@@ -80,29 +107,6 @@ class ForgotPassword : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
           binding = FragmentForgotPasswordBinding.inflate(layoutInflater,container,false)
-        (requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
-
-        val viewModel = ViewModelProvider(this)[ForgotPasswordViewModel::class.java]
-
-        viewModel.forgotPasswordResult.observe(viewLifecycleOwner){ status ->
-            if(status == "200") {
-                binding?.progressBar?.visibility = View.INVISIBLE
-                findNavController().navigate(R.id.navigate_to_forgotPasswordOtp)
-                viewModel.msg.observe(viewLifecycleOwner){msg ->
-                    val message = msg.toString()
-                    Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
-                }
-            }else{
-                binding?.progressBar?.visibility = View.INVISIBLE
-                val message = status.toString()
-                Toast.makeText(requireContext(),message, Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        viewModel.otpResult.observe(viewLifecycleOwner){ otp ->
-            val newOtp = otp.toString()
-            Constants.userOtp = newOtp
-        }
         return binding?.root
     }
     override fun onDestroyView() {

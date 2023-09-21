@@ -5,21 +5,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import com.example.todoapp.Constants
 import com.example.todoapp.R
+import com.example.todoapp.client.RetrofitClient
 import com.example.todoapp.client.SessionManager
 import com.example.todoapp.databinding.FragmentProfileBinding
 import com.example.todoapp.databinding.LogoutConfirmationBinding
 import com.example.todoapp.databinding.UserDeleteConfirmationBinding
-import com.example.todoapp.util.DialogUtils
+import com.example.todoapp.interfaces.TodoAPI
+import com.example.todoapp.repository.TodoRepository
 import com.example.todoapp.util.NetworkUtil
-import com.example.todoapp.viewModels.ProfileViewModel
-import com.example.todoapp.viewModels.RefreshTokenViewModel
+import com.example.todoapp.viewModelFactory.TodoViewModelFactory
+import com.example.todoapp.viewModels.TodoViewModel
+import com.google.android.material.snackbar.Snackbar
 
 class Profile : Fragment() {
     private var binding : FragmentProfileBinding? = null
@@ -40,21 +41,20 @@ class Profile : Fragment() {
             }
             true
         }
-        binding?.personalInformation?.setOnClickListener {
-            findNavController().navigate(R.id.navigate_to_personalInformation)
-        }
-        binding?.ChangePassword?.setOnClickListener {
-           findNavController().navigate(R.id.navigate_to_changePassword)
-        }
 
         val callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                findNavController().navigate(R.id.navigate_to_home)
-
+                findNavController().navigate(R.id.action_profile_to_home)
             }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
+        binding?.personalInformation?.setOnClickListener {
+            findNavController().navigate(R.id.action_profile_to_personalInformation)
+        }
+        binding?.ChangePassword?.setOnClickListener {
+            findNavController().navigate(R.id.action_profile_to_changePassword)
+        }
 
     }
     override fun onCreateView(
@@ -63,11 +63,14 @@ class Profile : Fragment() {
     ): View? {
         binding = FragmentProfileBinding.inflate(layoutInflater, container, false)
         //(requireActivity() as AppCompatActivity).setSupportActionBar(binding?.toolbar)
+        val sessionManager = SessionManager(requireContext())
+        val todoAPI: TodoAPI? = RetrofitClient.getInstance()?.create(TodoAPI::class.java)
+        val todoRepository = todoAPI?.let { TodoRepository(it) }
+        val viewModelFactory = todoRepository?.let { TodoViewModelFactory(it) }
+        val viewModel = viewModelFactory?.let { ViewModelProvider(this, it) }?.get(TodoViewModel::class.java)
+
         binding?.bottomNav?.visibility = View.VISIBLE
         binding?.bottomNav?.menu?.findItem(R.id.profile)?.isChecked = true
-        val viewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
-        val rViewModel = ViewModelProvider(this)[RefreshTokenViewModel::class.java]
-        val sessionManager = SessionManager(requireContext())
 
         binding?.Logout?.setOnClickListener {
             if (NetworkUtil.isNetworkAvailable(requireContext())) {
@@ -76,7 +79,7 @@ class Profile : Fragment() {
                 customDialog.setContentView(dialogBinding.root)
                 customDialog.setCanceledOnTouchOutside(false)
                 dialogBinding.tvYes.setOnClickListener {
-                    viewModel.logout()
+                    viewModel?.logout()
                     binding?.progressBar?.visibility = View.VISIBLE
                     customDialog.dismiss()
                 }
@@ -93,7 +96,7 @@ class Profile : Fragment() {
                 customDialog.setContentView(dialogBinding.root)
                 customDialog.setCanceledOnTouchOutside(false)
                 dialogBinding.tvYes.setOnClickListener {
-                    viewModel.deleteUser()
+                    viewModel?.deleteUser()
                     binding?.progressBar?.visibility = View.VISIBLE
                     customDialog.dismiss()
                 }
@@ -103,84 +106,35 @@ class Profile : Fragment() {
                 customDialog.show()
             }
         }
-        viewModel.logoutResult.observe(viewLifecycleOwner){ status ->
+        viewModel?.status?.observe(viewLifecycleOwner){ status ->
             if(status == "200"){
                 binding?.progressBar?.visibility = View.INVISIBLE
-                viewModel.msg.observe(viewLifecycleOwner){ msg ->
+                viewModel.todoMessage.observe(viewLifecycleOwner){ msg ->
                     val tMsg = msg.toString()
-                    Toast.makeText(requireContext(),tMsg,Toast.LENGTH_SHORT).show()
+                    Snackbar.make(requireView(),tMsg,Snackbar.LENGTH_SHORT).show()
                 }
-              findNavController().navigate(R.id.navigate_to_intro)
+                findNavController().navigate(R.id.action_profile_to_intro)
                 SessionManager(requireContext()).clearTokens()
-                Constants.clearAccessToken()
-            }else if(status.toString() == "Unauthenticated.") {
-                val refreshToken1 = SessionManager(requireContext()).getRefreshToken()!!
 
-                    rViewModel.refreshToken(refreshToken1)
-
-                rViewModel.result.observe(viewLifecycleOwner) { status1 ->
-                    if (status1 == "200") {
-                        sessionManager.clearTokens()
-                        Constants.clearAccessToken()
-                        rViewModel.getAuthTokens().observe(viewLifecycleOwner) { authTokens ->
-                            val accessToken = authTokens.accessToken
-                            Constants.accessToken = accessToken
-                            val refreshToken = authTokens.refreshToken
-                            Constants.refreshToken = refreshToken
-                            sessionManager.saveTokens(accessToken, refreshToken)
-                        }
-                    } else{
-                        DialogUtils.showAutoDismissAlertDialog(requireContext(),
-                            getString(R.string.your_session_has_expired))
-                        sessionManager.clearTokens()
-                        Constants.clearAccessToken()
-                        Constants.clearRefreshToken()
-                        findNavController().navigate(R.id.navigate_to_intro)
-                    }
-                }
             }else {
                 binding?.progressBar?.visibility = View.INVISIBLE
-                Toast.makeText(requireContext(),status.toString(), Toast.LENGTH_SHORT).show()
+                Snackbar.make(requireView(),status.toString(), Snackbar.LENGTH_SHORT).show()
             }
         }
 
-        viewModel.deleteUserResult.observe(viewLifecycleOwner){ status ->
+        viewModel?.status?.observe(viewLifecycleOwner){ status ->
             if(status == "200"){
                 binding?.progressBar?.visibility = View.INVISIBLE
-                findNavController().navigate(R.id.navigate_to_intro)
-                viewModel.msg.observe(viewLifecycleOwner){ msg ->
+                findNavController().navigate(R.id.action_profile_to_intro)
+                viewModel.todoMessage.observe(viewLifecycleOwner){ msg ->
                     val tMsg = msg.toString()
-                    Toast.makeText(requireContext(),tMsg,Toast.LENGTH_SHORT).show()
+                    Snackbar.make(requireView(),tMsg,Snackbar.LENGTH_SHORT).show()
                 }
 
-            }else if(status.toString() == "Unauthenticated.") {
-                val refreshToken1 = SessionManager(requireContext()).getRefreshToken()!!
-                        rViewModel.refreshToken(refreshToken1)
-                binding?.progressBar?.visibility = View.INVISIBLE
-                rViewModel.result.observe(viewLifecycleOwner) { status1 ->
-                    if (status1 == "200") {
-                        sessionManager.clearTokens()
-                        Constants.clearAccessToken()
-                        rViewModel.getAuthTokens().observe(viewLifecycleOwner) { authTokens ->
-                            val accessToken = authTokens.accessToken
-                            Constants.accessToken = accessToken
-                            val refreshToken = authTokens.refreshToken
-                            Constants.refreshToken = refreshToken
-                            sessionManager.saveTokens(accessToken, refreshToken)
-                        }
-                    }else{
 
-                        DialogUtils.showAutoDismissAlertDialog(requireContext(),
-                            getString(R.string.your_session_has_expired))
-                        sessionManager.clearTokens()
-                        Constants.clearAccessToken()
-                        Constants.clearRefreshToken()
-                        findNavController().navigate(R.id.navigate_to_intro)
-                    }
-                }
             }else {
                 binding?.progressBar?.visibility = View.INVISIBLE
-                Toast.makeText(requireContext(),status.toString(), Toast.LENGTH_SHORT).show()
+                Snackbar.make(requireView(),status.toString(), Snackbar.LENGTH_SHORT).show()
             }
         }
         return binding?.root
